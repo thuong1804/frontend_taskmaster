@@ -15,10 +15,10 @@ const ListTable = () => {
     // }, [])
     return (
         <div className={styles.container}>
-            <div className={styles.table}>
-                <div className={styles.input}>
-                    <Button type='primary' onClick={() => router.push('/todo-list/form-add-todo')}>Add</Button>
+              <div className={styles.btnAdd}>
+                    <Button type='primary' onClick={() => router.push('/todo-list/form-add-todo')}>Add new task!</Button>
                 </div>
+            <div className={styles.table}>
                 <ListContent />
             </div>
         </div>

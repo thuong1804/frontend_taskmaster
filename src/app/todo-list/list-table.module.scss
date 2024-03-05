@@ -1,9 +1,10 @@
 .container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    flex-direction: column;
     height: 100vh;
     background: white;
+
     .table {
         display: flex;
         flex-direction: column;
@@ -12,13 +13,11 @@
         height: 400px;
         background: #f9f9f9;
         padding: 20px;
-        .input {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: flex-end;
-        }
+
     }
 
+    .btnAdd {
+        align-self: flex-end;
+        margin-bottom: 20px;
+     }
 }

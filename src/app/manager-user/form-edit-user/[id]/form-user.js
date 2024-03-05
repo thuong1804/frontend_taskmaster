@@ -1,22 +1,61 @@
+'use client'
 import { Button, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
-import styles from '../form-add-user/page.module.scss'
-import { handelCreateUser } from "@/app/service/user-service";
+import styles from '../page.module.scss'
+import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/app/service/user-service";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const FormUser = () => {
+const FormUser = ({ paramsId }) => {
+    const router = useRouter();
+    const [form] = Form.useForm();
+    const [detailUser, setDetailUser] = useState();
 
-    const onFinish = async(values) => {
-        const bodyData = {...values};
-        await handelCreateUser(bodyData)
-        console.log('Success:', values);
+    const onFinish = async (values) => {
+        const datatest = {
+            "id": 1,
+            "email": "thiong@gmail.com",
+            "name": "lll ne ",
+            "address": "zzzz",
+            "gender": "1",
+            "groupId": 1
+        }
+
+        const bodyData = {
+            ...values,
+            groupId: values.groupId === 'Admin' ? 1 : 2,
+            id: +paramsId.id,
+            gender: '1'
+        };
+        await handelUpdateUser(bodyData).then((res) => {
+            if (res.data.result) router.push('/')
+        })
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
 
+    useEffect(() => {
+        const fetchDataById = async () => {
+            await handelGetByIdUser(paramsId.id)
+                .then(res => setDetailUser(res.data.data.content))
+        }
+        fetchDataById();
+    }, [paramsId])
+
+    useEffect(() => {
+        const { email, name, groupId, address, gender } = detailUser ?? {};
+        form.setFieldValue('email', email);
+        form.setFieldValue('name', name);
+        form.setFieldValue('groupId', groupId === 1 ? 'Admin' : 'User');
+        form.setFieldValue('address', address);
+        form.setFieldValue('gender', gender === '1' ? 'male' : 'female');
+    }, [form, detailUser])
+
     return (
         <Form
             name="basic"
+            form={form}
             labelCol={{
                 span: 8,
             }}
@@ -27,7 +66,6 @@ const FormUser = () => {
                 maxWidth: 600,
             }}
             initialValues={{
-                remember: true,
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -35,15 +73,9 @@ const FormUser = () => {
         >
             <Form.Item
                 label="Email"
-                name="email"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please input your email!',
-                    },
-                ]}
+                name='email'
             >
-                <Input />
+                <Input disabled />
             </Form.Item>
 
             <Form.Item
@@ -60,18 +92,19 @@ const FormUser = () => {
             </Form.Item>
             <Form.Item
                 label="Group"
-                name="group"
+                name="groupId"
                 rules={[
                     {
-                    required: true,
-                    message: 'Please input your group!',
+                        required: true,
+                        message: 'Please input your group!',
                     },
                 ]}
             >
-               <Select
+                <Select
                     placeholder="Select a option Group"
                     // onChange={onGenderChange}
                     allowClear
+                    defaultValue={detailUser?.groupId}
                 >
                     <Option value="Admin">Admin</Option>
                     <Option value="User">User</Option>
@@ -83,29 +116,17 @@ const FormUser = () => {
             >
                 <Input />
             </Form.Item>
-            <Form.Item name="Gender" label="Gender" rules={[{ required: true }]}>
+            <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
                 <Select
                     placeholder="Select a option gender"
                     // onChange={onGenderChange}
                     allowClear
+
                 >
                     <Option value="male">male</Option>
                     <Option value="female">female</Option>
-                    <Option value="other">Bê Đê</Option>
                 </Select>
             </Form.Item>
-            <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                    ]}
-                >
-                    <Input.Password />
-                </Form.Item>
             <Form.Item
                 wrapperCol={{
                     offset: 8,
@@ -114,9 +135,9 @@ const FormUser = () => {
             >
                 <div className={styles.btnAction}>
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        Save
                     </Button>
-                    <Button htmlType="submit">
+                    <Button htmlType="button" onClick={() => router.push('/')}>
                         Cancel
                     </Button>
                 </div>

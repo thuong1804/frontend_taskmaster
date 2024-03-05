@@ -10,6 +10,9 @@ const handelGetListUser = async(data) => {
     })
 }
 
+//handelCreateUser("fas@gmail", "fasdf", "fasdf",...)
+//handelCreateUser({ email : "", name: ""})
+
 const handelCreateUser = async(email, name, address, gender, groupId) => {
     return await axios({
         method: 'post',
@@ -26,19 +29,20 @@ const handelCreateUser = async(email, name, address, gender, groupId) => {
 
 const handelDeleteUser = async(id) => {
     return await axios({
-        method: 'delete',
-        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/delete-user`,
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/delete-user/${id}`,
         data: {
            id,
         }
     })
 }
 
-const handelUpdateUser = async(email, name, address, gender, groupId) => {
+const handelUpdateUser = async({id, email, name, address, gender, groupId}) => {
     return await axios({
         method: 'put',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/update-user`,
         data: {
+            id,
            email,
            name,
            address,
@@ -48,9 +52,20 @@ const handelUpdateUser = async(email, name, address, gender, groupId) => {
     })
 }
 
+const handelGetByIdUser = async(id) => {
+    return await axios({
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/get-id-user/${id}`,
+        data: {
+           id,
+        }
+    })
+}
+
 export {
     handelCreateUser,
     handelGetListUser,
     handelUpdateUser,
     handelDeleteUser,
+    handelGetByIdUser
 }

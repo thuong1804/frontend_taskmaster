@@ -1,7 +1,7 @@
 'use client'
-import { Button, Space, Table, Tag } from "antd";
+import { Button, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
-import { handelGetListUser } from "../service/user-service";
+import { handelDeleteUser, handelGetListUser } from "../service/user-service";
 import { UserAddOutlined, EditOutlined, UserDeleteOutlined, UserOutlined } from "@ant-design/icons";
 import styles from './page.module.scss'
 import { useRouter } from "next/navigation";
@@ -10,6 +10,8 @@ import urlPath from "../constant/path";
 const ListPageUser = () => {
     const [data, setData] = useState([])
     const router = useRouter();
+    const [userID, setUserID] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             await handelGetListUser().then(res => {
@@ -21,7 +23,12 @@ const ListPageUser = () => {
         fetchData();
     }, [])
 
-    console.log({ data })
+    const confirm = async (e) => {
+        await handelDeleteUser(userID)
+    };
+    const cancel = (e) => {
+        console.log(e);
+    };
 
     const columns = [
         {
@@ -45,9 +52,8 @@ const ListPageUser = () => {
             key: 'gender',
             dataIndex: 'gender',
             render: (tags) => {
-                console.log(tags)
-                let color = tags === 1 ? 'geekblue' : 'green';
-                const renderName = tags === 1 ? 'Male' : 'Female'
+                let color = tags === '1' ? 'geekblue' : 'green';
+                const renderName = tags === '1' ? 'Male' : 'Female'
                 return (
                     <Tag color={color} key={renderName}>
                         {renderName}
@@ -64,12 +70,25 @@ const ListPageUser = () => {
             title: 'Action',
             key: 'action',
             width: 200,
-            render: (_, record) => (
-                <Space size="middle">
-                    <Button type="primary"><EditOutlined /></Button>
-                    <Button> <UserDeleteOutlined /> </Button>
-                </Space>
-            ),
+            render: (_, record) => {
+                return (
+                    <Space size="middle">
+                        <Button type="primary" onClick={() => router.push(`${urlPath.formEditUser}/${record.id}`)}>
+                            <EditOutlined /> </Button>
+                        <Popconfirm
+                            title="Delete the user"
+                            placement="topRight"
+                            description="Are you sure to delete this user?"
+                            onConfirm={confirm}
+                            onCancel={cancel}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button danger onClick={() => setUserID(record.id)}><UserDeleteOutlined /></Button>
+                        </Popconfirm>
+                    </Space>
+                )
+            },
         },
     ];
 
@@ -77,13 +96,12 @@ const ListPageUser = () => {
         <div className={styles.container}>
             <h1> <UserOutlined /> List User Manager</h1>
             <div className={styles.btnAddUser} >
-                <Button type="primary" onClick={() => {router.push(urlPath.signUp)}}>
+                <Button type="primary" onClick={() => { router.push(urlPath.signUp) }}>
                     <UserAddOutlined /> Add new user!
                 </Button>
             </div>
             <Table columns={columns} dataSource={data} />
         </div>
-
     )
 }
 export default ListPageUser

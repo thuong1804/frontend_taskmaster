@@ -1,16 +1,17 @@
 "use client"
 
-import { Button, Menu } from 'antd';
+import { Menu } from 'antd';
 import styles from './home.module.scss'
 import { useRouter } from 'next/navigation'
-import urlPath from '../constant/path';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { MailOutlined, SettingOutlined } from '@ant-design/icons';
 import ListPageUser from '../manager-user/page';
+import { useState } from 'react';
+import TodoList from '../todo-list/page';
 
 const Home = () => {
-    const onClick = (e) => {
-        console.log('click ', e);
-      };
+    const [activeKey, setActiveKey] = useState('1')
+    const router = useRouter();
+
     function getItem(label, key, icon, children, type) {
         return {
             key,
@@ -21,21 +22,27 @@ const Home = () => {
         };
     }
     const items = [
-        getItem('User-Manager', 'sub1', <MailOutlined />, [
-            getItem('Item 1', 'g1', null, [getItem('Option 1', '1')], 'group'),
-        ]),
+        getItem('User-manager', 'sub1', <MailOutlined />, [
+            getItem(' List user', '1'),
+          ]),
         {
             type: 'divider',
         },
-        getItem('User', 'sub4', <SettingOutlined />, [
-            getItem('Option 9', '9'),
-        ]),
+        getItem('Task', 'sub4', <SettingOutlined />, [
+            getItem('List task', '9'),
+          ]),
     ];
-    const router = useRouter();
+
+
+    const onClickItem = ( item) => {
+        console.log({item})
+        setActiveKey(item.key)
+    }
+
     return (
         <div className={styles.container}>
             <Menu
-                onClick={onClick}
+                onClick={onClickItem}
                 style={{
                     width: 256,
                 }}
@@ -44,8 +51,13 @@ const Home = () => {
                 mode="inline"
                 items={items}
             />
-            <ListPageUser />
-
+            <div className={styles.listPage}>
+                {activeKey === '1' ? (
+                    <ListPageUser />
+                ) : (
+                    <TodoList />
+                )}
+            </div>
         </div>
     )
 }
