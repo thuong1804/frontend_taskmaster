@@ -1,0 +1,14 @@
+
+.container {
+    padding: 30px;
+    h1 {
+        color:#1677ff;
+    }
+
+    .btnAddUser {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+}
