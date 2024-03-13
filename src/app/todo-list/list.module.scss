@@ -1,0 +1,21 @@
+.container {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+    h1 {
+        color:#1677ff;
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .btnAdd {
+            align-self: flex-end;
+        }
+    }
+
+}

@@ -6,6 +6,7 @@ import { UserAddOutlined, EditOutlined, UserDeleteOutlined, UserOutlined } from 
 import styles from './page.module.scss'
 import { useRouter } from "next/navigation";
 import urlPath from "../constant/path";
+import { toast } from "sonner";
 
 const ListPageUser = () => {
     const [data, setData] = useState([])
@@ -24,7 +25,11 @@ const ListPageUser = () => {
     }, [])
 
     const confirm = async (e) => {
-        await handelDeleteUser(userID)
+        await handelDeleteUser(userID).then(res => {
+            if(res.data.result) {
+                handelGetListUser();
+            }
+        })
     };
     const cancel = (e) => {
         console.log(e);
@@ -84,7 +89,7 @@ const ListPageUser = () => {
                             okText="Yes"
                             cancelText="No"
                         >
-                            <Button danger onClick={() => setUserID(record.id)}><UserDeleteOutlined /></Button>
+                            <Button danger onClick={() => {setUserID(record.id), router.refresh()}}><UserDeleteOutlined /></Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -96,11 +101,11 @@ const ListPageUser = () => {
         <div className={styles.container}>
             <h1> <UserOutlined /> List User Manager</h1>
             <div className={styles.btnAddUser} >
-                <Button type="primary" onClick={() => { router.push(urlPath.signUp) }}>
+                <Button type="primary" onClick={() => { router.push(urlPath.register) }}>
                     <UserAddOutlined /> Add new user!
                 </Button>
             </div>
-            <Table columns={columns} dataSource={data} />
+            <Table rowKey="Id" columns={columns} dataSource={data} />
         </div>
     )
 }

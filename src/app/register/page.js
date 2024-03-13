@@ -1,11 +1,11 @@
-import SignUp from "./signup";
-import styles from './signup.module.scss'
+import Register from "./register";
+import styles from './register.module.scss'
 const Page = () => {
     return (
         <div className={styles.container}>
             <h1>Register</h1>
             <div className={styles.formSignUp}>
-                <SignUp />
+                <Register />
             </div>
         </div>
     )

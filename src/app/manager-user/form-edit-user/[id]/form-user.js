@@ -12,23 +12,14 @@ const FormUser = ({ paramsId }) => {
     const [detailUser, setDetailUser] = useState();
 
     const onFinish = async (values) => {
-        const datatest = {
-            "id": 1,
-            "email": "thiong@gmail.com",
-            "name": "lll ne ",
-            "address": "zzzz",
-            "gender": "1",
-            "groupId": 1
-        }
-
         const bodyData = {
             ...values,
             groupId: values.groupId === 'Admin' ? 1 : 2,
             id: +paramsId.id,
-            gender: '1'
+            gender: values.gender === 'Male' ? 1 : 2,
         };
         await handelUpdateUser(bodyData).then((res) => {
-            if (res.data.result) router.push('/')
+            if (res.data.result) router.push('/home')
         })
     };
     const onFinishFailed = (errorInfo) => {
@@ -137,7 +128,7 @@ const FormUser = ({ paramsId }) => {
                     <Button type="primary" htmlType="submit">
                         Save
                     </Button>
-                    <Button htmlType="button" onClick={() => router.push('/')}>
+                    <Button htmlType="button" onClick={() => router.push('/home')}>
                         Cancel
                     </Button>
                 </div>

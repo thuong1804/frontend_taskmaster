@@ -1,78 +1,82 @@
 'use client';
-import { Avatar, Button, List, Skeleton } from 'antd';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-const count = 3;
-const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+import styles from './list.module.scss'
+import { PlusOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { getTask } from '../service/taskService';
+import { Button, Space, Table, Tag } from 'antd';
+import { useRouter } from 'next/navigation';
+import urlPath from '../constant/path';
 
-const ListContent = () => {
+const ListTask = () => {
     const [initLoading, setInitLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-    const [list, setList] = useState([]);
-    const [isCheckLogin, setIsCheckLogin] = useState([])
-    useEffect(() => {
-        fetch(fakeDataUrl)
-            .then((res) => res.json())
-            .then((res) => {
-                setInitLoading(false);
-                setList(res.results);
-            });
-    }, []);
-    console.log({ list, data })
+    const router = useRouter();
 
     useEffect(() => {
         const fetchData = async () => {
-            await axios({
-                method: 'get',
-                url: 'http://localhost:3005/task/get-task',
-            }).then((res) => {
-                console.log({ res })
-                return setData(res.data.content)
-            });
+            try {
+                await getTask().then((res) => {
+                    setData(res.data.data.content);
+                    setInitLoading(false);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         }
         fetchData();
     }, [])
 
-    const onLoadMore = () => {
-        setLoading(true);
-
-    };
-    const loadMore =
-        !initLoading && !loading ? (
-            <div
-                style={{
-                    textAlign: 'center',
-                    marginTop: 12,
-                    height: 32,
-                    lineHeight: '32px',
-                }}
-            >
-                <Button onClick={onLoadMore}>loading more</Button>
-            </div>
-        ) : null;
+    const columns = [
+        {
+          title: 'Task Title',
+          dataIndex: 'taskTitle',
+          key: 'taskTitle',
+          render: (text) => <a>{text}</a>,
+          width: 300
+        },
+        {
+          title: 'Task Description',
+          dataIndex: 'taskDescription',
+          key: 'taskDescription',
+          width: 300
+        },
+        {
+          title: 'Schedule Date',
+          dataIndex: 'scheduleDate',
+          key: 'scheduleDate',
+          width: 300
+        },
+        {
+            title: 'Completed Date',
+            dataIndex: 'completedDate',
+            key: 'scheduleDate',
+            width: 300
+          },
+        {
+          title: 'Action',
+          key: 'action',
+          width: 150,
+          render: (_, record) => (
+            <Space size="middle">
+              <a>Edit</a>
+              <a>Delete</a>
+            </Space>
+          ),
+        },
+      ];
 
     return (
-        <List
-            className="demo-loadmore-list"
-            loading={initLoading}
-            itemLayout="horizontal"
-            loadMore={loadMore}
-            dataSource={data}
-            renderItem={(item) => (
-                <List.Item
-                    actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}
-                >
-                    <Skeleton avatar title={false} loading={item.loading} active>
-                        <List.Item.Meta
-                            // avatar={<Avatar } />}
-                            title={item.taskTitle}
-                            description={item.taskDescription}
-                        />
-                    </Skeleton>
-                </List.Item>
-            )}
-        />
+
+        <div className={styles.container}>
+            <h1><UnorderedListOutlined /> List Task Manager</h1>
+            <div className={styles.list}>
+                <div className={styles.btnAdd}>
+                <Button type='primary' onClick={() => router.push(urlPath.addTodo)}><PlusOutlined /> Add task</Button>
+                </div>
+                <Table columns={columns} dataSource={data} />
+            </div>
+        </div>
     )
 }
-export default ListContent
+export default ListTask

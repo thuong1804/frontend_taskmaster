@@ -6,14 +6,14 @@ const handelGetListUser = async(data) => {
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/users`,
         data: {
             ...data
-        }
+        },
+        withCredentials: true,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+
     })
 }
 
-//handelCreateUser("fas@gmail", "fasdf", "fasdf",...)
-//handelCreateUser({ email : "", name: ""})
-
-const handelCreateUser = async(email, name, address, gender, groupId) => {
+const handelCreateUser = async({email, name, address, gender, groupId}) => {
     return await axios({
         method: 'post',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/create-user`,
@@ -62,10 +62,23 @@ const handelGetByIdUser = async(id) => {
     })
 }
 
+const handelGetProfileUser = async(data) => {
+    return await axios({
+        method: 'get',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/profile`,
+        data: {
+           ...data,
+        },
+        withCredentials: true,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+    })
+}
+
 export {
     handelCreateUser,
     handelGetListUser,
     handelUpdateUser,
     handelDeleteUser,
-    handelGetByIdUser
+    handelGetByIdUser,
+    handelGetProfileUser,
 }

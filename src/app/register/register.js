@@ -1,29 +1,29 @@
 'use client'
-import axios from "axios";
-import { Button, Checkbox, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { useRouter } from 'next/navigation'
-import styles from './signup.module.scss'
+import styles from './register.module.scss'
+import urlPath from "../constant/path";
+import { handelCreateUser } from "../service/user-service";
 
 const { Option } = Select;
 
-const SignUp = () => {
+const Register = () => {
     const router = useRouter();
     const onFinish = async(values) => {
-        const dataBody = { ...values, gender: values.gender === 'male' }
-       await axios({
-            method: 'post',
-            url: `${process.env.NEXT_PUBLIC_WEB_URL}/user/create-user` ,
-            data: {
-               ...dataBody
+        const dataBody = {
+            ...values,
+            gender: values.gender === 'male' ? 1 : 2,
+        }
+        await handelCreateUser(dataBody).then(res => {
+            if(res.data.result) {
+                router.push(urlPath.home)
             }
-          });
+        })
+        // console.log({values})
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
-    };
-
-    const onGenderChange = (value) => {
     };
 
     return (
@@ -61,8 +61,8 @@ const SignUp = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Username"
-                    name="username"
+                    label="Name"
+                    name="name"
                     rules={[
                         {
                             required: true,
@@ -109,7 +109,6 @@ const SignUp = () => {
                 >
                     <Select
                         placeholder="Select a option and change input text above"
-                        onChange={onGenderChange}
                         allowClear
                     >
                         <Option value="male">male</Option>
@@ -126,7 +125,7 @@ const SignUp = () => {
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>
-                    <Button htmlType="button" onClick={()=> router.push('/')}>
+                    <Button htmlType="button" onClick={()=> router.push('/home')}>
                         Cancel
                     </Button>
                     </div>
@@ -134,4 +133,4 @@ const SignUp = () => {
             </Form>
         </>)
 }
-export default SignUp;
+export default Register;

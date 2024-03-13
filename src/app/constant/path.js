@@ -1,7 +1,9 @@
 const urlPath = {
-    signUp: '/signup',
+    register: '/register',
+    addTodo: '/todo-list/form-add-todo',
     login: '/login',
-    home:'/',
+    logout: '/logout',
+    home:'/home',
     todoList: '/todo-list',
     formEditUser: 'manager-user/form-edit-user'
 }
