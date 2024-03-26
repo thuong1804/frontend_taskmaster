@@ -13,7 +13,7 @@ const handelGetListUser = async(data) => {
     })
 }
 
-const handelCreateUser = async({email, name, address, gender, groupId}) => {
+const handelCreateUser = async({email, name, address, gender, groupId, password}) => {
     return await axios({
         method: 'post',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/create-user`,
@@ -22,6 +22,7 @@ const handelCreateUser = async({email, name, address, gender, groupId}) => {
            name,
            address,
            gender,
+           password,
            groupId
         }
     })

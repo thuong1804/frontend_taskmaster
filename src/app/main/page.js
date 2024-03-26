@@ -4,7 +4,7 @@ import { Button } from "antd";
 import Image from 'next/image'
 import styles from './main.module.scss'
 import { useRouter } from "next/navigation";
-import urlPath from "../constant/path";
+import urlPath from "../../constant/path";
 
 const MainPage = () => {
     const router = useRouter();

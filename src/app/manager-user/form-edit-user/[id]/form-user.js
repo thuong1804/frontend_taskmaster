@@ -2,7 +2,7 @@
 import { Button, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import styles from '../page.module.scss'
-import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/app/service/user-service";
+import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/service/user-service";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -22,6 +22,7 @@ const FormUser = ({ paramsId }) => {
             if (res.data.result) router.push('/home')
         })
     };
+
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
@@ -101,6 +102,7 @@ const FormUser = ({ paramsId }) => {
                     <Option value="User">User</Option>
                 </Select>
             </Form.Item>
+
             <Form.Item
                 label="Address"
                 name="address"
@@ -110,7 +112,6 @@ const FormUser = ({ paramsId }) => {
             <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
                 <Select
                     placeholder="Select a option gender"
-                    // onChange={onGenderChange}
                     allowClear
 
                 >

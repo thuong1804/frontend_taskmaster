@@ -1,17 +1,21 @@
 'use client'
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, Switch } from "antd";
 import { useRouter } from 'next/navigation'
 import styles from './register.module.scss'
-import urlPath from "../constant/path";
-import { handelCreateUser } from "../service/user-service";
+import urlPath from "../../constant/path";
+import { handelCreateUser } from "../../service/user-service";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 const { Option } = Select;
 
 const Register = () => {
     const router = useRouter();
+    const [isCheckGroup, setIsCheckGroup]= useState();
     const onFinish = async(values) => {
         const dataBody = {
             ...values,
+            groupId: isCheckGroup ? 1 : 2,
             gender: values.gender === 'male' ? 1 : 2,
         }
         await handelCreateUser(dataBody).then(res => {
@@ -19,13 +23,15 @@ const Register = () => {
                 router.push(urlPath.home)
             }
         })
-        // console.log({values})
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
 
+    const onChange = (checked) => {
+        setIsCheckGroup(checked)
+    }
     return (
         <>
             <Form
@@ -114,6 +120,16 @@ const Register = () => {
                         <Option value="male">male</Option>
                         <Option value="female">female</Option>
                     </Select>
+                </Form.Item>
+                <Form.Item
+                    label="Group"
+                    name="groupId"
+                >
+                    <Switch
+                        checkedChildren={'Admin'}
+                        unCheckedChildren={'User'}
+                        onChange={onChange}
+                    />
                 </Form.Item>
                 <Form.Item
                     wrapperCol={{

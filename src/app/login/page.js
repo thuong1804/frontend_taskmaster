@@ -2,10 +2,10 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useRouter } from 'next/navigation'
 import styles from './login.module.scss'
-import urlPath from '../constant/path';
+import urlPath from '../../constant/path';
 import { Toaster, toast } from "sonner";
 import 'react-toastify/dist/ReactToastify.css';
-import { login } from '../service/authService';
+import { login } from '../../service/authService';
 import { useEffect } from 'react';
 
 const LoginPage = () => {
@@ -13,14 +13,14 @@ const LoginPage = () => {
     const onFinish = async (values) => {
         const email = values.email;;
         const password = values.password
-        await login(email, password).then(res => {
+        await login(email, password).then(async (res) => {
             if (res.data.result) {
                 toast.success("Login success!");
-               return router.push(urlPath.home)
+                router.push(urlPath.home)
             }
         }).catch(error => {
-            if(error) {
-               return toast.error("Email or password don't exits!");
+            if (error) {
+                return toast.error("Email or password don't exits!");
             }
         })
     };
@@ -33,6 +33,11 @@ const LoginPage = () => {
             <h1>Please Login!</h1>
             <Form
                 name="basic"
+                initialValues={{
+                    email: 'admin@.com',
+                    password: '123123'
+
+                }}
                 labelCol={{
                     span: 8,
                 }}
@@ -41,9 +46,6 @@ const LoginPage = () => {
                 }}
                 style={{
                     maxWidth: 600,
-                }}
-                initialValues={{
-                    remember: true,
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
