@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ProfileProvider } from "../component/context/ProfileProvider";
-import ToastProvider from "../component/context/ToastProvider";
+import { ProfileProvider } from "../context/ProfileProvider";
+import ToastProvider from "../context/ToastProvider";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 const inter = Inter({ subsets: ["latin"] });

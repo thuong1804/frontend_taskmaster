@@ -5,7 +5,7 @@ import { Button } from 'antd'
 import { deleteCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import urlPath from '@/constant/path'
-import { useUser } from '../context/ProfileProvider'
+import { useUser } from '../../context/ProfileProvider'
 
 export default function HeaderLayout({children}) {
     const router = useRouter()

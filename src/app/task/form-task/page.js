@@ -3,7 +3,7 @@ import { Button, DatePicker, Form, Input, Select } from "antd";
 import styles from './formAddTodo.module.scss'
 import { useParams, useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import { useUser } from "@/component/context/ProfileProvider";
+import { useUser } from "@/context/ProfileProvider";
 import { createTask, getByIdTask, updateTask } from "@/service/taskService";
 import urlPath from "@/constant/path";
 import { useEffect, useState } from "react";
@@ -21,11 +21,9 @@ const FormTodo = () => {
     const [userData, setUserData] = useState();
     const userName = userData?.map(item => item.id)
     const [form] = Form.useForm();
-    console.log({userName})
 
     const onFinish = async (values) => {
         const checkUserReport = userName.includes(values.reporter)
-        console.log({checkUserReport})
         const dataBody = {
             ...values,
             userId: values.userId,
@@ -35,7 +33,7 @@ const FormTodo = () => {
         }
 
         if (isCreating) {
-             await createTask(dataBody)
+            await createTask(dataBody)
         } else {
             await updateTask({
                 ...dataBody,
@@ -43,7 +41,7 @@ const FormTodo = () => {
             })
         }
         toast.success('Add task success')
-        router.push(urlPath.todoList)
+        router.push(urlPath.task)
     };
 
     const onChange = (date, dateString) => {
@@ -84,7 +82,6 @@ const FormTodo = () => {
             form.setFieldValue('reporter', reporter);
             form.setFieldValue('userId', userId);
             form.setFieldValue('scheduledDate', dayjs(scheduledDate));
-            form.setFieldValue('completedDate', dayjs(completedDate));
         }
     }, [form, detailTask, isCreating])
 
@@ -186,7 +183,7 @@ const FormTodo = () => {
                             width: '100%',
                         }} />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         label="Completed Date"
                         name="completedDate"
                         rules={[
@@ -200,7 +197,7 @@ const FormTodo = () => {
                             style={{
                                 width: '100%',
                             }} />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item
                         wrapperCol={{
@@ -212,7 +209,7 @@ const FormTodo = () => {
                             <Button type="primary" htmlType="submit">
                                 Submit
                             </Button>
-                            <Button htmlType="button" onClick={() => router.push(urlPath.todoList)}>
+                            <Button htmlType="button" onClick={() => router.push(urlPath.task)}>
                                 Cancel
                             </Button>
                         </div>

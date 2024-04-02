@@ -4,7 +4,7 @@ import { AppstoreOutlined, MailOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { usePathname, useRouter } from "next/navigation";
 import styles from './navbar.module.scss'
-import { useUser } from "../context/ProfileProvider";
+import { useUser } from "../../context/ProfileProvider";
 
 const childrenKey = {
     user: '/manager-user',

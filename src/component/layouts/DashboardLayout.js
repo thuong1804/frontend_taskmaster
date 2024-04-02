@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react'
 import styles from './DashboardLayout.module.scss'
 import NavBarLayout from '@/component/NavBar/navbar'
-import { useUser } from '../context/ProfileProvider'
+import { useUser } from '../../context/ProfileProvider'
 import { getCookies } from 'cookies-next'
 import { handelGetProfileUser } from '@/service/user-service'
 

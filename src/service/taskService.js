@@ -3,7 +3,8 @@ import axios from "../setup/axios";
 const getTask = async ({userId, groupId, page, size}) => {
     return await axios({
         method: 'post',
-        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/tasks?page=${page}&size=${5}`,
+        // url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/tasks?page=${page}&size=${5}`,
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/tasks`,
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
         withCredentials: true,
         data: {
@@ -75,10 +76,38 @@ const getByIdTask = async (id) => {
     })
 }
 
+const searchTask = async ({taskTitle}) => {
+    return await axios({
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/search?taskTitle=${taskTitle}`,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        data: {
+            taskTitle: taskTitle,
+        },
+        withCredentials: true,
+    })
+}
+
+const updateInProgress = async ({id, isInProgress}) => {
+    return await axios({
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/task-progress`,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        data: {
+            id: id,
+            isInProgress: isInProgress,
+        },
+        withCredentials: true,
+    })
+}
+
+
 export {
     getTask,
     createTask,
     deleteTask,
     updateTask,
     getByIdTask,
+    searchTask,
+    updateInProgress,
 }

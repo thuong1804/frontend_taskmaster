@@ -1,24 +1,17 @@
 .container {
-    padding: 30px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 30px;
 
-    h1 {
-        color:#1677ff;
+    .btnAdd {
+        align-self: flex-end;
     }
 
+    .pagination {
+        align-self: flex-end;
+    }
 
-    .list {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-
-        .btnAdd {
-            align-self: flex-end;
-        }
-
-        .btnAction {
+     .btnAction {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -48,14 +41,10 @@
                     box-shadow: 0 3px 0 rgba(92, 137, 172, 0.1);
                 }
             }
-        }
-
-        .pagination {
-            align-self: flex-end;
-        }
     }
 
-    .timeFrameTaskTable{
-        margin-top: 100px;
+    .btnStartTask {
+        display: flex;
+        justify-content: space-between;
     }
 }
