@@ -1,4 +1,4 @@
-import { deleteTask, updateInProgress } from '@/service/taskService';
+import { deleteTask, updateInCompleted, updateInProgress } from '@/service/taskService';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Pagination, Popconfirm, Space, Table, Tag } from 'antd';
 import { usePathname } from 'next/navigation';
@@ -78,8 +78,14 @@ export default function TableTask({
         {
             title: 'Schedule Date',
             dataIndex: 'scheduledDate',
-            key: 'scheduledDate',
-            render: (text) => <span>{dayjs(text).format('DD-MM-YYYY')}</span>,
+            key: 'scheduleDate',
+            render: text => dayjs(text).format('DD-MM-YYYY')
+        },
+        {
+            title: 'Completed Date',
+            dataIndex: 'completedDate',
+            key: 'completedDate',
+            render: text => dayjs(text).format('DD-MM-YYYY')
         },
         {
             title: 'Action',
@@ -119,9 +125,11 @@ export default function TableTask({
     // }
 
     const handelTaskProgress = async () => {
+        const currentDay = new Date();
         const bodyData = {
             id: keyIdTaskProgress,
-            isInProgress: 1 ? true : false
+            isInProgress: 1 ? true : false,
+            scheduledDate: currentDay,
         }
         await updateInProgress(bodyData)
         setKeyIdTaskProgress([])
@@ -132,7 +140,8 @@ export default function TableTask({
     return (
         <div className={styles.container}>
             <SearchField
-                queryName={'Task Title'}
+                queryName={'taskTitle'}
+                objectName={'Task Title!'}
             />
             <div className={styles.btnAdd}>
                 <Button
@@ -177,6 +186,7 @@ export default function TableTask({
                 <ModalShowListTask
                     dataProgress={data}
                     setReloadData={setReloadData}
+                    userData={userData}
                 />
 
                 <Button

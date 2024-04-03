@@ -101,6 +101,20 @@ const updateInProgress = async ({id, isInProgress}) => {
     })
 }
 
+const updateInCompleted = async ({id, isCompleted}) => {
+    return await axios({
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/task-completed`,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        data: {
+            id: id,
+            isCompleted: isCompleted,
+        },
+        withCredentials: true,
+    })
+}
+
+
 
 export {
     getTask,
@@ -110,4 +124,5 @@ export {
     getByIdTask,
     searchTask,
     updateInProgress,
+    updateInCompleted,
 }

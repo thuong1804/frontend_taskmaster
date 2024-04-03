@@ -1,22 +1,22 @@
 import { Button, Popconfirm, Table, Tag } from "antd";
 import dayjs from "dayjs";
 import styles from './timeFrameTaskTable.module.scss'
-import urlPath from "@/constant/path";
 import { useEffect, useMemo, useState } from "react";
-import { updateInProgress } from "@/service/taskService";
+import { updateInCompleted, updateInProgress } from "@/service/taskService";
 
 const TimeFrameTaskTable = ({
     dataProgress,
     setReloadData,
+    userData,
 }) => {
     const [listTaskKey, setListTaskKey] = useState([])
+
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             setListTaskKey(selectedRowKeys)
         },
         getCheckboxProps: (record) => ({
             disabled: record.name === 'Disabled User',
-            // Column configuration not to be checked
             name: record.name,
         }),
     };
@@ -29,13 +29,13 @@ const TimeFrameTaskTable = ({
     const handelCancelTask = async () => {
         const bodyData = {
             id: listTaskKey,
-            isInProgress: 0 && false
+            isInProgress: 0 && false,
         }
         await updateInProgress(bodyData)
         setListTaskKey([])
         setReloadData(prevFlag => !prevFlag)
     }
-    console.log({listTaskKey})
+
     const columns = [
         {
             title: 'Task Title',
@@ -48,14 +48,14 @@ const TimeFrameTaskTable = ({
             title: 'Reporter',
             dataIndex: 'reporter',
             key: 'reporter',
-            // render: (id) => {
-            //     const reporterData = userData?.find(item => item.id === id);
-            //     if (reporterData) {
-            //         return <Tag color='red'>{reporterData.name}</Tag>;
-            //     } else {
-            //         return null;
-            //     }
-            // },
+            render: (id) => {
+                const reporterData = userData?.find(item => item.id === id);
+                if (reporterData) {
+                    return <Tag color='red'>{reporterData.name}</Tag>;
+                } else {
+                    return null;
+                }
+            },
             width: 200
         },
         {
@@ -78,18 +78,38 @@ const TimeFrameTaskTable = ({
             render: (text) => <span>{dayjs(text).format('DD-MM-YYYY')}</span>,
             width: 300
         },
+        {
+            title: 'Completed Date',
+            dataIndex: 'completedDate',
+            key: 'completedDate',
+            render: (text) => <span>{dayjs(text).format('DD-MM-YYYY')}</span>,
+            width: 300
+        },
+        {
+            title: 'Completed',
+            dataIndex: 'isCompleted',
+            key: 'isCompleted',
+            render: (isCompleted) => <Tag color={isCompleted === 1 ? 'green' : 'red'}>{isCompleted === 1 ? 'Finished' : 'Unfinished'}</Tag>,
+            width: 300
+        },
         // {
         //     title: 'Action',
         //     key: 'action',
         //     width: 150,
         //     render: (_, record) => (
-        //         <div className={styles.btnAction}>
-        //             <Button  danger onClick={handelCancelTask}>Cancel</Button>
-        //             <Button  type="primary">Completed</Button>
-        //         </div>
+        //         <Button  type="primary">Edit</Button>
         //     ),
         // },
     ];
+
+    const handelTaskCompleted = async() => {
+        const bodyData = {
+            id: listTaskKey,
+            isCompleted: 1 ? true : false,
+        }
+        setReloadData(prevFlag => !prevFlag)
+        await updateInCompleted(bodyData)
+    }
 
     return (
         <>
@@ -97,7 +117,7 @@ const TimeFrameTaskTable = ({
                 <Button danger onClick={handelCancelTask} disabled={listTaskKey.length < 1}>
                     Cancel
                 </Button>
-                <Button type="primary">Completed</Button>
+                <Button type="primary" disabled={listTaskKey.length < 1} onClick={handelTaskCompleted} >Completed</Button>
             </div>
             <Table
                 rowKey={'id'}
@@ -109,7 +129,23 @@ const TimeFrameTaskTable = ({
                 }}
                 columns={columns}
                 dataSource={filterData}
+                onRow={(record, index) => {
+                    const checkInProgress = record.isInProgress === 1 && record.isCompleted === 0;
+                    const recordDate = new Date(record.completedDate);
+                    if (checkInProgress) {
+                        const nowDay = new Date();
+                        const checkCompletedTask =  recordDate < nowDay
+                        return (
+                            ({
+                                style: {
+                                    background: checkCompletedTask && '#e37460'
+                                }
+                            })
+                        )
+                    }
+                }}
                 pagination={{
+                    pageSize: 7
                 }}
             />
         </>

@@ -113,7 +113,7 @@ const ListPageUser = () => {
                         <UserAddOutlined /> Add new user!
                     </Button>
                 </div>
-                <Table rowKey="Id" columns={columns} dataSource={data} />
+                <Table rowKey={'id'} columns={columns} dataSource={data} />
             </div>
     )
 }

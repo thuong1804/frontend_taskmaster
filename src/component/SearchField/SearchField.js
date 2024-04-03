@@ -19,7 +19,7 @@ export default function SearchField({
 
   return (
     <Search
-        placeholder={`Please input ${queryName}!`}
+        placeholder={`Please input ${objectName ? objectName : ''}!`}
         allowClear
         onSearch={onSearch}
         style={{

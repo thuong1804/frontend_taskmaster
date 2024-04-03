@@ -13,17 +13,15 @@ import { toast } from "sonner";
 
 const FormTodo = () => {
     const router = useRouter();
-    const { user } = useUser();
     const params = useParams()
     const taskId = params.id;
     const isCreating = !taskId;
     const [detailTask, setDetailTask] = useState();
     const [userData, setUserData] = useState();
-    const userName = userData?.map(item => item.id)
     const [form] = Form.useForm();
+    const [scheduleDate, setScheduleDate] = useState();
 
     const onFinish = async (values) => {
-        const checkUserReport = userName.includes(values.reporter)
         const dataBody = {
             ...values,
             userId: values.userId,
@@ -34,18 +32,20 @@ const FormTodo = () => {
 
         if (isCreating) {
             await createTask(dataBody)
+            toast.success('Add task success')
         } else {
             await updateTask({
                 ...dataBody,
                 id: +params.id,
             })
+            toast.success('Update task success')
+
         }
-        toast.success('Add task success')
         router.push(urlPath.task)
     };
 
     const onChange = (date, dateString) => {
-        console.log(date, dateString);
+        setScheduleDate(date)
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -62,12 +62,11 @@ const FormTodo = () => {
             fetchData()
         }
     }, [taskId])
-    console.log({user})
 
     useEffect(() => {
         const fetchDataUser = async () => {
             await handelGetListUser().then(res => {
-                console.log({res})
+                console.log({ res })
                 setUserData(res.data.data.content)
             })
         }
@@ -76,23 +75,38 @@ const FormTodo = () => {
 
     useEffect(() => {
         if (!isCreating) {
-            const { taskTitle, taskDescription, scheduledDate, completedDate, reporter, userId } = detailTask ?? {};
+            const {
+                taskTitle,
+                taskDescription,
+                scheduledDate,
+                completedDate,
+                reporter,
+                userId
+            } = detailTask ?? {};
             form.setFieldValue('taskTitle', taskTitle);
             form.setFieldValue('taskDescription', taskDescription);
             form.setFieldValue('reporter', reporter);
             form.setFieldValue('userId', userId);
             form.setFieldValue('scheduledDate', dayjs(scheduledDate));
+            form.setFieldValue('completedDate', dayjs(completedDate));
         }
     }, [form, detailTask, isCreating])
+
+    const disabledDate = (current) => {
+        const nowDate = dayjs().startOf('day');
+        const currentDate = dayjs(current).startOf('day');
+        const check = currentDate.isBefore(nowDate);
+        return check;
+    };
 
     return (
         <div className={styles.container}>
             <h1> {isCreating ? 'Add task' : 'Edit task'} </h1>
             <div style={{ width: '700px' }}>
                 <Form
-                // initialValues={{
-                //     reporter: user.name
-                // }}
+                    // initialValues={{
+                    //     reporter: user.name
+                    // }}
                     name="basic"
                     form={form}
                     labelCol={{
@@ -131,7 +145,7 @@ const FormTodo = () => {
                             },
                         ]}
                     >
-                       <Select
+                        <Select
                             placeholder="Select a option Owner"
                             // onChange={onGenderChange}
                             options={mappingDropdownData(userData)}
@@ -179,11 +193,15 @@ const FormTodo = () => {
                             },
                         ]}
                     >
-                        <DatePicker onChange={onChange} style={{
-                            width: '100%',
-                        }} />
+                        <DatePicker
+                            onChange={onChange}
+                            style={{
+                                width: '100%',
+                            }}
+                            disabledDate={disabledDate}
+                        />
                     </Form.Item>
-                    {/* <Form.Item
+                    <Form.Item
                         label="Completed Date"
                         name="completedDate"
                         rules={[
@@ -193,11 +211,19 @@ const FormTodo = () => {
                             },
                         ]}
                     >
-                        <DatePicker onChange={onChange}
+                        <DatePicker
+                            // onChange={onChange}
                             style={{
                                 width: '100%',
-                            }} />
-                    </Form.Item> */}
+                            }}
+                            disabledDate={
+                                (current) => {
+                                    const selectedDate = dayjs(current).endOf('day');
+                                    return selectedDate.isBefore(scheduleDate);
+                                }
+                            }
+                        />
+                    </Form.Item>
 
                     <Form.Item
                         wrapperCol={{

@@ -25,6 +25,7 @@ const ListTask = () => {
     const querySize = searchParams.get('size')
     const queryTaskTitle = searchParams.get('taskTitle')
     const [search, setSearch] = useState([])
+    console.log({queryTaskTitle})
 
     useEffect(() => {
         const fetchSearch = async () => {
@@ -40,7 +41,7 @@ const ListTask = () => {
         };
 
         fetchSearch();
-    }, [ reloadData, queryTaskTitle])
+    }, [queryTaskTitle])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,7 +63,7 @@ const ListTask = () => {
         };
 
         fetchData();
-    }, [ user, reloadData])
+    }, [user, reloadData])
 
     useEffect(() => {
         const fetchDataUser = async () => {
