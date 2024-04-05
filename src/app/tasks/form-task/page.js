@@ -3,12 +3,11 @@ import { Button, DatePicker, Form, Input, Select } from "antd";
 import styles from './formAddTodo.module.scss'
 import { useParams, useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import { useUser } from "@/context/ProfileProvider";
 import { createTask, getByIdTask, updateTask } from "@/service/taskService";
 import urlPath from "@/constant/path";
 import { useEffect, useState } from "react";
 import { handelGetListUser } from "@/service/user-service";
-import { getLabel, mappingDropdownData } from "@/constant/masterData";
+import { mappingDropdownData } from "@/constant/masterData";
 import { toast } from "sonner";
 
 const FormTodo = () => {
@@ -66,7 +65,6 @@ const FormTodo = () => {
     useEffect(() => {
         const fetchDataUser = async () => {
             await handelGetListUser().then(res => {
-                console.log({ res })
                 setUserData(res.data.data.content)
             })
         }

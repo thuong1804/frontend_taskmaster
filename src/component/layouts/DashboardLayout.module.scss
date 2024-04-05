@@ -1,13 +1,10 @@
 .layoutContainer {
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
+    height: calc(919px - 62px);
 
-    .leftLayout {
-        //
-    }
     .rightLayout {
+        padding: 20px;
         width: 100%;
+        background-color: rgb(238 242 245);
     }
 }

@@ -134,16 +134,16 @@ export default function TableTask({
         await updateInProgress(bodyData)
         setKeyIdTaskProgress([])
         setReloadData(prevFlag => !prevFlag)
-        toast.info(`Select ${titleTask} success`)
+        toast.success(`Select ${titleTask} success`)
     }
 
     return (
         <div className={styles.container}>
-            <SearchField
-                queryName={'taskTitle'}
-                objectName={'Task Title!'}
-            />
-            <div className={styles.btnAdd}>
+            <div className={styles.actionFilter}>
+                <SearchField
+                    queryName={'taskTitle'}
+                    objectName={'Task Title!'}
+                />
                 <Button
                     type='primary'
                     onClick={() => router.push(urlPath.formTask)}>
@@ -153,23 +153,13 @@ export default function TableTask({
                 rowSelection={{
                     type: 'checkbox',
                     ...rowSelection,
-                    hideSelectAll : true
+                    hideSelectAll: true
                 }}
                 scroll={{
                     y: 400
                 }}
                 className="table-striped-rows"
                 columns={columns}
-                onRow={(record, index) => {
-                    const checkCompletedTask = record.scheduledDate > record.completedDate
-                    return (
-                        ({
-                            // style: {
-                            //     background:   checkCompletedTask && '#e37460'
-                            // }
-                        })
-                    )
-                }}
                 dataSource={filterData}
                 pagination={false}
                 rowKey="id"

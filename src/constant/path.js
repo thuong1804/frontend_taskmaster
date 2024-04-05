@@ -1,10 +1,11 @@
 const urlPath = {
+    manageUser: '/manager-user',
     register: '/register',
-    formTask: '/task/form-task',
+    formTask: '/tasks/form-task',
     login: '/login',
     logout: '/logout',
     home:'/home',
-    task: '/task',
+    task: '/tasks',
     formEditUser: 'manager-user/form-edit-user'
 }
 export default urlPath;

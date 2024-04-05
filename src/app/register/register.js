@@ -11,15 +11,15 @@ const { Option } = Select;
 
 const Register = () => {
     const router = useRouter();
-    const [isCheckGroup, setIsCheckGroup]= useState();
-    const onFinish = async(values) => {
+    const [isCheckGroup, setIsCheckGroup] = useState();
+    const onFinish = async (values) => {
         const dataBody = {
             ...values,
             groupId: isCheckGroup ? 1 : 2,
             gender: values.gender === 'male' ? 1 : 2,
         }
         await handelCreateUser(dataBody).then(res => {
-            if(res.data.result) {
+            if (res.data.result) {
                 router.push(urlPath.home)
             }
         })
@@ -138,12 +138,12 @@ const Register = () => {
                     }}
                 >
                     <div className={styles.btnAction}>
-                    <Button type="primary" htmlType="submit">
-                        Submit
-                    </Button>
-                    <Button htmlType="button" onClick={()=> router.push('/home')}>
-                        Cancel
-                    </Button>
+                        <Button type="primary" htmlType="submit">
+                            Submit
+                        </Button>
+                        <Button htmlType="button" onClick={() => router.push('/home')}>
+                            Cancel
+                        </Button>
                     </div>
                 </Form.Item>
             </Form>

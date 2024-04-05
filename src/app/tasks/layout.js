@@ -1,6 +1,8 @@
 import WrapperLayout from "../_components/WrapperLayout";
 
-export default function ManagerUserLayout({ children }) {
+export default function ManagerTaskLayout({
+    children,
+}) {
     return (
         <WrapperLayout>{children}</WrapperLayout>
     )

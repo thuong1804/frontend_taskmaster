@@ -5,9 +5,7 @@ import DashboardLayout from '../../component/layouts/DashboardLayout';
 
 const Home = () => {
     return (
-        <DashboardLayout>
-            <HeaderLayout/>
-        </DashboardLayout>
+        <></>
     )
 }
 export default Home;

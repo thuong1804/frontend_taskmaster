@@ -16,7 +16,7 @@ const FormUser = ({ paramsId }) => {
             ...values,
             groupId: values.groupId === 'Admin' ? 1 : 2,
             id: +paramsId.id,
-            gender: values.gender === 'Male' ? 1 : 2,
+            gender: values.gender === 'male' ? 1 : 2,
         };
         await handelUpdateUser(bodyData).then((res) => {
             if (res.data.result) router.push('/home')

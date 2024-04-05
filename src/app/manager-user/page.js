@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import urlPath from "../../constant/path";
 import { toast } from "sonner";
 import DashboardLayout from "../../component/layouts/DashboardLayout";
+import FormAddNew from "./FormAddNew";
 
 const ListPageUser = () => {
     const [data, setData] = useState([])
@@ -65,8 +66,8 @@ const ListPageUser = () => {
             key: 'gender',
             dataIndex: 'gender',
             render: (tags) => {
-                let color = tags === '1' ? 'geekblue' : 'green';
-                const renderName = tags === '1' ? 'Male' : 'Female'
+                let color = tags === 1 ? 'geekblue' : 'green';
+                const renderName = tags === 1 ? 'Male' : 'Female'
                 return (
                     <Tag color={color} key={renderName}>
                         {renderName}
@@ -108,10 +109,8 @@ const ListPageUser = () => {
     return (
             <div className={styles.container}>
                 <h1> <UserOutlined /> List User Manager</h1>
-                <div className={styles.btnAddUser} >
-                    <Button type="primary" onClick={() => { router.push(urlPath.register) }}>
-                        <UserAddOutlined /> Add new user!
-                    </Button>
+                <div className={styles.FormAddNew}>
+                    <FormAddNew setReloadData={setReloadData}/>
                 </div>
                 <Table rowKey={'id'} columns={columns} dataSource={data} />
             </div>

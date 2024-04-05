@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import styles from './timeFrameTaskTable.module.scss'
 import { useEffect, useMemo, useState } from "react";
 import { updateInCompleted, updateInProgress } from "@/service/taskService";
+import SearchField from "@/component/SearchField/SearchField";
 
 const TimeFrameTaskTable = ({
     dataProgress,
@@ -113,6 +114,9 @@ const TimeFrameTaskTable = ({
 
     return (
         <>
+            <SearchField
+                queryName={'isCompleted'}
+            />
             <div className={styles.btnAction}>
                 <Button danger onClick={handelCancelTask} disabled={listTaskKey.length < 1}>
                     Cancel
@@ -134,7 +138,7 @@ const TimeFrameTaskTable = ({
                     const recordDate = new Date(record.completedDate);
                     if (checkInProgress) {
                         const nowDay = new Date();
-                        const checkCompletedTask =  recordDate < nowDay
+                        const checkCompletedTask =  dayjs(recordDate).isBefore(nowDay)
                         return (
                             ({
                                 style: {

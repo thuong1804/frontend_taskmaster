@@ -1,15 +1,15 @@
 'use client'
 
+import HeaderLayout from '@/component/layouts/HeaderLayout'
 import React, { useEffect } from 'react'
-import styles from './DashboardLayout.module.scss'
+import styles from './index.module.scss'
 import NavBarLayout from '@/component/NavBar/navbar'
-import { useUser } from '../../context/ProfileProvider'
+import { useUser } from '@/context/ProfileProvider'
 import { getCookies } from 'cookies-next'
 import { handelGetProfileUser } from '@/service/user-service'
-import classNames from 'classnames'
 
-export default function DashboardLayout({ children, className }) {
-    const {setUser} = useUser();
+function WrapperLayout({ children }) {
+    const {user ,setUser} = useUser();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,11 +27,18 @@ export default function DashboardLayout({ children, className }) {
     }, [setUser])
 
     return (
-        <div className={classNames(styles.layoutContainer, className)}>
-            <div className={styles.leftLayout}>
-                <NavBarLayout />
+        <div className={styles.wrapperContainer}>
+            <HeaderLayout  className={styles.header}/>
+            <div className={styles.content}>
+                <div className={styles.leftMenu}>
+                    <NavBarLayout user={user}/>
+                </div>
+                <div className={styles.rightContent}>
+                    {children}
+                </div>
             </div>
-            <div className={styles.rightLayout}>{children}</div>
         </div>
     )
 }
+
+export default WrapperLayout

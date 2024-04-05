@@ -4,7 +4,11 @@ import { Button, Drawer } from 'antd';
 import styles from './ModalShowListTask.module.scss'
 import TimeFrameTaskTable from '../timeFrameTaskTable';
 
-const ModalShowListTask = ({dataProgress, setReloadData, userData}) => {
+const ModalShowListTask = ({
+    dataProgress,
+    setReloadData,
+    userData
+}) => {
     const [open, setOpen] = useState(false);
 
     const showDrawer = () => {

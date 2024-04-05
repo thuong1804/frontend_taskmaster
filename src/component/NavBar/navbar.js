@@ -1,14 +1,16 @@
 'use client';
 
-import { AppstoreOutlined, MailOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, SolutionOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { usePathname, useRouter } from "next/navigation";
 import styles from './navbar.module.scss'
 import { useUser } from "../../context/ProfileProvider";
+import urlPath from "@/constant/path";
+import Link from "next/link";
 
 const childrenKey = {
-    user: '/manager-user',
-    task: '/task',
+    user: urlPath.manageUser,
+    task: urlPath.task,
 }
 
 const NavBarLayout = () => {
@@ -20,12 +22,12 @@ const NavBarLayout = () => {
         {
             label: 'Manager Users',
             key: 'sub1',
-            icon: <MailOutlined />,
+            icon: <SolutionOutlined />,
             children: [
                 {
                     key: childrenKey.user,
-                    label: 'List users',
-                    disabled: user?.groupId !== 1,
+                    label: <Link href={urlPath.manageUser} passHref>user</Link>,
+                    // disabled: user?.groupId !== 1,
                 }
             ],
             disabled: user?.groupId !== 1,
@@ -37,25 +39,23 @@ const NavBarLayout = () => {
             children: [
                 {
                     key: childrenKey.task,
-                    label: 'List task'
+                    label: <Link href={urlPath.task} passHref>task</Link>
                 }
             ]
         }
     ];
 
-    const onClick = (e) => {
-        push(e.key)
-    };
+    console.log('reload')
 
     return (
         <div className={styles.container}>
             <Menu
                 theme={'light'}
-                onClick={onClick}
                 style={{
-                    width: 256,
+                    width: "100%",
+                    minWidth: 256,
                 }}
-                defaultOpenKeys={pathname === '/manager-user' ? ['sub1'] : ['sub2']}
+                defaultOpenKeys={['sub1', 'sub2']}
                 selectedKeys={pathname === childrenKey.user ? childrenKey.user : childrenKey.task}
                 mode="inline"
                 items={items}
