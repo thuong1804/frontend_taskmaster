@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import styles from './navbar.module.scss'
 import urlPath from "@/constant/path";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const childrenKey = {
     user: urlPath.manageUser,
@@ -13,6 +14,12 @@ const childrenKey = {
 
 const NavBarLayout = ({user}) => {
     const pathname = usePathname();
+    const [selectedKeys, setSelectedKeys] = useState(childrenKey.user);
+    const [openKeys, setOpenKeys] = useState(pathname === childrenKey.user ? ['sub1'] : ['sub2']);
+
+    const handleSubMenuOpenChange = openKeys => {
+        setOpenKeys(openKeys);
+    };
 
     const items = [
         {
@@ -41,6 +48,17 @@ const NavBarLayout = ({user}) => {
         }
     ];
 
+    useEffect(() => {
+        if (pathname.includes(childrenKey.user) || pathname.split('/').length === 3) {
+            setSelectedKeys(childrenKey.user);
+        } else {
+            setSelectedKeys(childrenKey.task);
+        }
+
+    }, [pathname]);
+
+    
+
     const dataNav = items.filter(nav => {
         if (user?.groupId !== 1) return !nav.disabled
         return nav
@@ -54,9 +72,10 @@ const NavBarLayout = ({user}) => {
                     width: "100%",
                     minWidth: 256,
                 }}
-                defaultOpenKeys={pathname === '/manager-user' ? ['sub1'] : ['sub2']}
-                selectedKeys={pathname === childrenKey.user ? childrenKey.user : childrenKey.task}
+                defaultOpenKeys={openKeys}
+                selectedKeys={[selectedKeys]}
                 mode="inline"
+                onOpenChange={handleSubMenuOpenChange}
                 items={dataNav}
             />
         </div>

@@ -9,7 +9,7 @@ import { useUser } from '@/context/ProfileProvider';
 import { handelGetListUser } from '@/service/user-service';
 import TableTask from './tableTask';
 import TimeFrameTaskTable from './timeFrameTaskTable';
-import ModalShowListTask from './ModalShowListTask/ModalShowListTask';
+import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';
 
 const ListTask = () => {
     const [data, setData] = useState([]);

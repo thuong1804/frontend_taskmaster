@@ -4,6 +4,8 @@ import styles from './timeFrameTaskTable.module.scss'
 import { useEffect, useMemo, useState } from "react";
 import { updateInCompleted, updateInProgress } from "@/service/taskService";
 import SearchField from "@/component/SearchField/SearchField";
+import ModalShowListTask from "./_ModalShowListTask/ModalShowListTask";
+import ModalShowTaskCompleted from "./_ModalShowTaskCompleted/ModalShowTaskCompleted";
 
 const TimeFrameTaskTable = ({
     dataProgress,
@@ -118,6 +120,7 @@ const TimeFrameTaskTable = ({
                 queryName={'isCompleted'}
             />
             <div className={styles.btnAction}>
+                <ModalShowTaskCompleted />
                 <Button danger onClick={handelCancelTask} disabled={listTaskKey.length < 1}>
                     Cancel
                 </Button>

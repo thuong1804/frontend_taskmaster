@@ -1,4 +1,4 @@
-import { Roboto  } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { ProfileProvider } from "../context/ProfileProvider";
 import ToastProvider from "../context/ToastProvider";
@@ -8,7 +8,7 @@ const roboto = Roboto({
     weight: '400',
     subsets: ['latin'],
     display: 'swap',
-  })
+})
 
 export const metadata = {
     title: "Create Next App",

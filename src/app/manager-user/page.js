@@ -9,6 +9,7 @@ import urlPath from "../../constant/path";
 import { toast } from "sonner";
 import FormAddNew from "./FormAddNew";
 import Skeletons from "@/component/Skeleton";
+import { useUser } from "@/context/ProfileProvider";
 
 const ListPageUser = () => {
     const [data, setData] = useState([])
@@ -87,7 +88,7 @@ const ListPageUser = () => {
             render: (_, record) => {
                 return (
                     <Space size="middle">
-                        <Button type="primary" onClick={() => router.push(`${urlPath.formEditUser}/${record.id}`)}>
+                        <Button type="primary" onClick={() => router.push(`${urlPath.manageUser}/${record.id}`)}>
                             <EditOutlined /> </Button>
                         <Popconfirm
                             title="Delete the user"

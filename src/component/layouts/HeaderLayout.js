@@ -10,6 +10,7 @@ import Image from 'next/image'
 import imgLogo from '../../../public/output-logo.png'
 import { AuditOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
+import Profile from '@/app/profile/page'
 
 export default function HeaderLayout({ className }) {
     const router = useRouter()
@@ -27,7 +28,7 @@ export default function HeaderLayout({ className }) {
             key: '1',
             label: (
                 <div target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                   <AuditOutlined /> Profile
+                   <Profile />
                 </div>
             ),
         },

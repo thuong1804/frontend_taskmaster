@@ -6,6 +6,5 @@ const urlPath = {
     logout: '/logout',
     home:'/home',
     task: '/tasks',
-    formEditUser: 'manager-user/form-edit-user'
 }
 export default urlPath;
