@@ -1,15 +1,21 @@
 'use client'
-import { Button, Space, Table, Tag } from "antd";
+import { Button, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
-import { handelGetListUser } from "../service/user-service";
+import { handelDeleteUser, handelGetListUser } from "../../service/user-service";
 import { UserAddOutlined, EditOutlined, UserDeleteOutlined, UserOutlined } from "@ant-design/icons";
 import styles from './page.module.scss'
 import { useRouter } from "next/navigation";
-import urlPath from "../constant/path";
+import urlPath from "../../constant/path";
+import { toast } from "sonner";
+import FormAddNew from "./FormAddNew";
+import Skeletons from "@/component/Skeleton";
 
 const ListPageUser = () => {
     const [data, setData] = useState([])
     const router = useRouter();
+    const [userID, setUserID] = useState([]);
+    const [reloadData, setReloadData] = useState(false);
+
     useEffect(() => {
         const fetchData = async () => {
             await handelGetListUser().then(res => {
@@ -19,9 +25,24 @@ const ListPageUser = () => {
             })
         }
         fetchData();
-    }, [])
+    }, [reloadData])
 
-    console.log({ data })
+    const confirm = async (e) => {
+        await handelDeleteUser(userID).then(res => {
+            if (res.data.result) {
+                toast.success('Delete user success')
+                setReloadData(prevFlag => !prevFlag)
+            }
+        }).catch((error) => {
+            if (error) {
+                return toast.error('Delete user failed')
+            }
+        })
+    };
+
+    const cancel = (e) => {
+        console.log(e);
+    };
 
     const columns = [
         {
@@ -45,7 +66,6 @@ const ListPageUser = () => {
             key: 'gender',
             dataIndex: 'gender',
             render: (tags) => {
-                console.log(tags)
                 let color = tags === 1 ? 'geekblue' : 'green';
                 const renderName = tags === 1 ? 'Male' : 'Female'
                 return (
@@ -64,26 +84,42 @@ const ListPageUser = () => {
             title: 'Action',
             key: 'action',
             width: 200,
-            render: (_, record) => (
-                <Space size="middle">
-                    <Button type="primary"><EditOutlined /></Button>
-                    <Button> <UserDeleteOutlined /> </Button>
-                </Space>
-            ),
+            render: (_, record) => {
+                return (
+                    <Space size="middle">
+                        <Button type="primary" onClick={() => router.push(`${urlPath.formEditUser}/${record.id}`)}>
+                            <EditOutlined /> </Button>
+                        <Popconfirm
+                            title="Delete the user"
+                            placement="topRight"
+                            description="Are you sure to delete this user?"
+                            onConfirm={confirm}
+                            onCancel={cancel}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button danger onClick={() => { setUserID(record.id) }}><UserDeleteOutlined /></Button>
+                        </Popconfirm>
+                    </Space>
+                )
+            },
         },
     ];
 
     return (
-        <div className={styles.container}>
-            <h1> <UserOutlined /> List User Manager</h1>
-            <div className={styles.btnAddUser} >
-                <Button type="primary" onClick={() => {router.push(urlPath.signUp)}}>
-                    <UserAddOutlined /> Add new user!
-                </Button>
-            </div>
-            <Table columns={columns} dataSource={data} />
-        </div>
-
+        <>
+            {!data ? (
+                <Skeletons className={styles.skeleton} />
+            ) : (
+                <div className={styles.container}>
+                    <h1> <UserOutlined /> List User Manager</h1>
+                    <div className={styles.FormAddNew}>
+                        <FormAddNew setReloadData={setReloadData} />
+                    </div>
+                    <Table rowKey={'id'} columns={columns} dataSource={data} />
+                </div>
+            )}
+        </>
     )
 }
 export default ListPageUser

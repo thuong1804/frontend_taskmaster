@@ -1,0 +1,63 @@
+.container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    h1 {
+        color:#1677ff;
+    }
+
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .btnAdd {
+            align-self: flex-end;
+        }
+
+        .btnAction {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            button {
+                padding: 10px;
+                border-radius: 10px;
+                border: none;
+                cursor: pointer;
+            }
+
+            .btnEdit {
+                color: white;
+                width: 50px;
+                background-color: #f7bb07;
+
+                &:hover {
+                    box-shadow: 0 3px 0 rgba(92, 137, 172, 0.1);
+                }
+            }
+
+            .btnDelete {
+                color: white;
+                background: #dc3545;
+
+                &:hover {
+                    box-shadow: 0 3px 0 rgba(92, 137, 172, 0.1);
+                }
+            }
+        }
+
+        .pagination {
+            align-self: flex-end;
+        }
+    }
+
+    .timeFrameTaskTable{
+        margin-top: 100px;
+    }
+}

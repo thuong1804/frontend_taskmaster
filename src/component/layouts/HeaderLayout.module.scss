@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    align-items: center;
+    background-color: rgb(22 119 255);
+    justify-content: space-between;
+    padding: 0px 25px 0px 0px;
+
+    .contentLeft {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+
+        h3 {
+            color: #ffffff;
+        }
+    }
+    
+    .contentRight {
+        .iconProfile {
+            font-size: 25px;
+            color: white;
+        }
+    }
+}

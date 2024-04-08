@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    h1 {
+        color:#1677ff;
+    }
+
+    .formSignUp {
+        width: 700px;
+    }
+}
+
+.btnAction {
+    display: flex;
+    gap: 10px;
+}
