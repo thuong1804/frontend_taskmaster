@@ -1,10 +1,8 @@
-'use client';
-
+'use client'
 import { AppstoreOutlined, SolutionOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { usePathname, useRouter } from "next/navigation";
 import styles from './navbar.module.scss'
-import { useUser } from "../../context/ProfileProvider";
 import urlPath from "@/constant/path";
 import Link from "next/link";
 
@@ -13,10 +11,8 @@ const childrenKey = {
     task: urlPath.task,
 }
 
-const NavBarLayout = () => {
-    const { push } = useRouter()
+const NavBarLayout = ({user}) => {
     const pathname = usePathname();
-    const {user} = useUser();
 
     const items = [
         {
@@ -26,8 +22,8 @@ const NavBarLayout = () => {
             children: [
                 {
                     key: childrenKey.user,
-                    label: <Link href={urlPath.manageUser} passHref>user</Link>,
-                    // disabled: user?.groupId !== 1,
+                    label: <Link href={urlPath.manageUser} passHref>List user</Link>,
+                    disabled: user?.groupId !== 1,
                 }
             ],
             disabled: user?.groupId !== 1,
@@ -39,13 +35,16 @@ const NavBarLayout = () => {
             children: [
                 {
                     key: childrenKey.task,
-                    label: <Link href={urlPath.task} passHref>task</Link>
+                    label: <Link href={urlPath.task} passHref>List task</Link>
                 }
             ]
         }
     ];
 
-    console.log('reload')
+    const dataNav = items.filter(nav => {
+        if (user?.groupId !== 1) return !nav.disabled
+        return nav
+    })
 
     return (
         <div className={styles.container}>
@@ -55,10 +54,10 @@ const NavBarLayout = () => {
                     width: "100%",
                     minWidth: 256,
                 }}
-                defaultOpenKeys={['sub1', 'sub2']}
+                defaultOpenKeys={pathname === '/manager-user' ? ['sub1'] : ['sub2']}
                 selectedKeys={pathname === childrenKey.user ? childrenKey.user : childrenKey.task}
                 mode="inline"
-                items={items}
+                items={dataNav}
             />
         </div>
 

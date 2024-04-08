@@ -10,7 +10,7 @@ import { handelGetListUser } from "@/service/user-service";
 import { mappingDropdownData } from "@/constant/masterData";
 import { toast } from "sonner";
 
-const FormTodo = () => {
+const FormTask = () => {
     const router = useRouter();
     const params = useParams()
     const taskId = params.id;
@@ -99,6 +99,7 @@ const FormTodo = () => {
 
     return (
         <div className={styles.container}>
+            <div className={styles.contentForm}>
             <h1> {isCreating ? 'Add task' : 'Edit task'} </h1>
             <div style={{ width: '700px' }}>
                 <Form
@@ -240,7 +241,9 @@ const FormTodo = () => {
                     </Form.Item>
                 </Form>
             </div>
+            </div>
+            
         </div>
     )
 }
-export default FormTodo;
+export default FormTask;

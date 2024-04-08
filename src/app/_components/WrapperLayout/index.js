@@ -1,30 +1,18 @@
 'use client'
 
 import HeaderLayout from '@/component/layouts/HeaderLayout'
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './index.module.scss'
 import NavBarLayout from '@/component/NavBar/navbar'
 import { useUser } from '@/context/ProfileProvider'
-import { getCookies } from 'cookies-next'
-import { handelGetProfileUser } from '@/service/user-service'
+import classNames from 'classnames'
+import Loading from '@/component/Loading'
 
 function WrapperLayout({ children }) {
-    const {user ,setUser} = useUser();
+    const {user} = useUser();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const cookies = getCookies('login');
-                if (cookies && cookies.login) {
-                    const res = await handelGetProfileUser();
-                    setUser(res.data.data.content);
-                }
-            } catch (error) {
-                console.error("Error fetching user profile:", error);
-            }
-        };
-        fetchData();
-    }, [setUser])
+    if(!user)
+    return <div className={classNames(styles.wrapperContainer, styles.loading)}><Loading/></div>
 
     return (
         <div className={styles.wrapperContainer}>

@@ -7,8 +7,8 @@ import styles from './page.module.scss'
 import { useRouter } from "next/navigation";
 import urlPath from "../../constant/path";
 import { toast } from "sonner";
-import DashboardLayout from "../../component/layouts/DashboardLayout";
 import FormAddNew from "./FormAddNew";
+import Skeletons from "@/component/Skeleton";
 
 const ListPageUser = () => {
     const [data, setData] = useState([])
@@ -98,7 +98,7 @@ const ListPageUser = () => {
                             okText="Yes"
                             cancelText="No"
                         >
-                            <Button danger onClick={() => { setUserID(record.id)}}><UserDeleteOutlined /></Button>
+                            <Button danger onClick={() => { setUserID(record.id) }}><UserDeleteOutlined /></Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -107,13 +107,19 @@ const ListPageUser = () => {
     ];
 
     return (
-            <div className={styles.container}>
-                <h1> <UserOutlined /> List User Manager</h1>
-                <div className={styles.FormAddNew}>
-                    <FormAddNew setReloadData={setReloadData}/>
+        <>
+            {!data ? (
+                <Skeletons className={styles.skeleton} />
+            ) : (
+                <div className={styles.container}>
+                    <h1> <UserOutlined /> List User Manager</h1>
+                    <div className={styles.FormAddNew}>
+                        <FormAddNew setReloadData={setReloadData} />
+                    </div>
+                    <Table rowKey={'id'} columns={columns} dataSource={data} />
                 </div>
-                <Table rowKey={'id'} columns={columns} dataSource={data} />
-            </div>
+            )}
+        </>
     )
 }
 export default ListPageUser

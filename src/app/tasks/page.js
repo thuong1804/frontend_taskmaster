@@ -25,7 +25,6 @@ const ListTask = () => {
     const querySize = searchParams.get('size')
     const queryTaskTitle = searchParams.get('taskTitle')
     const [search, setSearch] = useState([])
-    console.log({queryTaskTitle})
 
     useEffect(() => {
         const fetchSearch = async () => {
