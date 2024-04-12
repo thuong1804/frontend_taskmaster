@@ -1,12 +1,13 @@
 "use client"
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useRouter } from 'next/navigation'
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './login.module.scss'
 import urlPath from '../../constant/path';
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
+import Link from 'next/link'
 import 'react-toastify/dist/ReactToastify.css';
 import { login } from '../../service/authService';
-import { useEffect } from 'react';
 
 const LoginPage = () => {
     const router = useRouter();
@@ -25,86 +26,67 @@ const LoginPage = () => {
             }
         })
     };
+
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
 
     return (
         <div className={styles.container}>
-            <h1>Please Login!</h1>
-            <Form
-                name="basic"
-                initialValues={{
-                    email: 'admin@.com',
-                    password: '123123'
-
-                }}
-                labelCol={{
-                    span: 8,
-                }}
-                wrapperCol={{
-                    span: 16,
-                }}
-                style={{
-                    maxWidth: 600,
-                }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-            >
-                <Form.Item
-                    label="Email"
-                    name="email"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your email!',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                    ]}
-                >
-                    <Input.Password />
-                </Form.Item>
-
-                <Form.Item
-                    name="remember"
-                    valuePropName="checked"
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
+            <div className={styles.formContent}>
+                <h1>Login</h1>
+                <Form
+                    name="normal_login"
+                    className="login-form"
+                    initialValues={{ remember: true }}
+                    onFinish={onFinish}
+                    style={{
+                        width:'100%',
+                        padding:'30px',
                     }}
                 >
-                    <Checkbox>Remember me</Checkbox>
-                </Form.Item>
+                    <Form.Item
+                        name="email"
+                        rules={[{
+                            required: true,
+                            message: 'Please input your Email!',
+                             type:"email"
+                        }]}
+                    >
+                        <Input prefix={<UserOutlined  />} placeholder="Email!" />
+                    </Form.Item>
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: 'Please input your Password!' }]}
+                    >
+                        <Input
+                            prefix={<LockOutlined />}
+                            type="password"
+                            placeholder="Password"
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <div className={styles.content}>
+                            <Form.Item name="remember" valuePropName="checked" noStyle>
+                                <Checkbox>Remember me</Checkbox>
+                            </Form.Item>
 
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
-                    <div className={styles.btnAction}>
-                        <Button type="primary" htmlType="submit">
-                            Submit
-                        </Button>
-                        <Button htmlType="button" onClick={() => router.push(urlPath.register)}>
-                            Register
-                        </Button>
-                    </div>
-                </Form.Item>
-            </Form>
+                            <a className="login-form-forgot" href="">
+                                Forgot password
+                            </a>
+                        </div>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <div className={styles.footer}>
+                            <Button type="primary" htmlType="submit" className="login-form-button">
+                                Log in
+                            </Button>
+                          <span>Or <Link href={urlPath.register}>register now!</Link></span>
+                        </div>
+                    </Form.Item>
+                </Form>
+            </div>
         </div>
     )
 }

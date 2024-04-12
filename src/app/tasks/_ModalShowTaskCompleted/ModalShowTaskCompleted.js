@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Modal, List } from 'antd';
+import { getTask } from '@/service/taskService';
+import { useUser } from '@/context/ProfileProvider';
 
 export default function ModalShowTaskCompleted() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [dataCompleted, setDataCompleted] = useState([])
+    const {user} = useUser();
+
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -26,6 +31,22 @@ export default function ModalShowTaskCompleted() {
             title: 'Ant Design Title 4',
         },
     ];
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const dataBody = {
+                userId: user?.id,
+                groupId: user?.groupId,
+                // page: queryPage ? queryPage : 1,
+                // size: +querySize ? +querySize : +size
+            };
+            const response = await getTask(dataBody);
+           setDataCompleted(response.data.data)
+        }
+        fetchData()
+    }, [])
+
+    console.log({dataCompleted})
     return (
         <>
             <Button type="primary" onClick={showModal}>

@@ -1,9 +1,8 @@
-import { deleteTask, updateInCompleted, updateInProgress } from '@/service/taskService';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Pagination, Popconfirm, Space, Table, Tag } from 'antd';
-import { usePathname } from 'next/navigation';
+import { deleteTask, updateInProgress } from '@/service/taskService';
+import { PlusOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Table, Tag } from 'antd';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import dayjs from 'dayjs';
 import { toast } from 'sonner';
@@ -90,11 +89,14 @@ export default function TableTask({
         {
             title: 'Action',
             key: 'action',
-            width: 150,
+            width: '10%',
             render: (_, record) => (
                 <div className={styles.btnAction}>
-                    <button className={styles.btnEdit} onClick={() => router.push(`${urlPath.formTask}/${record.id}`)}>Edit</button>
-
+                    <Button
+                        style={{background:'#f4a62a', color:'white'}}
+                        onClick={() => router.push(`${urlPath.formTask}/${record.id}`)}>
+                           <EditOutlined /> Edit
+                    </Button>
                     <Popconfirm
                         placement="topRight"
                         title="Delete the task"
@@ -104,7 +106,12 @@ export default function TableTask({
                         okText="Yes"
                         cancelText="No"
                     >
-                        <button className={styles.btnDelete} onClick={() => setTaskID(record.id)} >Delete</button>
+                        <Button
+                            danger
+                            type="primary"
+                            onClick={() => setTaskID(record.id)} >
+                            <MinusCircleOutlined /> Delete
+                        </Button>
                     </Popconfirm>
                 </div>
             ),
@@ -155,14 +162,13 @@ export default function TableTask({
                     ...rowSelection,
                     hideSelectAll: true
                 }}
-                scroll={{
-                    y: 400
-                }}
                 className="table-striped-rows"
                 columns={columns}
                 dataSource={filterData}
-                pagination={false}
                 rowKey="id"
+                pagination={{
+                    pageSize: 6,
+                }}
             />
             {/* <div className={styles.pagination}>
                 <Pagination

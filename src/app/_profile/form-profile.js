@@ -98,6 +98,7 @@ export default function FormProfile({ setIsModalOpen }) {
                         ]}
                     >
                         <Switch
+                            disabled
                             checkedChildren={'Admin'}
                             unCheckedChildren={'User'}
                             onChange={onChangeGroup}

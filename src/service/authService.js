@@ -16,6 +16,21 @@ const login = async(email, password) => {
     })
 }
 
+const register = async({email, name, password, confirmPassword}) => {
+    return await axios({
+          method: 'post',
+          url: `${process.env.NEXT_PUBLIC_WEB_URL}/register`,
+          headers: {'X-Requested-With': 'XMLHttpRequest'},
+          data: {
+              email,
+              name,
+              password,
+              confirmPassword,
+          },
+          withCredentials: true,
+      })
+  }
+
 const logout = async() => {
    return await axios({
         method: 'post',
@@ -24,5 +39,6 @@ const logout = async() => {
 }
 export {
     login,
-    logout
+    logout,
+    register
 }
