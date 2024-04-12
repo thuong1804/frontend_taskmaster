@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Col, Drawer, Form, Input, Radio, Row, Select, Space, Switch } from 'antd'
+import { Button, Col, Drawer, Form, Input, Radio, Row, Switch } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styles from './FormAddNew.module.scss'
 import { handelCreateUser } from '@/service/user-service';

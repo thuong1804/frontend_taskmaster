@@ -6,7 +6,7 @@ import { useState, createContext, useContext, useEffect } from "react";
 export const ProfileContext = createContext({});
 
 export const ProfileProvider = ({ children }) => {
-    const [user, setUser] = useState();
+const [user, setUser] = useState();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,9 +23,9 @@ export const ProfileProvider = ({ children }) => {
         fetchData();
     }, [])
 
+
     const clearUserData = () => {
         setUser(null); // Clear user data
-        // You might want to add additional logic here, such as clearing cookies or any other stored data related to the user
     };
 
     return (

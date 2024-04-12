@@ -4,6 +4,7 @@ import styles from './timeFrameTaskTable.module.scss'
 import { useEffect, useMemo, useState } from "react";
 import { updateInCompleted, updateInProgress } from "@/service/taskService";
 import SearchField from "@/component/SearchField/SearchField";
+import ModalShowTaskCompleted from "./_ModalShowTaskCompleted/ModalShowTaskCompleted";
 
 const TimeFrameTaskTable = ({
     dataProgress,
@@ -11,10 +12,13 @@ const TimeFrameTaskTable = ({
     userData,
 }) => {
     const [listTaskKey, setListTaskKey] = useState([])
+    const [listTaskCompleted, setListTaskCompleted] = useState([])
+    const isTaskCompleted = listTaskCompleted.some(item => item.isCompleted === 1)
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             setListTaskKey(selectedRowKeys)
+            setListTaskCompleted(selectedRows)
         },
         getCheckboxProps: (record) => ({
             disabled: record.name === 'Disabled User',
@@ -118,7 +122,8 @@ const TimeFrameTaskTable = ({
                 queryName={'isCompleted'}
             />
             <div className={styles.btnAction}>
-                <Button danger onClick={handelCancelTask} disabled={listTaskKey.length < 1}>
+                {/* <ModalShowTaskCompleted /> */}
+                <Button danger onClick={handelCancelTask} disabled={isTaskCompleted || listTaskKey.length < 1 }>
                     Cancel
                 </Button>
                 <Button type="primary" disabled={listTaskKey.length < 1} onClick={handelTaskCompleted} >Completed</Button>
@@ -142,7 +147,7 @@ const TimeFrameTaskTable = ({
                         return (
                             ({
                                 style: {
-                                    background: checkCompletedTask && '#e37460'
+                                    background: checkCompletedTask && '#e37460',
                                 }
                             })
                         )

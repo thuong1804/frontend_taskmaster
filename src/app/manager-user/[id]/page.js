@@ -1,7 +1,7 @@
 'use client'
 import { UserAddOutlined } from "@ant-design/icons";
 import FormUser from "./form-user";
-import styles from '../page.module.scss'
+import styles from './page.module.scss'
 import { useParams } from 'next/navigation'
 const FormUserPage = () => {
     const paramsId = useParams();

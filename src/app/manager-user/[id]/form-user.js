@@ -1,10 +1,11 @@
 'use client'
 import { Button, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
-import styles from '../page.module.scss'
+import styles from './page.module.scss'
 import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/service/user-service";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import urlPath from "@/constant/path";
 
 const FormUser = ({ paramsId }) => {
     const router = useRouter();
@@ -126,11 +127,11 @@ const FormUser = ({ paramsId }) => {
                 }}
             >
                 <div className={styles.btnAction}>
+                    <Button htmlType="button" onClick={() => router.push(urlPath.manageUser)}>
+                        Cancel
+                    </Button>
                     <Button type="primary" htmlType="submit">
                         Save
-                    </Button>
-                    <Button htmlType="button" onClick={() => router.push('/home')}>
-                        Cancel
                     </Button>
                 </div>
             </Form.Item>

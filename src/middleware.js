@@ -5,10 +5,15 @@ export function middleware(request) {
     if (!isLogin) {
         if (request.nextUrl.pathname.startsWith("/home")) {
             return NextResponse.redirect(new URL("/login", request.url));
-        } else if (request.nextUrl.pathname.startsWith("/todo-list")) {
+        } else if (request.nextUrl.pathname.startsWith("/task")) {
+            return NextResponse.redirect(new URL("/login", request.url));
+        } else if (request.nextUrl.pathname.startsWith("/manager-user")) {
             return NextResponse.redirect(new URL("/login", request.url));
         }
+
     } else if (request.nextUrl.pathname.startsWith("/login")){
+        return NextResponse.redirect(new URL("/home", request.url));
+    } else if (request.nextUrl.pathname.startsWith("/register")) {
         return NextResponse.redirect(new URL("/home", request.url));
     }
 }
