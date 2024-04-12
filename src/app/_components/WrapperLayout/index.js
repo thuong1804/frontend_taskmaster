@@ -1,7 +1,7 @@
 'use client'
 
 import HeaderLayout from '@/component/layouts/HeaderLayout'
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './index.module.scss'
 import NavBarLayout from '@/component/NavBar/navbar'
 import { useUser } from '@/context/ProfileProvider'
@@ -12,7 +12,7 @@ function WrapperLayout({ children }) {
     const {user} = useUser();
 
     if(!user)
-    return <div className={classNames(styles.wrapperContainer, styles.loading)}><Loading/></div>
+        return <div className={classNames(styles.wrapperContainer, styles.loading)}><Loading/></div>
 
     return (
         <div className={styles.wrapperContainer}>

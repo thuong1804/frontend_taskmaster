@@ -3,11 +3,11 @@ import { deleteCookie } from "cookies-next";
 import axios from "axios";
 import urlPath from "../constant/path";
 
-const login = async(email, password) => {
-  return await axios({
+const login = async (email, password) => {
+    return await axios({
         method: 'post',
-        url: process.env.NEXT_PUBLIC_WEB_URL + urlPath.login,
-        headers: {'X-Requested-With': 'XMLHttpRequest'},
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/login`,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
         data: {
             email,
             password,
@@ -16,29 +16,54 @@ const login = async(email, password) => {
     })
 }
 
-const register = async({email, name, password, confirmPassword}) => {
+const register = async ({ email, name, password, confirmPassword }) => {
     return await axios({
-          method: 'post',
-          url: `${process.env.NEXT_PUBLIC_WEB_URL}/register`,
-          headers: {'X-Requested-With': 'XMLHttpRequest'},
-          data: {
-              email,
-              name,
-              password,
-              confirmPassword,
-          },
-          withCredentials: true,
-      })
-  }
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/register`,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        data: {
+            email,
+            name,
+            password,
+            confirmPassword,
+        },
+        withCredentials: true,
+    })
+}
 
-const logout = async() => {
-   return await axios({
+const logout = async () => {
+    return await axios({
         method: 'post',
         url: process.env.NEXT_PUBLIC_WEB_URL + urlPath.logout,
-    }).then((res) => {deleteCookie('login'), deleteCookie('refreshToken')})
+    }).then((res) => { deleteCookie('login'), deleteCookie('refreshToken') })
+}
+
+const sendEmailCode = async ({email}) => {
+    return await axios({
+        method: 'post',
+        data: {
+            email,
+        },
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/sendEmail`,
+    })
+}
+
+const verifyCode = async ({code, emailUSer}) => {
+    return await axios({
+        method: 'post',
+        data: {
+            code,
+            emailUSer,
+        },
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        withCredentials: true,
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/recover-code`,
+    })
 }
 export {
     login,
     logout,
-    register
+    register,
+    sendEmailCode,
+    verifyCode,
 }

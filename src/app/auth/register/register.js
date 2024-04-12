@@ -3,12 +3,11 @@ import { Button, Form, Input, Select, Switch } from "antd";
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styles from './register.module.scss'
-import urlPath from "../../constant/path";
-import { handelCreateUser } from "../../service/user-service";
 import { UserOutlined, LockOutlined, SmileOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { register } from "@/service/authService";
 import { toast } from "sonner";
+import urlPath from "@/constant/path";
 
 const Register = () => {
     const router = useRouter();
@@ -87,11 +86,20 @@ const Register = () => {
                 </Form.Item>
                 <Form.Item
                     name="confirmPassword"
+                    dependencies={['password']}
                     rules={[
-                        {
-                            required: true,
-                            message: 'Please input your ConfirmPassword!',
+                      {
+                        required: true,
+                        message: 'Please confirm your password!',
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue('password') === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(new Error('The two passwords do not match!'));
                         },
+                      }),
                     ]}
                 >
                     <Input.Password placeholder="Confirm Password" prefix={<LockOutlined className="site-form-item-icon" />}/>
