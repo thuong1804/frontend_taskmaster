@@ -8,6 +8,7 @@ const urlPath = {
     home:'/home',
     task: '/tasks',
     recoverCode: '/auth/recover-code',
+    changePassword: '/auth/change-password',
 
 }
 export default urlPath;

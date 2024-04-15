@@ -6,7 +6,7 @@ import React, { useMemo, useState } from 'react'
 
 import dayjs from 'dayjs';
 import { toast } from 'sonner';
-import styles from './tableTask.module.scss'
+import styles from './TableTask.module.scss'
 import SearchField from '@/component/SearchField/SearchField';
 import urlPath from '@/constant/path';
 import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';

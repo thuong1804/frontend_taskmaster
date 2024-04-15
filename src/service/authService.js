@@ -60,10 +60,40 @@ const verifyCode = async ({code, emailUSer}) => {
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/recover-code`,
     })
 }
+
+const changePasswordForgot = async ({email, password, confirmPassword}) => {
+    return await axios({
+        method: 'post',
+        data: {
+            email,
+            password,
+            confirmPassword,
+        },
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        withCredentials: true,
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/change-password-forgot`,
+    })
+}
+
+const changePassword = async ({email, password, newPassword}) => {
+    return await axios({
+        method: 'post',
+        data: {
+            email,
+            password,
+            newPassword,
+        },
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        withCredentials: true,
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/change-password`,
+    })
+}
 export {
     login,
     logout,
     register,
     sendEmailCode,
     verifyCode,
+    changePassword,
+    changePasswordForgot,
 }

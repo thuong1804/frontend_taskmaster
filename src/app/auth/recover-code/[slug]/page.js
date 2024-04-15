@@ -8,21 +8,33 @@ import { toast } from "sonner";
 
 import urlPath from '@/constant/path';
 import styles from './page.module.scss';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { verifyCode } from '@/service/authService';
 
 export default function RecoverCode() {
-
+    const [form] = Form.useForm();
     const params = useParams()
+    const router = useRouter();
     const emailSlug = params.slug.replace(/%40/g, '@')
-    console.log({params: params.slug.replace(/%40/g, '@')})
-
-    const onFinish = async(values) => {
+    const onFinish = async (values) => {
         const dataBody = {
             code: values.code,
             emailUSer: emailSlug,
         }
-        await verifyCode(dataBody)
+        await verifyCode(dataBody).then(res => {
+            console.log({res})
+            if (res.data.result) {
+                router.push(`${urlPath.changePassword}/${emailSlug}`)
+            }
+        }).catch(error => {
+            if (error)
+                return form.setFields([
+                    {
+                        name: "code", // required
+                        errors: ["Invalid authentication code"],
+                    },
+                ]);
+        })
     }
 
     return (
@@ -33,6 +45,7 @@ export default function RecoverCode() {
                 <Form
                     name="normal_login"
                     className="login-form"
+                    form={form}
                     onFinish={onFinish}
                     style={{
                         width: '100%',
