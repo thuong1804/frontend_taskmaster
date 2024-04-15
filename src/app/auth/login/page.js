@@ -3,14 +3,18 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import { useRouter } from 'next/navigation'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './login.module.scss'
-import urlPath from '../../constant/path';
 import { toast } from "sonner";
 import Link from 'next/link'
 import 'react-toastify/dist/ReactToastify.css';
-import { login } from '../../service/authService';
+import { login } from '../../../service/authService';
+import urlPath from '@/constant/path';
+import { useUser } from '@/context/ProfileProvider';
+import { getCookies } from 'cookies-next';
+import { handelGetProfileUser } from '@/service/user-service';
 
 const LoginPage = () => {
     const router = useRouter();
+    const {setUser} = useUser();
 
     const onFinish = async (values) => {
         const email = values.email;;
@@ -19,9 +23,21 @@ const LoginPage = () => {
             if (res.data.result) {
                 toast.success("Login success!");
                 router.push(urlPath.home)
+                setTimeout(async () => {
+                    try {
+                        const cookies = getCookies('login');
+                        if (cookies && cookies.login) {
+                            const res = await handelGetProfileUser();
+                            setUser(res.data.data.content);
+                        }
+                    } catch (error) {
+                        console.error("Error fetching user profile:", error);
+                    }
+                }, 3000);
             }
         }).catch(error => {
             if (error) {
+                console.log({error})
                 return toast.error("Email or password don't exits!");
             }
         })
@@ -38,7 +54,10 @@ const LoginPage = () => {
                 <Form
                     name="normal_login"
                     className="login-form"
-                    initialValues={{ remember: true }}
+                    initialValues={{
+                        email: 'thuongtvt30@gmail.com',
+                        password: '123123'
+                    }}
                     onFinish={onFinish}
                     style={{
                         width:'100%',
@@ -59,7 +78,7 @@ const LoginPage = () => {
                         name="password"
                         rules={[{ required: true, message: 'Please input your Password!' }]}
                     >
-                        <Input
+                        <Input.Password
                             prefix={<LockOutlined />}
                             type="password"
                             placeholder="Password"
@@ -71,9 +90,9 @@ const LoginPage = () => {
                                 <Checkbox>Remember me</Checkbox>
                             </Form.Item>
 
-                            <a className="login-form-forgot" href="">
+                            <Link className="login-form-forgot" href={urlPath.forgotPassWord}>
                                 Forgot password
-                            </a>
+                            </Link>
                         </div>
                     </Form.Item>
 

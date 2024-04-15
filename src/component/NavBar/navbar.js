@@ -14,9 +14,9 @@ const childrenKey = {
 
 const NavBarLayout = ({user}) => {
     const pathname = usePathname();
-    const [selectedKeys, setSelectedKeys] = useState(childrenKey.user);
-    const [openKeys, setOpenKeys] = useState(pathname === childrenKey.user ? ['sub1'] : ['sub2']);
-
+    const [selectedKeys, setSelectedKeys] = useState();
+    const [openKeys, setOpenKeys] = useState(pathname === urlPath.home ? '' : pathname === childrenKey.user ? ['sub1'] : ['sub2']);
+    console.log({selectedKeys})
     const handleSubMenuOpenChange = openKeys => {
         setOpenKeys(openKeys);
     };
@@ -49,6 +49,9 @@ const NavBarLayout = ({user}) => {
     ];
 
     useEffect(() => {
+        if (pathname === urlPath.home) {
+            return setSelectedKeys('')
+        }
         if (pathname.includes(childrenKey.user) || pathname.split('/').length === 3) {
             setSelectedKeys(childrenKey.user);
         } else {
@@ -56,8 +59,6 @@ const NavBarLayout = ({user}) => {
         }
 
     }, [pathname]);
-
-    
 
     const dataNav = items.filter(nav => {
         if (user?.groupId !== 1) return !nav.disabled

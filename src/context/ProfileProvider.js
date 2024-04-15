@@ -23,7 +23,6 @@ const [user, setUser] = useState();
         fetchData();
     }, [])
 
-
     const clearUserData = () => {
         setUser(null); // Clear user data
     };

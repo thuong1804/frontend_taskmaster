@@ -1,10 +1,9 @@
-import { Button, Popconfirm, Table, Tag } from "antd";
+import { Button, Table, Tag } from "antd";
 import dayjs from "dayjs";
-import styles from './timeFrameTaskTable.module.scss'
-import { useEffect, useMemo, useState } from "react";
+import styles from './TimeFrameTaskTable.module.scss'
+import { useMemo, useState } from "react";
 import { updateInCompleted, updateInProgress } from "@/service/taskService";
 import SearchField from "@/component/SearchField/SearchField";
-import ModalShowTaskCompleted from "./_ModalShowTaskCompleted/ModalShowTaskCompleted";
 
 const TimeFrameTaskTable = ({
     dataProgress,
