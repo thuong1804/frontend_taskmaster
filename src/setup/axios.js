@@ -39,6 +39,8 @@ instance.interceptors.response.use(
                 return await axios(originalRequest);
             } catch (error) {
                 console.log({error})
+                deleteCookie('login')
+                
             }
         }
         return Promise.reject(error);

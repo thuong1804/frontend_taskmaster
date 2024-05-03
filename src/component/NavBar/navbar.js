@@ -16,7 +16,7 @@ const NavBarLayout = ({user}) => {
     const pathname = usePathname();
     const [selectedKeys, setSelectedKeys] = useState();
     const [openKeys, setOpenKeys] = useState(pathname === urlPath.home ? '' : pathname === childrenKey.user ? ['sub1'] : ['sub2']);
-    console.log({selectedKeys})
+   
     const handleSubMenuOpenChange = openKeys => {
         setOpenKeys(openKeys);
     };

@@ -8,10 +8,12 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
     }
 
-    .btnAdd {
-        align-self: flex-end;
+    .btnAddTask {
+        display: flex;
+        justify-content: flex-end;
     }
 
     .pagination {

@@ -1,8 +1,9 @@
-import { deleteTask, updateInProgress } from '@/service/taskService';
+import { deleteTask, updateStatus } from '@/service/taskService';
 import { PlusOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Table, Tag } from 'antd';
+import { Button, Popconfirm, Table, Tag, Typography } from 'antd';
 import { useRouter } from 'next/navigation';
 import React, { useMemo, useState } from 'react'
+import { DATETIME_FORMAT_DISPLAY } from "@/constant/constant";
 
 import dayjs from 'dayjs';
 import { toast } from 'sonner';
@@ -10,6 +11,27 @@ import styles from './TableTask.module.scss'
 import SearchField from '@/component/SearchField/SearchField';
 import urlPath from '@/constant/path';
 import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';
+import { commonStatus } from '@/constant/constant';
+import SearchForm from '@/component/SearchForm/SearchForm';
+
+const tabSearch = [
+    {
+        label: 'Task Title',
+        key: 'taskTitle'
+    },
+    {
+        label: 'Reporter',
+        key: 'reporter'
+    },
+    {
+        label: 'Owner',
+        key: 'owner'
+    },
+    {
+        label: 'Status',
+        key: 'status'
+    },
+]
 
 export default function TableTask({
     data,
@@ -21,8 +43,7 @@ export default function TableTask({
     const router = useRouter();
     const [keyIdTaskProgress, setKeyIdTaskProgress] = useState([])
     const [titleTask, setTitleTask] = useState([]);
-
-
+    
     const confirm = async (e) => {
         await deleteTask(taskID).then(res => {
             if (res.data.result) {
@@ -41,7 +62,7 @@ export default function TableTask({
     };
 
     const filterData = useMemo(() => {
-        const dataRender = data.filter(item => item.isInProgress === 0)
+        const dataRender = data.filter(item => item.status === commonStatus.PENDING)
         return dataRender
     }, [data])
 
@@ -59,7 +80,7 @@ export default function TableTask({
             render: (id) => {
                 const reporterData = userData?.find(item => item.id === id);
                 if (reporterData) {
-                    return <Tag color='red'>{reporterData.name}</Tag>;
+                    return reporterData.name;
                 } else {
                     return null;
                 }
@@ -78,13 +99,19 @@ export default function TableTask({
             title: 'Schedule Date',
             dataIndex: 'scheduledDate',
             key: 'scheduleDate',
-            render: text => dayjs(text).format('DD-MM-YYYY')
+            render: text => dayjs(text).format(DATETIME_FORMAT_DISPLAY)
         },
         {
             title: 'Completed Date',
             dataIndex: 'completedDate',
             key: 'completedDate',
-            render: text => dayjs(text).format('DD-MM-YYYY')
+            render: text => dayjs(text).format(DATETIME_FORMAT_DISPLAY)
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: status => <Tag>{status}</Tag>
         },
         {
             title: 'Action',
@@ -93,9 +120,9 @@ export default function TableTask({
             render: (_, record) => (
                 <div className={styles.btnAction}>
                     <Button
-                        style={{background:'#f4a62a', color:'white'}}
+                        style={{ background: '#f4a62a', color: 'white' }}
                         onClick={() => router.push(`${urlPath.formTask}/${record.id}`)}>
-                           <EditOutlined /> Edit
+                        <EditOutlined /> Edit
                     </Button>
                     <Popconfirm
                         placement="topRight"
@@ -132,13 +159,11 @@ export default function TableTask({
     // }
 
     const handelTaskProgress = async () => {
-        const currentDay = new Date();
         const bodyData = {
             id: keyIdTaskProgress,
-            isInProgress: 1 ? true : false,
-            scheduledDate: currentDay,
+            status: commonStatus.PROGRESS
         }
-        await updateInProgress(bodyData)
+        await updateStatus(bodyData)
         setKeyIdTaskProgress([])
         setReloadData(prevFlag => !prevFlag)
         toast.success(`Select ${titleTask} success`)
@@ -147,15 +172,35 @@ export default function TableTask({
     return (
         <div className={styles.container}>
             <div className={styles.actionFilter}>
-                <SearchField
-                    queryName={'taskTitle'}
-                    objectName={'Task Title!'}
-                />
+                 <SearchForm 
+                        searchField = {[
+                            {
+                                key: 'taskTitle',
+                                placeHoder: 'Task Title'
+                            },
+                            {
+                                key: 'reporter',
+                                placeHoder: 'Reporter'
+                            },
+                            {
+                                key: 'owner',
+                                placeHoder: 'Owner'
+                            },
+                            {
+                                key: 'status',
+                                placeHoder: 'Status'
+                            }
+                        ]}
+                     />
+            </div>
+            <div className={styles.btnAddTask}>
                 <Button
                     type='primary'
                     onClick={() => router.push(urlPath.formTask)}>
-                    <PlusOutlined /> Add task</Button>
+                    <PlusOutlined /> Add task
+                </Button>
             </div>
+            
             <Table
                 rowSelection={{
                     type: 'checkbox',

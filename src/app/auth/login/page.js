@@ -15,6 +15,8 @@ import { handelGetProfileUser } from '@/service/user-service';
 const LoginPage = () => {
     const router = useRouter();
     const {setUser} = useUser();
+    const [form] = Form.useForm();
+
 
     const onFinish = async (values) => {
         const email = values.email;;
@@ -36,15 +38,16 @@ const LoginPage = () => {
                 }, 3000);
             }
         }).catch(error => {
-            if (error) {
-                console.log({error})
-                return toast.error("Email or password don't exits!");
+            if (error.response.status === 404) {
+                return toast.error("Email don't exits in system!");
+            } else if (error.response.status === 400) {
+                return form.setFields([
+                    {
+                        name: "password",
+                        errors: ["Incorret password"],
+                    },]);
             }
         })
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
     };
 
     return (
@@ -54,9 +57,10 @@ const LoginPage = () => {
                 <Form
                     name="normal_login"
                     className="login-form"
+                    form={form}
                     initialValues={{
                         email: 'thuongtvt30@gmail.com',
-                        password: '123123'
+                        password: '12345678'
                     }}
                     onFinish={onFinish}
                     style={{

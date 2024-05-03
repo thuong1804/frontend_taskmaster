@@ -9,4 +9,20 @@
     .icon {
         font-size: 30px;
     }
+
+  /* HTML: <div class="loader"></div> */
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 120px;
+    height: 10px;
+    border-radius: 20px;
+    background:
+     linear-gradient(rgb(29, 25, 18) 0 0) 0/0% no-repeat
+     lightblue;
+    animation: l2 2s infinite steps(10);
+  }
+  @keyframes l2 {
+      100% {background-size:110%}
+  }
 }
+

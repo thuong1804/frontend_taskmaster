@@ -2,8 +2,9 @@ import { Button, Table, Tag } from "antd";
 import dayjs from "dayjs";
 import styles from './TimeFrameTaskTable.module.scss'
 import { useMemo, useState } from "react";
-import { updateInCompleted, updateInProgress } from "@/service/taskService";
 import SearchField from "@/component/SearchField/SearchField";
+import { commonStatus } from "@/constant/constant";
+import { updateStatus } from "@/service/taskService";
 
 const TimeFrameTaskTable = ({
     dataProgress,
@@ -26,16 +27,16 @@ const TimeFrameTaskTable = ({
     };
 
     const filterData = useMemo(() => {
-        const dataRender = dataProgress.filter(item => item.isInProgress === 1)
+        const dataRender = dataProgress.filter(item => item.status === commonStatus.PROGRESS)
         return dataRender;
     }, [dataProgress])
 
     const handelCancelTask = async () => {
         const bodyData = {
             id: listTaskKey,
-            isInProgress: 0 && false,
+            status: commonStatus.PENDING
         }
-        await updateInProgress(bodyData)
+        await updateStatus(bodyData)
         setListTaskKey([])
         setReloadData(prevFlag => !prevFlag)
     }
@@ -55,7 +56,7 @@ const TimeFrameTaskTable = ({
             render: (id) => {
                 const reporterData = userData?.find(item => item.id === id);
                 if (reporterData) {
-                    return <Tag color='red'>{reporterData.name}</Tag>;
+                    return reporterData.name
                 } else {
                     return null;
                 }
@@ -67,7 +68,7 @@ const TimeFrameTaskTable = ({
             dataIndex: ['User', 'name'],
             key: 'userId',
             width: 200,
-            render: (text) => <Tag color='geekblue'>{text}</Tag>
+            render: (owner) => <span>{owner}</span>
         },
         {
             title: 'Task Description',
@@ -87,6 +88,13 @@ const TimeFrameTaskTable = ({
             dataIndex: 'completedDate',
             key: 'completedDate',
             render: (text) => <span>{dayjs(text).format('DD-MM-YYYY')}</span>,
+            width: 300
+        }, 
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => <Tag color="blue">{status}</Tag>,
             width: 300
         },
         {

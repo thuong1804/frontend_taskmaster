@@ -2,7 +2,7 @@ import axios from "../setup/axios";
 
 const handelGetListUser = async(data) => {
    return await axios({
-        method: 'get',
+        method: 'post',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/users`,
         data: {
             ...data
