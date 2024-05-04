@@ -10,9 +10,9 @@ import { toast } from 'sonner';
 import styles from './TableTask.module.scss'
 import SearchField from '@/component/SearchField/SearchField';
 import urlPath from '@/constant/path';
-import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';
 import { commonStatus } from '@/constant/constant';
 import SearchForm from '@/component/SearchForm/SearchForm';
+import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';
 
 const tabSearch = [
     {
@@ -193,36 +193,36 @@ export default function TableTask({
                         ]}
                      />
             </div>
-            <div className={styles.btnAddTask}>
-                <Button
-                    type='primary'
-                    onClick={() => router.push(urlPath.formTask)}>
-                    <PlusOutlined /> Add task
-                </Button>
-            </div>
-            
-            <Table
-                rowSelection={{
-                    type: 'checkbox',
-                    ...rowSelection,
-                    hideSelectAll: true
-                }}
-                className="table-striped-rows"
-                columns={columns}
-                dataSource={filterData}
-                rowKey="id"
-                pagination={{
-                    pageSize: 6,
-                }}
-            />
-            {/* <div className={styles.pagination}>
-                <Pagination
-                defaultCurrent={queryPage}
-                total={totalElement}
-                onChange={onChange}
-                pageSize={5}
-            />
-            </div> */}
+            <div className={styles.contentTable}>
+                <div className={styles.btnAddTask}>
+                    <Button
+                        type='primary'
+                        onClick={() => router.push(urlPath.formTask)}>
+                        <PlusOutlined /> Add task
+                    </Button>
+                </div>
+                <Table
+                    rowSelection={{
+                        type: 'checkbox',
+                        ...rowSelection,
+                        hideSelectAll: true
+                    }}
+                    className="table-striped-rows"
+                    columns={columns}
+                    dataSource={filterData}
+                    rowKey="id"
+                    pagination={{
+                        pageSize: 6,
+                    }}
+                />
+                {/* <div className={styles.pagination}>
+                    <Pagination
+                    defaultCurrent={queryPage}
+                    total={totalElement}
+                    onChange={onChange}
+                    pageSize={5}
+                />
+                </div> */}
             <div className={styles.btnStartTask}>
                 <ModalShowListTask
                     dataProgress={data}
@@ -238,6 +238,8 @@ export default function TableTask({
                     Start task
                 </Button>
             </div>
+            </div>
+           
         </div>
     )
 }

@@ -7,8 +7,8 @@ import {  getTask, searchTask } from '../../service/taskService';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/ProfileProvider';
 import { handelGetListUser } from '@/service/user-service';
-import TableTask from './tableTask';
 import { cleanObject, convertSearchParamsToObject } from '@/utils';
+import TableTask from './TableTask';
 
 const ListTask = () => {
     const [data, setData] = useState([]);

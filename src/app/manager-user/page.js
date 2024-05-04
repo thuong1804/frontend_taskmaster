@@ -2,14 +2,12 @@
 import { Button, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { handelDeleteUser, handelGetListUser } from "../../service/user-service";
-import { UserAddOutlined, EditOutlined, UserDeleteOutlined, UserOutlined } from "@ant-design/icons";
+import { EditOutlined, UserDeleteOutlined, UserOutlined, PlusOutlined } from "@ant-design/icons";
 import styles from './page.module.scss'
 import { useRouter } from "next/navigation";
 import urlPath from "../../constant/path";
 import { toast } from "sonner";
-import FormAddNew from "./FormAddNew";
 import Skeletons from "@/component/Skeleton";
-import { useUser } from "@/context/ProfileProvider";
 
 const ListPageUser = () => {
     const [data, setData] = useState([])
@@ -88,7 +86,7 @@ const ListPageUser = () => {
             render: (_, record) => {
                 return (
                     <Space size="middle">
-                        <Button type="primary" onClick={() => router.push(`${urlPath.manageUser}/${record.id}`)}>
+                        <Button type="primary" onClick={() => router.push(`${urlPath.formUser}/${record.id}`)}>
                             <EditOutlined /> </Button>
                         <Popconfirm
                             title="Delete the user"
@@ -107,6 +105,7 @@ const ListPageUser = () => {
         },
     ];
 
+
     return (
         <>
             {!data ? (
@@ -115,7 +114,13 @@ const ListPageUser = () => {
                 <div className={styles.container}>
                     <h1> <UserOutlined /> List User Manager</h1>
                     <div className={styles.FormAddNew}>
-                        <FormAddNew setReloadData={setReloadData} />
+                        <Button 
+                        type="primary" 
+                        icon={<PlusOutlined />}
+                        onClick={() => router.push(urlPath.formUser)}
+                        >
+                            Create a new user
+                        </Button>
                     </div>
                     <Table rowKey={'id'} columns={columns} dataSource={data} />
                 </div>

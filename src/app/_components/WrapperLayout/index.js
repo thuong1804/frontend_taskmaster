@@ -3,7 +3,7 @@
 import HeaderLayout from '@/component/layouts/HeaderLayout'
 import React, { useEffect } from 'react'
 import styles from './index.module.scss'
-import NavBarLayout from '@/component/NavBar/navbar'
+import NavBarLayout from '@/component/layouts/NavBar'
 import { useUser } from '@/context/ProfileProvider'
 import classNames from 'classnames'
 import Loading from '@/component/Loading'
