@@ -2,24 +2,27 @@
 import { AppstoreOutlined, SolutionOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import styles from './navbar.module.scss'
+import styles from './Navbar.module.scss'
 import urlPath from "@/constant/path";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useUser } from '@/context/ProfileProvider'
+
 
 const childrenKey = {
     user: urlPath.manageUser,
     task: urlPath.task,
 }
 
-const NavBarLayout = ({user}) => {
+const NavBarLayout = () => {
     const pathname = usePathname();
     const [selectedKeys, setSelectedKeys] = useState();
     const [openKeys, setOpenKeys] = useState(pathname === urlPath.home ? '' : pathname === childrenKey.user ? ['sub1'] : ['sub2']);
-   
+    const {user} = useUser()
     const handleSubMenuOpenChange = openKeys => {
         setOpenKeys(openKeys);
     };
+
 
     const items = [
         {
@@ -71,7 +74,6 @@ const NavBarLayout = ({user}) => {
                 theme={'light'}
                 style={{
                     width: "100%",
-                    minWidth: 256,
                 }}
                 defaultOpenKeys={openKeys}
                 selectedKeys={[selectedKeys]}

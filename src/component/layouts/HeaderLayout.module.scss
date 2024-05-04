@@ -1,25 +1,10 @@
 .container {
-    display: flex;
-    align-items: center;
-    background-color: rgb(22 119 255);
-    justify-content: space-between;
-    padding: 0px 25px 0px 0px;
-
-    .contentLeft {
-        display: flex;
-        gap: 5px;
-        align-items: center;
-        cursor: pointer;
-
-        h3 {
-            color: #ffffff;
-        }
-    }
-    
-    .contentRight {
-        .iconProfile {
-            font-size: 25px;
-            color: white;
-        }
+    .iconProfile {
+        background-color: #1677ff;
+        border: 1px solid white;
+        border-radius: 50px;
+        padding: 7px;
+        font-size: 18px;
+        color: white;
     }
 }

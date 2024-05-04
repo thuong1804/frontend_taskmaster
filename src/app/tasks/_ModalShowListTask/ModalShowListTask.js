@@ -1,7 +1,6 @@
 import React, {  useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import styles from './ModalShowListTask.module.scss'
 import TimeFrameTaskTable from '../timeFrameTaskTable';
 
 const ModalShowListTask = ({

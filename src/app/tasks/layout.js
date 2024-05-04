@@ -1,9 +1,9 @@
-import WrapperLayout from "../_components/WrapperLayout";
+import MasterLayout from "@/component/layouts/MasterLayout";
 
 export default function ManagerTaskLayout({
     children,
 }) {
     return (
-        <WrapperLayout>{children}</WrapperLayout>
+        <MasterLayout>{children}</MasterLayout>
     )
 }

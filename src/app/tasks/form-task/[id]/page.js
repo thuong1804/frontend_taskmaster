@@ -1,5 +1,5 @@
 'use client'
-import { Button, DatePicker, Form, Input, Select } from "antd";
+import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import styles from './page.module.scss'
 import { useParams, useRouter } from "next/navigation";
 import dayjs from "dayjs";
@@ -11,13 +11,14 @@ import { toast } from "sonner";
 import { mappingDropdownData } from "@/utils";
 import { useUser } from "@/context/ProfileProvider";
 import { DATETIME_FORMAT_DISPLAY, commonStatus } from "@/constant/constant";
+import { CheckOutlined, CloseOutlined, PlusSquareOutlined, } from "@ant-design/icons";
 
 const FormTask = () => {
     const router = useRouter();
     const params = useParams()
     const taskId = params.id;
     const isCreating = !taskId;
-    const {user} = useUser();
+    const { user } = useUser();
     const [detailTask, setDetailTask] = useState();
     const [userData, setUserData] = useState();
     const [form] = Form.useForm();
@@ -107,171 +108,182 @@ const FormTask = () => {
     return (
         <div className={styles.container}>
             <div className={styles.contentForm}>
-            <h1> {isCreating ? 'Add task' : 'Edit task'} </h1>
-            <div style={{ width: '700px' }}>
-                <Form
-                    // initialValues={{
-                    //     reporter: user.name
-                    // }}
-                    name="basic"
-                    form={form}
-                    labelCol={{
-                        span: 8,
-                    }}
-                    wrapperCol={{
-                        span: 16,
-                    }}
-                    style={{
-                        maxWidth: 600,
-                    }}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="off"
-                >
-                    <Form.Item
-                        label="Task title"
-                        name="taskTitle"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input Task title!',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Reporter"
-                        name="reporter"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input Task title!',
-                            },
-                        ]}
-                    >
-                        <Select
-                            placeholder="Select a option Owner"
-                            // onChange={onGenderChange}
-                            options={mappingDropdownData(userData)}
-                            allowClear
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Owner"
-                        name="owner"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input Owner!',
-                            },
-                        ]}
-                    >
-                        <Select
-                            placeholder="Select a option Owner"
-                            // onChange={onGenderChange}
-                            options={mappingDropdownData(userData)}
-                            allowClear
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Task Description"
-                        name="taskDescription"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input Task Description!',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Scheduled Date"
-                        name="scheduledDate"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input Scheduled Date!',
-                            },
-                        ]}
-                    >
-                        <DatePicker
-                            onChange={onChange}
-                            showTime
-                            style={{
-                                width: '100%',
-                            }}
-                            format={DATETIME_FORMAT_DISPLAY}
-                            disabledDate={disabledDate}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        label="Completed Date"
-                        name="completedDate"
-                        dependencies={['scheduledDate']}
-                        rules={[
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    const endDateFormat = dayjs(value)
-                                    const startDateFormat = dayjs(getFieldValue('scheduledDate'))
-                                    console.log(value)
-                                    if (value) {
-                                        if (endDateFormat < startDateFormat) {
-                                            return Promise.reject(new Error('The scheduled date cannot be completed after the completed date'));
-                                        }
-                                    }
-                                    return Promise.resolve();
-                                },
-                            }),
-                        ]}
-                    >
-                        <DatePicker
-                            // onChange={onChange}
-                            showTime
-                            style={{
-                                width: '100%',
-                            }}
-                            format={DATETIME_FORMAT_DISPLAY}
-                            disabledDate={
-                                (current) => {
-                                    const selectedDate = dayjs(current).endOf('day');
-                                    return selectedDate.isBefore(scheduleDate);
-                                }
-                            }
-                            
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        label="Status"
-                        name="status"
-                        hidden
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        wrapperCol={{
-                            offset: 8,
+                <h1><PlusSquareOutlined /> {isCreating ? 'Add task' : 'Edit task'}</h1>
+                <div style={{ width: '100%' }}>
+                    <Form
+                        // initialValues={{
+                        //     reporter: user.name
+                        // }}
+                        name="basic"
+                        form={form}
+                        labelCol={{
                             span: 16,
                         }}
+                        wrapperCol= {{
+                            span: 22,
+                        }}
+                        layout="vertical"
+                        style={{
+                            width: '100%',
+                        }}
+                        id="form-task"
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                        autoComplete="off"
                     >
-                        <div className={styles.btnAction}>
-                            <Button type="primary" htmlType="submit">
-                                Submit
-                            </Button>
-                            <Button htmlType="button" onClick={() => router.push(urlPath.task)}>
-                                Cancel
-                            </Button>
-                        </div>
-                    </Form.Item>
-                </Form>
+                        <Row>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Task title"
+                                    name="taskTitle"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input Task title!',
+                                        },
+                                    ]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Reporter"
+                                    name="reporter"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input Task title!',
+                                        },
+                                    ]}
+                                >
+                                    <Select
+                                        placeholder="Select a option Owner"
+                                        // onChange={onGenderChange}
+                                        options={mappingDropdownData(userData)}
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Owner"
+                                    name="owner"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input Owner!',
+                                        },
+                                    ]}
+                                >
+                                    <Select
+                                        placeholder="Select a option Owner"
+                                        // onChange={onGenderChange}
+                                        options={mappingDropdownData(userData)}
+                                        allowClear
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Task Description"
+                                    name="taskDescription"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input Task Description!',
+                                        },
+                                    ]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Scheduled Date"
+                                    name="scheduledDate"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input Scheduled Date!',
+                                        },
+                                    ]}
+                                >
+                                    <DatePicker
+                                        onChange={onChange}
+                                        showTime
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                        format={DATETIME_FORMAT_DISPLAY}
+                                        disabledDate={disabledDate}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Completed Date"
+                                    name="completedDate"
+                                    dependencies={['scheduledDate']}
+                                    rules={[
+                                        ({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                                const endDateFormat = dayjs(value)
+                                                const startDateFormat = dayjs(getFieldValue('scheduledDate'))
+                                                console.log(value)
+                                                if (value) {
+                                                    if (endDateFormat < startDateFormat) {
+                                                        return Promise.reject(new Error('The scheduled date cannot be completed after the completed date'));
+                                                    }
+                                                }
+                                                return Promise.resolve();
+                                            },
+                                        }),
+                                    ]}
+                                >
+                                    <DatePicker
+                                        // onChange={onChange}
+                                        showTime
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                        format={DATETIME_FORMAT_DISPLAY}
+                                        disabledDate={
+                                            (current) => {
+                                                const selectedDate = dayjs(current).endOf('day');
+                                                return selectedDate.isBefore(scheduleDate);
+                                            }
+                                        }
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Status"
+                                    name="status"
+                                    hidden
+                                >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form>
+                </div>
             </div>
+            <div className={styles.btnAction}>   
+                <Button htmlType="button" onClick={() => router.push(urlPath.task)}>
+                    <CloseOutlined /> Cancel
+                </Button>
+                <Button type="primary" htmlType="submit" form="form-task">
+                    <CheckOutlined /> Submit
+                </Button>
             </div>
-            
         </div>
     )
 }

@@ -1,14 +1,11 @@
 'use client'
-import React, { useEffect } from 'react'
 import styles from './HeaderLayout.module.scss'
-import { Button, Dropdown } from 'antd'
+import { Dropdown } from 'antd'
 import { deleteCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import urlPath from '@/constant/path'
 import { useUser } from '../../context/ProfileProvider'
-import Image from 'next/image'
-import imgLogo from '../../../public/output-logo.png'
-import { AuditOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
+import {LoginOutlined, UserOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
 import Profile from '@/app/_profile/page'
 
@@ -42,29 +39,19 @@ export default function HeaderLayout({ className }) {
         },
     ];
 
-    const handelBackHome = (user) => {
-        return user ? router.push(urlPath.home) : router.push(urlPath.login)
-    }
-
-
     return (
-        <div className={classNames(styles.container, className)}>
-            <div className={styles.contentLeft} onClick={() => handelBackHome(user)}>
-                <Image src={imgLogo} alt='logo' width={70} height={70}></Image>
-                <h3>Task Master</h3>
-            </div>
-            <div className={styles.contentRight}>
-                {user && (
-                    <Dropdown
-                        menu={{
-                            items,
-                        }}
-                        placement="bottomRight"
-                    >
+        <div className={styles.container}>
+            {user && (
+                <Dropdown
+                    menu={{
+                        items,
+                    }}
+                    placement="bottomRight"
+                    
+                >
                         <UserOutlined className={styles.iconProfile} />
-                    </Dropdown>
-                )}
-            </div>
+                </Dropdown>
+            )}
         </div>
     )
 }

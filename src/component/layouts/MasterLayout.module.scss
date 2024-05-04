@@ -1,0 +1,23 @@
+.logo {
+    height: 62px;
+    display: flex;
+    align-items: center;
+    background-color: #1677ff;
+    position: relative;
+    justify-content: flex-end;
+    padding: 22px;
+
+    .imglogo {
+        position: absolute;
+        left: 15px;
+    }
+
+    span {
+        font-weight: bold;
+        font-size: 17px;
+        color: white;
+    }
+}
+.logoCollapsed {
+    justify-content: center;
+}
