@@ -16,13 +16,20 @@ import Image from 'next/image';
 import logoImg from '../../../public/output-logo.png'
 import classNames from 'classnames';
 import NavBarLayout from './NavBar';
+import Loading from '../Loading';
+import { useUser } from '@/context/ProfileProvider';
 
 const MasterLayout = ({children}) => {
-
+   
     const [collapsed, setCollapsed] = useState(false);
+    const {user} = useUser();
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+
+    if(!user)
+    return <div className={classNames(styles.wrapperContainer, styles.loading)}><Loading/></div>
+
     return (
         <Layout style={{height:'100%'}}>
             <Sider trigger={null} 

@@ -15,9 +15,7 @@
         border-radius: 10px;
         width: 400px;
         height: 500px;
-        h1 {
-            text-align: center;
-        }
+        
         .btnAction {
             display: flex;
             gap: 10px;
@@ -33,6 +31,7 @@
             }
         }
 
+    
         .content {
             display: flex;
             justify-content: space-between;

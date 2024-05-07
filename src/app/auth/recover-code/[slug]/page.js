@@ -10,6 +10,7 @@ import urlPath from '@/constant/path';
 import styles from './page.module.scss';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { verifyCode } from '@/service/authService';
+import LineRender from '@/component/Line/line';
 
 export default function RecoverCode() {
     const [form] = Form.useForm();
@@ -40,7 +41,10 @@ export default function RecoverCode() {
     return (
         <div className={styles.container}>
             <div className={styles.formContent}>
-                <h1>Enter the security code</h1>
+                <LineRender 
+                    text='The security code'
+                    size='small'
+                />
                 <p>Please check the code in your email. This code includes 6 numbers</p>
                 <Form
                     name="normal_login"

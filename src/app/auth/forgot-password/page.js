@@ -10,6 +10,7 @@ import urlPath from '@/constant/path';
 import styles from './page.module.scss';
 import { sendEmailCode } from '@/service/authService';
 import { useRouter } from 'next/navigation';
+import LineRender from '@/component/Line/line';
 
 export default function ForgotPassword() {
     const [form] = Form.useForm();
@@ -40,7 +41,10 @@ export default function ForgotPassword() {
     return (
         <div className={styles.container}>
             <div className={styles.formContent}>
-                <h1>Forgot Password</h1>
+                <LineRender 
+                    text='Forgot Password'
+                    size='small'
+                />
                 <p>Please enter your email for verification to receive the code</p>
                 <Form
                     name="normal_login"

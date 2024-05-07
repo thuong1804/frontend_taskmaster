@@ -86,8 +86,12 @@ const ListPageUser = () => {
             render: (_, record) => {
                 return (
                     <Space size="middle">
-                        <Button type="primary" onClick={() => router.push(`${urlPath.formUser}/${record.id}`)}>
-                            <EditOutlined /> </Button>
+                        <Button 
+                            type="primary" 
+                            onClick={() => router.push(`${urlPath.formUser}/${record.id}`)}
+                        >
+                            <EditOutlined /> 
+                        </Button>
                         <Popconfirm
                             title="Delete the user"
                             placement="topRight"
@@ -115,9 +119,9 @@ const ListPageUser = () => {
                     <h1> <UserOutlined /> List User Manager</h1>
                     <div className={styles.FormAddNew}>
                         <Button 
-                        type="primary" 
-                        icon={<PlusOutlined />}
-                        onClick={() => router.push(urlPath.formUser)}
+                            type="primary" 
+                            icon={<PlusOutlined />}
+                            onClick={() => router.push(urlPath.formUser)}
                         >
                             Create a new user
                         </Button>

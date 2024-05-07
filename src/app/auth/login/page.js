@@ -11,6 +11,7 @@ import urlPath from '@/constant/path';
 import { useUser } from '@/context/ProfileProvider';
 import { getCookies } from 'cookies-next';
 import { handelGetProfileUser } from '@/service/user-service';
+import LineRender from '@/component/Line/line';
 
 const LoginPage = () => {
     const router = useRouter();
@@ -53,7 +54,10 @@ const LoginPage = () => {
     return (
         <div className={styles.container}>
             <div className={styles.formContent}>
-                <h1>Login</h1>
+                <LineRender 
+                    text='login' 
+                    size='medium'
+                />
                 <Form
                     name="normal_login"
                     className="login-form"

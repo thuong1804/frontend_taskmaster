@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useState } from 'react'
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link'
 import { LockOutlined, RollbackOutlined } from '@ant-design/icons';
@@ -8,8 +7,9 @@ import { toast } from "sonner";
 
 import urlPath from '@/constant/path';
 import styles from './page.module.scss';
-import { changePassword, changePasswordForgot, sendEmailCode } from '@/service/authService';
+import { changePasswordForgot} from '@/service/authService';
 import { useParams, useRouter } from 'next/navigation';
+import LineRender from '@/component/Line/line';
 
 const ChangePassword = () => {
     const [form] = Form.useForm();
@@ -32,8 +32,10 @@ const ChangePassword = () => {
     return (
         <div className={styles.container}>
             <div className={styles.formContent}>
-                <h1>Change Password</h1>
-                <p>Enter new password!</p>
+                <LineRender 
+                    text='New password!'
+                    size='small'
+                />
                 <Form
                     name="normal_login"
                     className="login-form"
