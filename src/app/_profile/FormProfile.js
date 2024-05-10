@@ -1,27 +1,30 @@
-import React, { useState } from 'react'
-import { Button, Form, Input, Switch, Radio, Row, Col } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Button, Form, Input, Switch, Radio, Row, Col, DatePicker } from 'antd'
 import { useUser } from '@/context/ProfileProvider';
 import styles from './FormProfile.module.scss'
 import { toast } from "sonner";
 import { handelGetListUser, handelUpdateUser } from '@/service/user-service';
 import { UserOutlined } from '@ant-design/icons';
+import UploadImageField from '@/component/UploadImageField/UploadImageField';
 
-export default function FormProfile({ handleCancel }) {
+export default function FormProfile({ 
+    handleCancel,
+    formId,
+}) {
     const [isCheckGroup, setIsCheckGroup] = useState();
-    const [value, setValue] = useState(1);
-    const { user } = useUser();
+    const [value, setValue] = useState(1)
+    const [form] = Form.useForm();
+    const { user, updateProfile } = useUser();
+    const storage = `http://localhost:3005/${user.avatar}`
 
     const onFinish = async (values) => {
         const bodyData = {
             ...values,
             id: user.id,
-            groupId: values.groupId === true ? 1 : 2,
+            avatar: user.avatar
         }
-        await handelUpdateUser(bodyData).then((res) => {
-            if (res.data.result) toast.success('Update profile success')
-        })
+        updateProfile({bodyData});
         handleCancel();
-        console.log('Success:', values);
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -35,6 +38,11 @@ export default function FormProfile({ handleCancel }) {
         console.log(even.target.value)
     }
 
+    useEffect(() => {
+       form.setFieldValue('avatar', storage)
+    }, [user])
+    console.log({form: form.getFieldValue('avatar')})
+    console.log(user.avatar)
     return (
         <>
             <h2 style={{
@@ -47,6 +55,7 @@ export default function FormProfile({ handleCancel }) {
             <Form
                 name="basic"
                 layout="vertical"
+                form={form}
                 initialValues={{
                     email: user?.email,
                     name: user?.name,
@@ -57,16 +66,17 @@ export default function FormProfile({ handleCancel }) {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
+                id={formId}
             >
+                <Form.Item
+                    label="Avatar"
+                    name="avatar"
+                >
+                   <UploadImageField />
+                </Form.Item>
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your email!',
-                        },
-                    ]}
                 >
                     <Input disabled />
                 </Form.Item>
@@ -86,13 +96,23 @@ export default function FormProfile({ handleCancel }) {
                 <Form.Item
                     label="Address"
                     name="address"
-                    rules={[
-                        {
-                            message: 'Please input your Address!',
-                        },
-                    ]}
                 >
                     <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Phone Number"
+                    name="phone"
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Birth Day"
+                    name="birthDay"
+                >
+                    <DatePicker 
+                        format={'DD-MM-YYYY'}
+                        style={{ width: '100%' }}  
+                    />
                 </Form.Item>
                 <Row>
                     <Col span={12}>
@@ -132,21 +152,6 @@ export default function FormProfile({ handleCancel }) {
                         </Form.Item>
                     </Col>
                 </Row>
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
-                    <div className={styles.btnAction}>
-                        <Button htmlType="button" onClick={() => setIsModalOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button type="primary" htmlType="submit">
-                            Save
-                        </Button>
-                    </div>
-                </Form.Item>
             </Form>
         </>
     )

@@ -4,6 +4,7 @@ import { AuditOutlined, UserOutlined } from '@ant-design/icons'
 import { useUser } from '@/context/ProfileProvider';
 import FormProfile from './FormProfile';
 import StepProfile from './StepProfile';
+import styles from './page.module.scss'
 
 export default function Profile() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,14 +18,19 @@ export default function Profile() {
     };
 
     return (
-        <>
-            <span onClick={showModal}><AuditOutlined /> Profile</span>
+        <div style={{width:'100%'}}>
+            <span
+                style={{display:'block', width:'100%'}}
+                onClick={showModal}>
+                    <AuditOutlined /> Profile
+            </span>
             <Modal
                 open={isModalOpen}
                 footer={null}
+                className={styles.modalContainer}
                 onCancel={handleCancel}>
-                <StepProfile handleCancel={handleCancel}/>
+                    <StepProfile handleCancel={handleCancel}/>
             </Modal>
-        </>
+        </div>
     )
 }

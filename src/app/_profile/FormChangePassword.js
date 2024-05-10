@@ -6,7 +6,10 @@ import { changePassword } from '@/service/authService';
 import { toast } from 'sonner';
 import { useForm } from 'antd/es/form/Form';
 
-export default function FormChangePassword({handleCancel}) {
+export default function FormChangePassword({
+    handleCancel,
+    formId,
+}){
     const { user } = useUser()
     const [form] = useForm();
 
@@ -23,23 +26,19 @@ export default function FormChangePassword({handleCancel}) {
             }
         }).catch(error => {
             if (error.response.status === 400)
-                return form.setFields([
-                    {
+                return form.setFields([{
                         name: "newPassword", // required
                         errors: ["Password is too short. Please enter a password with at least 8 characters."],
-                    },
-                ]);
+                    }]);
+
             if (error.response.status === 404)
-                return form.setFields([
-                    {
+                return form.setFields([{
                         name: "password", // required
-                        errors: ["Invalid current password"],
-                    },
-                ]);
-
+                        errors: ["Current password is incorrect"],
+                    }]);
         })
-
     }
+
     return (
         <div>
             <h2 style={{
@@ -53,6 +52,7 @@ export default function FormChangePassword({handleCancel}) {
                 layout="vertical"
                 onFinish={onFinish}
                 autoComplete="off"
+                id={formId}
             >
                 <Form.Item
                     name="password"
@@ -105,18 +105,6 @@ export default function FormChangePassword({handleCancel}) {
                     ]}
                 >
                     <Input.Password prefix={<LockOutlined />} placeholder='Confirm new password' />
-                </Form.Item>
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button type="primary" htmlType="submit">
-                            Update
-                        </Button>
-                    </div>
                 </Form.Item>
             </Form>
         </div>

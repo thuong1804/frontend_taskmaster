@@ -1,12 +1,11 @@
 'use client'
 import styles from './HeaderLayout.module.scss'
-import { Dropdown } from 'antd'
+import { Avatar, Dropdown } from 'antd'
 import { deleteCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import urlPath from '@/constant/path'
 import { useUser } from '../../context/ProfileProvider'
 import {LoginOutlined, UserOutlined } from '@ant-design/icons'
-import classNames from 'classnames'
 import Profile from '@/app/_profile/page'
 
 export default function HeaderLayout({ className }) {
@@ -24,32 +23,44 @@ export default function HeaderLayout({ className }) {
         {
             key: '1',
             label: (
-                <div target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    <Profile />
-                </div>
+                <Profile/>
             ),
         },
         {
             key: '2',
             label: (
-                <span style={{ color: 'red' }} onClick={handelSignOut}>
-                    <LoginOutlined /> Log Out
+                <span 
+                    style={{ 
+                        color: 'red', 
+                        display:'block', 
+                        width:'100%' 
+                    }}
+                    onClick={handelSignOut}>
+                        <LoginOutlined /> Log Out
                 </span>
             ),
         },
     ];
-
+    console.log({user})
     return (
         <div className={styles.container}>
             {user && (
-                <Dropdown
+                 <Dropdown
                     menu={{
                         items,
                     }}
                     placement="bottomRight"
                     
                 >
-                        <UserOutlined className={styles.iconProfile} />
+                    <div className={styles.content}>
+                        <Avatar
+                            className={styles.avatar}
+                            src={`http://localhost:3005/${user.avatar}`}
+                            >
+                                {user.avatar ? user.avatar : <UserOutlined />}
+                        </Avatar>
+                        <span>{user.name}</span>
+                    </div>
                 </Dropdown>
             )}
         </div>

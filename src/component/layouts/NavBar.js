@@ -10,7 +10,7 @@ import { useUser } from '@/context/ProfileProvider'
 
 
 const childrenKey = {
-    user: urlPath.manageUser,
+    user: urlPath.user,
     task: urlPath.task,
 }
 
@@ -32,7 +32,7 @@ const NavBarLayout = () => {
             children: [
                 {
                     key: childrenKey.user,
-                    label: <Link href={urlPath.manageUser} passHref>List user</Link>,
+                    label: <Link href={urlPath.user} passHref>List user</Link>,
                     disabled: user?.groupId !== 1,
                 }
             ],

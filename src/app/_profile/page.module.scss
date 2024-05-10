@@ -1,0 +1,13 @@
+.modalContainer {
+    [class="ant-modal-content"] {
+        overflow: auto;
+        max-height: 750px;
+    }
+
+    [class="ant-modal-content"]::-webkit-scrollbar {
+        width: 10px;
+        background-color: #e6e6e6;
+    }
+
+    
+}

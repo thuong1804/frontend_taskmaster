@@ -1,6 +1,5 @@
 import { deleteCookie } from "cookies-next";
-
-import axios from "axios";
+import axios from "../setup/axios";
 import urlPath from "../constant/path";
 
 const login = async (email, password) => {
@@ -83,7 +82,7 @@ const changePassword = async ({email, password, newPassword}) => {
             password,
             newPassword,
         },
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        headers: { 'X-Requested-With': 'XMLHttpRequest'},
         withCredentials: true,
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/change-password`,
     })

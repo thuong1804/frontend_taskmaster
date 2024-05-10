@@ -18,10 +18,10 @@ const LoginPage = () => {
     const {setUser} = useUser();
     const [form] = Form.useForm();
 
-
     const onFinish = async (values) => {
         const email = values.email;;
         const password = values.password
+
         await login(email, password).then(async (res) => {
             if (res.data.result) {
                 toast.success("Login success!");
@@ -36,7 +36,7 @@ const LoginPage = () => {
                     } catch (error) {
                         console.error("Error fetching user profile:", error);
                     }
-                }, 3000);
+                }, 2000);
             }
         }).catch(error => {
             if (error.response.status === 404) {

@@ -3,7 +3,7 @@ import { PlusOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/ico
 import { Button, Popconfirm, Table, Tag, Typography } from 'antd';
 import { useRouter } from 'next/navigation';
 import React, { useMemo, useState } from 'react'
-import { DATETIME_FORMAT_DISPLAY } from "@/constant/constant";
+import { DATETIME_FORMAT_DISPLAY, TYPE } from "@/constant/constant";
 
 import dayjs from 'dayjs';
 import { toast } from 'sonner';
@@ -13,25 +13,6 @@ import urlPath from '@/constant/path';
 import { commonStatus } from '@/constant/constant';
 import SearchForm from '@/component/SearchForm/SearchForm';
 import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';
-
-const tabSearch = [
-    {
-        label: 'Task Title',
-        key: 'taskTitle'
-    },
-    {
-        label: 'Reporter',
-        key: 'reporter'
-    },
-    {
-        label: 'Owner',
-        key: 'owner'
-    },
-    {
-        label: 'Status',
-        key: 'status'
-    },
-]
 
 export default function TableTask({
     data,
@@ -43,7 +24,7 @@ export default function TableTask({
     const router = useRouter();
     const [keyIdTaskProgress, setKeyIdTaskProgress] = useState([])
     const [titleTask, setTitleTask] = useState([]);
-    
+
     const confirm = async (e) => {
         await deleteTask(taskID).then(res => {
             if (res.data.result) {
@@ -153,11 +134,6 @@ export default function TableTask({
         },
     };
 
-    // const onChange = (page, pageSize) => {
-    //     const url = `page=${page}&size=${+querySize ? +querySize : +size}`
-    //     router.replace(`${pathname}?${url}`)
-    // }
-
     const handelTaskProgress = async () => {
         const bodyData = {
             id: keyIdTaskProgress,
@@ -172,26 +148,33 @@ export default function TableTask({
     return (
         <div className={styles.container}>
             <div className={styles.actionFilter}>
-                 <SearchForm 
-                        searchField = {[
-                            {
-                                key: 'taskTitle',
-                                placeHoder: 'Task Title'
-                            },
-                            {
-                                key: 'reporter',
-                                placeHoder: 'Reporter'
-                            },
-                            {
-                                key: 'owner',
-                                placeHoder: 'Owner'
-                            },
-                            {
-                                key: 'status',
-                                placeHoder: 'Status'
-                            }
-                        ]}
-                     />
+                <SearchForm
+                    searchField={[
+                        {
+                            key: 'taskTitle',
+                            searchPlaceholder: 'Task Title',
+                            fieldType: TYPE.TEXT,
+
+                        },
+                        {
+                            key: 'reporter',
+                            searchPlaceholder: 'Reporter',
+                            fieldType: TYPE.SELECT,
+                        },
+                        {
+                            key: 'owner',
+                            searchPlaceholder: 'Owner',
+                            fieldType: TYPE.TEXT
+
+                        },
+                        {
+                            key: 'status',
+                            searchPlaceholder: 'Status',
+                            fieldType: TYPE.TEXT
+
+                        }
+                    ]}
+                />
             </div>
             <div className={styles.contentTable}>
                 <div className={styles.btnAddTask}>
@@ -223,23 +206,23 @@ export default function TableTask({
                     pageSize={5}
                 />
                 </div> */}
-            <div className={styles.btnStartTask}>
-                <ModalShowListTask
-                    dataProgress={data}
-                    setReloadData={setReloadData}
-                    userData={userData}
-                />
-                <Button
-                    type="primary"
-                    ghost
-                    onClick={handelTaskProgress}
-                    disabled={keyIdTaskProgress.length < 1}
-                >
-                    Start task
-                </Button>
+                <div className={styles.btnStartTask}>
+                    <ModalShowListTask
+                        dataProgress={data}
+                        setReloadData={setReloadData}
+                        userData={userData}
+                    />
+                    <Button
+                        type="primary"
+                        ghost
+                        onClick={handelTaskProgress}
+                        disabled={keyIdTaskProgress.length < 1}
+                    >
+                        Start task
+                    </Button>
+                </div>
             </div>
-            </div>
-           
+
         </div>
     )
 }

@@ -1,5 +1,5 @@
 const urlPath = {
-    manageUser: '/manager-user',
+    user: '/manager-user',
     register: '/auth/register',
     formTask: '/tasks/form-task',
     formUser: '/manager-user/form-user',
