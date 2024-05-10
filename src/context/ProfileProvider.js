@@ -8,7 +8,6 @@ export const ProfileContext = createContext({});
 
 export const ProfileProvider = ({ children }) => {
 const [user, setUser] = useState();
-console.log({user})
 
     useEffect(() => {
         const fetchData = async () => {

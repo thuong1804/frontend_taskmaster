@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { handelGetListUser, handelUpdateUser } from '@/service/user-service';
 import { UserOutlined } from '@ant-design/icons';
 import UploadImageField from '@/component/UploadImageField/UploadImageField';
+import { cleanObject } from '@/utils';
 
 export default function FormProfile({ 
     handleCancel,
@@ -18,12 +19,18 @@ export default function FormProfile({
     const storage = `http://localhost:3005/${user.avatar}`
 
     const onFinish = async (values) => {
-        const bodyData = {
+        const parts = values.avatar.split("/");
+        const relativeUrl = parts[parts.length - 1];
+        const bodyData = cleanObject({
             ...values,
             id: user.id,
-            avatar: user.avatar
-        }
-        updateProfile({bodyData});
+            groupId: user.groupId,
+            avatar: relativeUrl === 'null' ? null : relativeUrl,
+        })
+        console.log({relativeUrl})
+        await updateProfile({bodyData});
+        console.log({values})
+
         handleCancel();
     };
     const onFinishFailed = (errorInfo) => {
@@ -41,8 +48,7 @@ export default function FormProfile({
     useEffect(() => {
        form.setFieldValue('avatar', storage)
     }, [user])
-    console.log({form: form.getFieldValue('avatar')})
-    console.log(user.avatar)
+
     return (
         <>
             <h2 style={{

@@ -10,10 +10,10 @@ const UploadImageField = () => {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState();
     const [file, setFile] = useState();
-    const { user } = useUser();
+    const { user, updateProfile} = useUser();
     const storage =  user.avatar ? `http://localhost:3005/${user.avatar}` : null
     const [fileList, setFileList] = useState([])
-    
+
     const getBase64 = (img, callback) => {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result));
@@ -34,17 +34,23 @@ const UploadImageField = () => {
     };
     
     const handleChange = (info) => {
+        const bodyData = {
+           ...user,
+            avatar: info.file.response && info.file.response.filename
+        }
         switch (info.file.status) {
             case 'uploading':
                 setFileList([info.file]);
                 setLoading(true);
                 break;
             case 'done':
-                getBase64(info.file.originFileObj, (url) => {
+                getBase64(info.file.originFileObj, async(url) => {
+                    console.log({info})
                     setLoading(false);
                     setImageUrl(url);
                     setFileList([info.file]);
                 });
+                updateProfile({bodyData}).then(res => console.log({res}))
                 break;
             case 'removed':
                 setFileList([...info.fileList]);
@@ -56,14 +62,16 @@ const UploadImageField = () => {
     
     useEffect(() => {
         if (user.avatar) {
-            setFileList([
-                {
-                    uid: '1',
-                    name: 'image.png',
-                    status: 'done',
-                    url: storage,
-                }
-            ]);
+            if (fileList.length === 0) {
+                setFileList([
+                    {
+                        uid: '1',
+                        name: 'image.png',
+                        status: 'done',
+                        url: storage,
+                    }
+                ]);
+            }
         }
     }, [user.avatar]);
 
@@ -100,10 +108,15 @@ const UploadImageField = () => {
     const removeFile = async (file) => {
         const fileData = {
             id: user.id,
-            imgName: user.avatar ? user.avatar : file.name,
+            imgName: file.response?.filename ? file.response.filename : user.avatar,
             imgPath: file.url
         }
+        const bodyData = {
+            ...user,
+            avatar: null,
+        }
         await handelDeleteAvatar(fileData)
+        updateProfile({bodyData})
         return true;
     }
 

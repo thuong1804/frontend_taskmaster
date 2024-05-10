@@ -41,7 +41,7 @@ export default function HeaderLayout({ className }) {
             ),
         },
     ];
-    console.log({user})
+
     return (
         <div className={styles.container}>
             {user && (

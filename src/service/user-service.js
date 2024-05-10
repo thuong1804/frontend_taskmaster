@@ -101,7 +101,6 @@ const handelUploadAvatar = async(formData) => {
 }
 
 const handelDeleteAvatar = async({id, imgName, imgPath}) => {
-    console.log({imgName})
     return await axios({
         method: 'post',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/delete-avatar/${imgName}`,
@@ -123,7 +122,8 @@ const handelUpdateProfile = async({
     gender, 
     phone, 
     birthDay, 
-    avatar
+    avatar,
+    groupId,
 }) => {
     return await axios({
         method: 'put',
@@ -137,6 +137,7 @@ const handelUpdateProfile = async({
             phone,
             birthDay,
             avatar,
+            groupId,
         },
         withCredentials: true,
         headers: {'X-Requested-With': 'XMLHttpRequest'},
