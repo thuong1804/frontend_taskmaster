@@ -28,7 +28,6 @@ const [user, setUser] = useState();
         await handelUpdateProfile(bodyData).then(res => {
             if (res.data.result) {
                 setUser(res.data.data.content)
-                toast.success('Update profile success')
             }
         })
     }
