@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {    Form, Input, Switch, Radio, Row, Col, DatePicker } from 'antd'
+import { Form, Input, Switch, Radio, Row, Col, DatePicker } from 'antd'
 import { useUser } from '@/context/ProfileProvider';
 import { UserOutlined } from '@ant-design/icons';
 import UploadImageField from '@/component/UploadImageField/UploadImageField';
