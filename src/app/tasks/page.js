@@ -1,15 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './page.module.scss'
 import {  UnorderedListOutlined } from '@ant-design/icons';
 import {  getTask, searchTask } from '../../service/taskService';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/ProfileProvider';
 import { handelGetListUser } from '@/service/user-service';
+import { cleanObject, convertSearchParamsToObject } from '@/utils';
 import TableTask from './tableTask';
-import TimeFrameTaskTable from './timeFrameTaskTable';
-import ModalShowListTask from './ModalShowListTask/ModalShowListTask';
 
 const ListTask = () => {
     const [data, setData] = useState([]);
@@ -21,37 +20,22 @@ const ListTask = () => {
     const [totalElement, setTotalElement] = useState();
     const size = 5;
     const searchParams = useSearchParams()
-    const queryPage = searchParams.get('page')
-    const querySize = searchParams.get('size')
-    const queryTaskTitle = searchParams.get('taskTitle')
-    const [search, setSearch] = useState([])
-
-    useEffect(() => {
-        const fetchSearch = async () => {
-            try {
-                const dataBody = {
-                    taskTitle: queryTaskTitle ? queryTaskTitle : ''
-                };
-                const response = await searchTask(dataBody);
-                setSearch(response.data.data.content);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchSearch();
-    }, [queryTaskTitle])
+    const paramsObject = useMemo(() => {
+        return convertSearchParamsToObject(searchParams);
+    },[searchParams]) 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (user) {
-                    const dataBody = {
+                    const dataBody = cleanObject({
                         userId: id,
                         groupId: groupId,
                         // page: queryPage ? queryPage : 1,
-                        // size: +querySize ? +querySize : +size
-                    };
+                        // size: +querySize ? +querySize : +size,
+                        taskTitle: paramsObject.taskTitle ? paramsObject.taskTitle : '',
+                        reporter: paramsObject.reporter ? +paramsObject.reporter : null
+                    });
                     const response = await getTask(dataBody);
                     setData(response.data.data.content);
                     setTotalElement(response.data.data.totalRows)
@@ -60,9 +44,8 @@ const ListTask = () => {
                 console.error('Error fetching data:', error);
             }
         };
-
         fetchData();
-    }, [user, reloadData])
+    }, [user, reloadData, paramsObject])
 
     useEffect(() => {
         const fetchDataUser = async () => {
@@ -79,20 +62,16 @@ const ListTask = () => {
             <h1><UnorderedListOutlined /> List Task Manager</h1>
             <div className={styles.tableTask}>
                 <TableTask
-                    data={queryTaskTitle ? search : data}
+                    data={data}
                     setReloadData={setReloadData}
                     userData={userData}
                     totalElement={totalElement}
-                    queryPage={queryPage}
-                    querySize={querySize}
+                    // queryPage={queryPage}
+                    // querySize={querySize}
                     reloadData={reloadData}
                     size={size}
                 />
             </div>
-            {/* <div className={styles.timeFrameTaskTable}>
-                <TimeFrameTaskTable
-                data={data} />
-            </div> */}
         </div>
     )
 }

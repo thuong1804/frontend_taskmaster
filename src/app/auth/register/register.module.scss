@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #1677ff;
+
+    h1 {
+        text-align: center;
+    }
+
+    .formSignUp {
+        background-color: #fff;
+        border-radius: 10px;
+        width: 400px;
+
+        #normal_login{
+            padding: 30px;
+        }
+    }
+}
+
+.btnAction {
+    margin-top: 100px;
+
+    button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        width: 100%;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .titleFooter {
+        margin-top: 10px;
+        text-align: center;
+    }
+}

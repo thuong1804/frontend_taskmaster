@@ -8,7 +8,7 @@ export default function Loading() {
         <h2>
             Loading...
         </h2>
-        <LoadingOutlined className={styles.icon}/>
+        <div className={styles.loader}></div>
     </div>
   )
 }

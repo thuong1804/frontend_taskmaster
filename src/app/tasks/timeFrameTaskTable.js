@@ -1,9 +1,10 @@
-import { Button, Popconfirm, Table, Tag } from "antd";
+import { Button, Table, Tag } from "antd";
 import dayjs from "dayjs";
-import styles from './timeFrameTaskTable.module.scss'
-import { useEffect, useMemo, useState } from "react";
-import { updateInCompleted, updateInProgress } from "@/service/taskService";
+import styles from './TimeFrameTaskTable.module.scss'
+import { useMemo, useState } from "react";
 import SearchField from "@/component/SearchField/SearchField";
+import { commonStatus } from "@/constant/constant";
+import { updateStatus } from "@/service/taskService";
 
 const TimeFrameTaskTable = ({
     dataProgress,
@@ -11,10 +12,13 @@ const TimeFrameTaskTable = ({
     userData,
 }) => {
     const [listTaskKey, setListTaskKey] = useState([])
+    const [listTaskCompleted, setListTaskCompleted] = useState([])
+    const isTaskCompleted = listTaskCompleted.some(item => item.isCompleted === 1)
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             setListTaskKey(selectedRowKeys)
+            setListTaskCompleted(selectedRows)
         },
         getCheckboxProps: (record) => ({
             disabled: record.name === 'Disabled User',
@@ -23,16 +27,16 @@ const TimeFrameTaskTable = ({
     };
 
     const filterData = useMemo(() => {
-        const dataRender = dataProgress.filter(item => item.isInProgress === 1)
+        const dataRender = dataProgress.filter(item => item.status === commonStatus.PROGRESS)
         return dataRender;
     }, [dataProgress])
 
     const handelCancelTask = async () => {
         const bodyData = {
             id: listTaskKey,
-            isInProgress: 0 && false,
+            status: commonStatus.PENDING
         }
-        await updateInProgress(bodyData)
+        await updateStatus(bodyData)
         setListTaskKey([])
         setReloadData(prevFlag => !prevFlag)
     }
@@ -52,7 +56,7 @@ const TimeFrameTaskTable = ({
             render: (id) => {
                 const reporterData = userData?.find(item => item.id === id);
                 if (reporterData) {
-                    return <Tag color='red'>{reporterData.name}</Tag>;
+                    return reporterData.name
                 } else {
                     return null;
                 }
@@ -64,7 +68,7 @@ const TimeFrameTaskTable = ({
             dataIndex: ['User', 'name'],
             key: 'userId',
             width: 200,
-            render: (text) => <Tag color='geekblue'>{text}</Tag>
+            render: (owner) => <span>{owner}</span>
         },
         {
             title: 'Task Description',
@@ -84,6 +88,13 @@ const TimeFrameTaskTable = ({
             dataIndex: 'completedDate',
             key: 'completedDate',
             render: (text) => <span>{dayjs(text).format('DD-MM-YYYY')}</span>,
+            width: 300
+        }, 
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => <Tag color="blue">{status}</Tag>,
             width: 300
         },
         {
@@ -118,7 +129,8 @@ const TimeFrameTaskTable = ({
                 queryName={'isCompleted'}
             />
             <div className={styles.btnAction}>
-                <Button danger onClick={handelCancelTask} disabled={listTaskKey.length < 1}>
+                {/* <ModalShowTaskCompleted /> */}
+                <Button danger onClick={handelCancelTask} disabled={isTaskCompleted || listTaskKey.length < 1 }>
                     Cancel
                 </Button>
                 <Button type="primary" disabled={listTaskKey.length < 1} onClick={handelTaskCompleted} >Completed</Button>
@@ -142,7 +154,7 @@ const TimeFrameTaskTable = ({
                         return (
                             ({
                                 style: {
-                                    background: checkCompletedTask && '#e37460'
+                                    background: checkCompletedTask && '#e37460',
                                 }
                             })
                         )

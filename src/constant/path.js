@@ -1,11 +1,15 @@
 const urlPath = {
-    manageUser: '/manager-user',
-    register: '/register',
+    user: '/manager-user',
+    register: '/auth/register',
     formTask: '/tasks/form-task',
-    login: '/login',
+    formUser: '/manager-user/form-user',
+    login: '/auth/login',
+    forgotPassWord: '/auth/forgot-password',
     logout: '/logout',
     home:'/home',
     task: '/tasks',
-    formEditUser: 'manager-user/form-edit-user'
+    recoverCode: '/auth/recover-code',
+    changePassword: '/auth/change-password',
+
 }
 export default urlPath;

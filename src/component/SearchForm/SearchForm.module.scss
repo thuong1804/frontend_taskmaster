@@ -1,0 +1,19 @@
+.container {
+    width: 100%;
+
+    .form {
+        .wrapperCol {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btnAction {
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+    }
+     
+}
+

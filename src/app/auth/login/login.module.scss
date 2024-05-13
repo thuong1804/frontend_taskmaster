@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #1677ff;
+
+    .formContent {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 10px;
+        width: 400px;
+        height: 500px;
+        
+        .btnAction {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer {
+            display: flex;
+            flex-direction: column;
+
+            button {
+                font-weight: bold;
+                font-size: 15px;
+            }
+        }
+
+    
+        .content {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+}

@@ -1,19 +1,16 @@
 'use client'
-import React, { useEffect } from 'react'
 import styles from './HeaderLayout.module.scss'
-import { Button, Dropdown } from 'antd'
+import { Avatar, Dropdown } from 'antd'
 import { deleteCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import urlPath from '@/constant/path'
 import { useUser } from '../../context/ProfileProvider'
-import Image from 'next/image'
-import imgLogo from '../../../public/output-logo.png'
-import { AuditOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
-import classNames from 'classnames'
+import {LoginOutlined, UserOutlined } from '@ant-design/icons'
+import Profile from '@/app/_profile/page'
 
 export default function HeaderLayout({ className }) {
     const router = useRouter()
-    const { clearUserData } = useUser();
+    const { user, clearUserData } = useUser();
 
     const handelSignOut = () => {
         deleteCookie('login')
@@ -26,38 +23,46 @@ export default function HeaderLayout({ className }) {
         {
             key: '1',
             label: (
-                <div target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                   <AuditOutlined /> Profile
-                </div>
+                <Profile/>
             ),
         },
         {
             key: '2',
             label: (
-                <span style={{ color: 'red' }} onClick={handelSignOut}>
-                    <LoginOutlined /> Log Out
+                <span 
+                    style={{ 
+                        color: 'red', 
+                        display:'block', 
+                        width:'100%' 
+                    }}
+                    onClick={handelSignOut}>
+                        <LoginOutlined /> Log Out
                 </span>
             ),
         },
     ];
 
-
     return (
-        <div className={classNames(styles.container, className)}>
-            <div className={styles.contentLeft}>
-                <Image src={imgLogo} alt='logo' width={70} height={70}></Image>
-                <h3>Task Master</h3>
-            </div>
-            <div className={styles.contentRight}>
-                <Dropdown
+        <div className={styles.container}>
+            {user && (
+                 <Dropdown
                     menu={{
                         items,
                     }}
                     placement="bottomRight"
+                    
                 >
-                    <UserOutlined className={styles.iconProfile} />
+                    <div className={styles.content}>
+                        <Avatar
+                            className={styles.avatar}
+                            src={`http://localhost:3005/${user.avatar}`}
+                            >
+                                {user.avatar ? user.avatar : <UserOutlined />}
+                        </Avatar>
+                        <span>{user.name}</span>
+                    </div>
                 </Dropdown>
-            </div>
+            )}
         </div>
     )
 }

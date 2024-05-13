@@ -4,11 +4,16 @@ export function middleware(request) {
     let isLogin = request.cookies.get("login");
     if (!isLogin) {
         if (request.nextUrl.pathname.startsWith("/home")) {
-            return NextResponse.redirect(new URL("/login", request.url));
-        } else if (request.nextUrl.pathname.startsWith("/todo-list")) {
-            return NextResponse.redirect(new URL("/login", request.url));
+            return NextResponse.redirect(new URL("auth/login", request.url));
+        } else if (request.nextUrl.pathname.startsWith("/task")) {
+            return NextResponse.redirect(new URL("auth/login", request.url));
+        } else if (request.nextUrl.pathname.startsWith("/manager-user")) {
+            return NextResponse.redirect(new URL("auth/login", request.url));
         }
-    } else if (request.nextUrl.pathname.startsWith("/login")){
+
+    } else if (request.nextUrl.pathname.startsWith("auth/login")){
+        return NextResponse.redirect(new URL("/home", request.url));
+    } else if (request.nextUrl.pathname.startsWith("/register")) {
         return NextResponse.redirect(new URL("/home", request.url));
     }
 }

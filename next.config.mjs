@@ -3,7 +3,17 @@ const nextConfig = {
     experimental: {
         serverActions: true,
       },
-      reactStrictMode: false
+      reactStrictMode: false,
+      images: {
+        remotePatterns: [
+          {
+            protocol: 'http',
+            hostname: 'localhost',
+            port: '3005',
+            pathname: '',
+          },
+        ],
+      },
 };
 
 

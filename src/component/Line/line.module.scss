@@ -1,0 +1,79 @@
+.line {
+    position: relative;
+    width: 100%;
+    h2 {
+        text-align: center;
+        
+    }
+}
+
+.line::before {
+    content: "";
+    position: absolute;
+    width: 30%;
+    bottom: 33px;
+    left: 33px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}
+.line::after {
+    content: "";
+    position: absolute;
+    width: 30%;
+    bottom: 33px;
+    right: 33px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}
+
+.larger::before {
+    content: "";
+    position: absolute;
+    width: 30%;
+    bottom: 33px;
+    right: 33px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}
+
+.larger::after {
+    content: "";
+    position: absolute;
+    width: 30%;
+    bottom: 33px;
+    right: 33px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}
+
+.middle::before {
+    content: "";
+    position: absolute;
+    width: 20%;
+    bottom: 33px;
+    right: 33px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}
+
+.middle::after {
+    content: "";
+    position: absolute;
+    width: 20%;
+    bottom: 33px;
+    right: 33px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}
+
+.small::before {
+    content: "";
+    position: absolute;
+    width: 15%;
+    bottom: 33px;
+    right: 33px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}
+
+.small::after {
+    content: "";
+    position: absolute;
+    width: 15%;
+    bottom: 33px;
+    right: 33px;
+    border-bottom: 1px solid rgb(196, 196, 196);
+}

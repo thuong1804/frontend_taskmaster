@@ -2,7 +2,7 @@ import axios from "../setup/axios";
 
 const handelGetListUser = async(data) => {
    return await axios({
-        method: 'get',
+        method: 'post',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/users`,
         data: {
             ...data
@@ -13,7 +13,7 @@ const handelGetListUser = async(data) => {
     })
 }
 
-const handelCreateUser = async({email, name, address, gender, groupId, password}) => {
+const handelCreateUser = async({email, name, address, gender, groupId, password, phone, birthDay}) => {
     return await axios({
         method: 'post',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/create-user`,
@@ -23,7 +23,9 @@ const handelCreateUser = async({email, name, address, gender, groupId, password}
            address,
            gender,
            password,
-           groupId
+           groupId,
+           phone,
+           birthDay,
         }
     })
 }
@@ -38,7 +40,17 @@ const handelDeleteUser = async(id) => {
     })
 }
 
-const handelUpdateUser = async({id, email, name, address, gender, groupId}) => {
+const handelUpdateUser = async({
+    id, 
+    email, 
+    name, 
+    address, 
+    gender, 
+    groupId, 
+    password, 
+    phone, 
+    birthDay
+}) => {
     return await axios({
         method: 'put',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/update-user`,
@@ -49,6 +61,9 @@ const handelUpdateUser = async({id, email, name, address, gender, groupId}) => {
            address,
            gender,
            groupId,
+           password,
+           phone,
+           birthDay,
         }
     })
 }
@@ -75,6 +90,59 @@ const handelGetProfileUser = async(data) => {
     })
 }
 
+const handelUploadAvatar = async(formData) => {
+    return await axios({
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/upload-avatar`,
+        data: formData,
+        withCredentials: true,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+    })
+}
+
+const handelDeleteAvatar = async({id, imgName, imgPath}) => {
+    return await axios({
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/delete-avatar/${imgName}`,
+        data: {
+            id,
+            imgName,
+            imgPath
+        },
+        withCredentials: true,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+    })
+}
+
+const handelUpdateProfile = async({
+    id, 
+    email, 
+    name, 
+    address, 
+    gender, 
+    phone, 
+    birthDay, 
+    avatar,
+    groupId,
+}) => {
+    return await axios({
+        method: 'put',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/update-profile`,
+        data: {
+            id,
+            email,
+            name,
+            address,
+            gender,
+            phone,
+            birthDay,
+            avatar,
+            groupId,
+        },
+        withCredentials: true,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+    })
+}
 export {
     handelCreateUser,
     handelGetListUser,
@@ -82,4 +150,7 @@ export {
     handelDeleteUser,
     handelGetByIdUser,
     handelGetProfileUser,
+    handelUploadAvatar,
+    handelDeleteAvatar,
+    handelUpdateProfile,
 }
