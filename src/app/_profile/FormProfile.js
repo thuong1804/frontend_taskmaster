@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Form, Input, Switch, Radio, Row, Col, DatePicker } from 'antd'
+import { Form, Input, Switch, Radio, Row, Col, DatePicker } from 'antd'
 import { useUser } from '@/context/ProfileProvider';
-import styles from './FormProfile.module.scss'
-import { toast } from "sonner";
-import { handelGetListUser, handelUpdateUser } from '@/service/user-service';
 import { UserOutlined } from '@ant-design/icons';
 import UploadImageField from '@/component/UploadImageField/UploadImageField';
 import { cleanObject } from '@/utils';
 
-export default function FormProfile({ 
+export default function FormProfile({
     handleCancel,
     formId,
 }) {
@@ -16,21 +13,15 @@ export default function FormProfile({
     const [value, setValue] = useState(1)
     const [form] = Form.useForm();
     const { user, updateProfile } = useUser();
-    const storage = `http://localhost:3005/${user.avatar}`
 
     const onFinish = async (values) => {
-        const parts = values.avatar.split("/");
-        const relativeUrl = parts[parts.length - 1];
         const bodyData = cleanObject({
             ...values,
             id: user.id,
             groupId: user.groupId,
-            avatar: relativeUrl === 'null' ? null : relativeUrl,
+            avatar: values.avatar === '' ? null : values.avatar,
         })
-        console.log({relativeUrl})
-        await updateProfile({bodyData});
-        console.log({values})
-
+        await updateProfile({ bodyData });
         handleCancel();
     };
     const onFinishFailed = (errorInfo) => {
@@ -46,7 +37,7 @@ export default function FormProfile({
     }
 
     useEffect(() => {
-       form.setFieldValue('avatar', storage)
+        form.setFieldValue('avatar', user.avatar)
     }, [user])
 
     return (
@@ -78,7 +69,7 @@ export default function FormProfile({
                     label="Avatar"
                     name="avatar"
                 >
-                   <UploadImageField />
+                    <UploadImageField />
                 </Form.Item>
                 <Form.Item
                     label="Email"
@@ -115,9 +106,9 @@ export default function FormProfile({
                     label="Birth Day"
                     name="birthDay"
                 >
-                    <DatePicker 
+                    <DatePicker
                         format={'DD-MM-YYYY'}
-                        style={{ width: '100%' }}  
+                        style={{ width: '100%' }}
                     />
                 </Form.Item>
                 <Row>
