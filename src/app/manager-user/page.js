@@ -1,7 +1,7 @@
 'use client'
 import { Avatar, Button, Popconfirm, Space, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
-import { handelDeleteUser, handelGetListUser } from "../../service/user-service";
+import { handelDeleteUser, handelGetListUser } from "../../service/userService";
 import { EditOutlined, UserDeleteOutlined, UserOutlined, PlusOutlined } from "@ant-design/icons";
 import styles from './page.module.scss'
 import { useRouter } from "next/navigation";

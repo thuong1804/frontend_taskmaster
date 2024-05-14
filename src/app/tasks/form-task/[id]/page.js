@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { createTask, getByIdTask, updateTask } from "@/service/taskService";
 import urlPath from "@/constant/path";
 import { useEffect, useState } from "react";
-import { handelGetListUser } from "@/service/user-service";
+import { handelGetListUser } from "@/service/userService";
 import { toast } from "sonner";
 import { mappingDropdownData } from "@/utils";
 import { useUser } from "@/context/ProfileProvider";

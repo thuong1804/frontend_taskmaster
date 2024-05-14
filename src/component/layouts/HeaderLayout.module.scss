@@ -1,4 +1,10 @@
 .container {
+    display: flex;
+    gap: 30px;
+
+    .notitfication {
+        color: gray;
+    }
 
     .content {
         display: flex;

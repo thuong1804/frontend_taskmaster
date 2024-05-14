@@ -1,12 +1,13 @@
 'use client'
 import styles from './HeaderLayout.module.scss'
-import { Avatar, Dropdown } from 'antd'
+import { Avatar, Badge, Dropdown, Space } from 'antd'
 import { deleteCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import urlPath from '@/constant/path'
 import { useUser } from '../../context/ProfileProvider'
-import {LoginOutlined, UserOutlined } from '@ant-design/icons'
+import { BellOutlined, DownOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
 import Profile from '@/app/_profile/page'
+import Notification from '@/app/_notification/Notification'
 
 export default function HeaderLayout({ className }) {
     const router = useRouter()
@@ -23,20 +24,20 @@ export default function HeaderLayout({ className }) {
         {
             key: '1',
             label: (
-                <Profile/>
+                <Profile />
             ),
         },
         {
             key: '2',
             label: (
-                <span 
-                    style={{ 
-                        color: 'red', 
-                        display:'block', 
-                        width:'100%' 
+                <span
+                    style={{
+                        color: 'red',
+                        display: 'block',
+                        width: '100%'
                     }}
                     onClick={handelSignOut}>
-                        <LoginOutlined /> Log Out
+                    <LoginOutlined /> Log Out
                 </span>
             ),
         },
@@ -44,20 +45,20 @@ export default function HeaderLayout({ className }) {
 
     return (
         <div className={styles.container}>
+           <Notification />
             {user && (
-                 <Dropdown
+                <Dropdown
                     menu={{
                         items,
                     }}
                     placement="bottomRight"
-                    
                 >
                     <div className={styles.content}>
                         <Avatar
                             className={styles.avatar}
                             src={`http://localhost:3005/${user.avatar}`}
-                            >
-                                {user.avatar ? user.avatar : <UserOutlined />}
+                        >
+                            {user.avatar ? user.avatar : <UserOutlined />}
                         </Avatar>
                         <span>{user.name}</span>
                     </div>

@@ -10,7 +10,7 @@ import { login } from '../../../service/authService';
 import urlPath from '@/constant/path';
 import { useUser } from '@/context/ProfileProvider';
 import { getCookies } from 'cookies-next';
-import { handelGetProfileUser } from '@/service/user-service';
+import { handelGetProfileUser } from '@/service/userService';
 import LineRender from '@/component/Line/line';
 
 const LoginPage = () => {
@@ -47,6 +47,8 @@ const LoginPage = () => {
                         name: "password",
                         errors: ["Incorret password"],
                     },]);
+            } else if (error.response.status === 500) {
+                return toast.error("Internal Server Error!")
             }
         })
     };

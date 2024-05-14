@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { camelCaseToTitleCase, cleanObject, mappingDropdownData } from "@/utils"
 import { TYPE } from "@/constant/constant"
 import { useEffect, useState } from "react"
-import { handelGetListUser } from "@/service/user-service"
+import { handelGetListUser } from "@/service/userService"
 
 const SearchForm = ({
     searchField = [],
