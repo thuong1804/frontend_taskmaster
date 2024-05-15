@@ -14,7 +14,7 @@ const ItemNotification = ({itemNotifications}) => {
                             <span>{item?.name}</span>
                             <span>{item?.description}</span>
                             <span>
-                                {dayjs(item?.date).format(DATETIME_FORMAT_DISPLAY)}
+                                {item.date ? dayjs(item?.date).format(DATETIME_FORMAT_DISPLAY) : null}
                             </span>
                         </div>
                         <span className={styles.point}></span>

@@ -111,7 +111,7 @@ const LoginPage = () => {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 Log in
                             </Button>
-                          <span>Or <Link href={urlPath.register}>register now!</Link></span>
+                          <span style={{marginTop:'10px'}}>Or <Link href={urlPath.register}>register now!</Link></span>
                         </div>
                     </Form.Item>
                 </Form>

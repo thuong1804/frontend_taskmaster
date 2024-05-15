@@ -16,6 +16,6 @@ export const TYPE = {
     DATETIME: "DATETIME",
 };
 
-export const DATETIME_FORMAT_DISPLAY = "DD/MM/YYYY HH:mm";
+export const DATETIME_FORMAT_DISPLAY = "HH:mm DD/MM/YYYY";
 export const DATETIME_FORMAT_VALUE = "DD/MM/YYYY";
 

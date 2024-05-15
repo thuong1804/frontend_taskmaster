@@ -4,6 +4,7 @@ import { useUser } from '@/context/ProfileProvider';
 import { UserOutlined } from '@ant-design/icons';
 import UploadImageField from '@/component/UploadImageField/UploadImageField';
 import { cleanObject } from '@/utils';
+import styles from './FormProfile.module.scss'
 
 export default function FormProfile({
     handleCancel,
@@ -41,7 +42,7 @@ export default function FormProfile({
     }, [user])
 
     return (
-        <>
+        <div className={styles.container}>
             <h2 style={{
                 lineHeight: 4,
                 fontWeight: 'bold',
@@ -150,6 +151,6 @@ export default function FormProfile({
                     </Col>
                 </Row>
             </Form>
-        </>
+        </div>
     )
 }

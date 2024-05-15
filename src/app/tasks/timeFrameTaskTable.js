@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import styles from './TimeFrameTaskTable.module.scss'
 import { useMemo, useState } from "react";
 import SearchField from "@/component/SearchField/SearchField";
-import { commonStatus } from "@/constant/constant";
+import { DATETIME_FORMAT_DISPLAY, commonStatus } from "@/constant/constant";
 import { updateStatus } from "@/service/taskService";
 
 const TimeFrameTaskTable = ({
@@ -80,14 +80,14 @@ const TimeFrameTaskTable = ({
             title: 'Schedule Date',
             dataIndex: 'scheduledDate',
             key: 'scheduledDate',
-            render: (text) => <span>{dayjs(text).format('DD-MM-YYYY')}</span>,
+            render: (text) => <span>{dayjs(text).format(DATETIME_FORMAT_DISPLAY)}</span>,
             width: 300
         },
         {
             title: 'Completed Date',
             dataIndex: 'completedDate',
             key: 'completedDate',
-            render: (text) => <span>{dayjs(text).format('DD-MM-YYYY')}</span>,
+            render: (text) => <span>{dayjs(text).format(DATETIME_FORMAT_DISPLAY)}</span>,
             width: 300
         }, 
         {

@@ -29,8 +29,6 @@ const FormTask = () => {
             ...values,
             userId: user.id,
             reporter: values.reporter,
-            scheduledDate: dayjs(values.scheduledDate),
-            completedDate: dayjs(values.completedDate),
             owner: values.owner,
             status: commonStatus.PENDING
         }

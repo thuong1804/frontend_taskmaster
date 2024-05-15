@@ -125,6 +125,19 @@ const updateStatus = async ({id, status}) => {
     })
 }
 
+const checkDeadline = async ({id, userId}) => {
+    return await axios({
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/deadline`,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        data: {
+            id: id,
+            userId: userId,
+        },
+        withCredentials: true,
+    })
+}
+
 export {
     getTask,
     createTask,
@@ -132,5 +145,6 @@ export {
     updateTask,
     getByIdTask,
     searchTask,
-    updateStatus
+    updateStatus,
+    checkDeadline,
 }

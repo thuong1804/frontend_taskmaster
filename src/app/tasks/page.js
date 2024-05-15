@@ -2,13 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import styles from './page.module.scss'
-import {  UnorderedListOutlined } from '@ant-design/icons';
-import {  getTask, searchTask } from '../../service/taskService';
+import { UnorderedListOutlined } from '@ant-design/icons';
+import { checkDeadline, getTask, searchTask } from '../../service/taskService';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/ProfileProvider';
 import { handelGetListUser } from '@/service/userService';
 import { cleanObject, convertSearchParamsToObject } from '@/utils';
 import TableTask from './tableTask';
+import dayjs from 'dayjs';
+import { commonStatus } from '@/constant/constant';
 
 const ListTask = () => {
     const [data, setData] = useState([]);
@@ -22,7 +24,8 @@ const ListTask = () => {
     const searchParams = useSearchParams()
     const paramsObject = useMemo(() => {
         return convertSearchParamsToObject(searchParams);
-    },[searchParams]) 
+    }, [searchParams])
+    const [taskDeadline, setTaskDeadline] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,6 +58,40 @@ const ListTask = () => {
         }
         fetchDataUser()
     }, [])
+
+    const checkTasksNearDeadline = (tasks) => {
+        const nowDate = dayjs();
+        return tasks.filter(task => {
+            if (task.status === commonStatus.PROGRESS) {
+                const completedDay = dayjs(task.completedDate);
+                const hourDiff = completedDay.diff(nowDate, 'hour', true);
+                if (completedDay.isSame(nowDate, 'day')) {
+                    return hourDiff >= 0.3333333333333333 && hourDiff <= 0.5;
+                }
+            }
+        });
+    };
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            try {
+                const nearDeadlineTasks = checkTasksNearDeadline(data);
+                if (nearDeadlineTasks && nearDeadlineTasks.length > 0) {
+                    setTaskDeadline(nearDeadlineTasks);
+                    const taskIds = nearDeadlineTasks.map(item => item.id);
+                    const bodyData = {
+                        id: [...taskIds],
+                        userId: user.id,
+                    };
+                    await checkDeadline(bodyData);
+                }
+            } catch (error) {
+                console.error('Error occurred in interval function:', error);
+            }
+        }, 180000);
+    
+        return () => clearInterval(interval);
+    }, [taskDeadline]);
 
 
     return (
