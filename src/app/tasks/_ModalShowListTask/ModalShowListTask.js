@@ -16,10 +16,11 @@ const ModalShowListTask = ({
     const onClose = () => {
         setOpen(false);
     };
+
     return (
         <div>
             <Button type="primary" onClick={showDrawer}>
-                Show task progress
+                List task progress
             </Button>
             <Drawer
                 title="List task progress"

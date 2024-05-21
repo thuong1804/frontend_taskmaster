@@ -2,13 +2,13 @@
 import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import styles from './page.module.scss'
-import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/service/user-service";
+import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/service/userService";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import urlPath from "@/constant/path";
 import { CheckOutlined, CloseOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
-import { cleanObject, validateEmail, validationPassword } from "@/utils";
-import { DATETIME_FORMAT_DISPLAY, DATETIME_FORMAT_VALUE, passwordRegex, phoneRegExp, whiteSpaceRegex } from "@/constant/constant";
+import { cleanObject, validateEmail } from "@/utils";
+import { passwordRegex, phoneRegExp, whiteSpaceRegex } from "@/constant/constant";
 import { toast } from "sonner";
 import dayjs from "dayjs";
 

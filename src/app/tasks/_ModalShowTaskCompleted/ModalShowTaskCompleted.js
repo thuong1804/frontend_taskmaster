@@ -6,7 +6,7 @@ import { useUser } from '@/context/ProfileProvider';
 export default function ModalShowTaskCompleted() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataCompleted, setDataCompleted] = useState([])
-    const {user} = useUser();
+    const { user } = useUser();
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -33,7 +33,7 @@ export default function ModalShowTaskCompleted() {
     ];
 
     useEffect(() => {
-        const fetchData = async() => {
+        const fetchData = async () => {
             const dataBody = {
                 userId: user?.id,
                 groupId: user?.groupId,
@@ -41,12 +41,11 @@ export default function ModalShowTaskCompleted() {
                 // size: +querySize ? +querySize : +size
             };
             const response = await getTask(dataBody);
-           setDataCompleted(response.data.data)
+            setDataCompleted(response.data.data)
         }
         fetchData()
     }, [])
 
-    console.log({dataCompleted})
     return (
         <>
             <Button type="primary" onClick={showModal}>
@@ -58,15 +57,17 @@ export default function ModalShowTaskCompleted() {
                     dataSource={data}
                     renderItem={(item, index) => (
                         <List.Item
-          actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}
-        >
-            <List.Item.Meta
-              title={<a href="https://ant.design">{item.name?.last}</a>}
-              description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-            />
-            <div>content</div>
-            
-        </List.Item>
+                            actions={[
+                            <a key="list-loadmore-edit">edit</a>, 
+                            <a key="list-loadmore-more">more</a>
+                        ]}
+                        >
+                            <List.Item.Meta
+                                title={<a href="https://ant.design">{item.name?.last}</a>}
+                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                            />
+                            <div>content</div>
+                        </List.Item>
                     )}
                 />
             </Modal>

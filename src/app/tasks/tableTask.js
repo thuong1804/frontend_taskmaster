@@ -1,18 +1,19 @@
 import { deleteTask, updateStatus } from '@/service/taskService';
-import { PlusOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Table, Tag, Typography } from 'antd';
+import { PlusOutlined, EditOutlined, LineOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Table, Tag } from 'antd';
 import { useRouter } from 'next/navigation';
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { DATETIME_FORMAT_DISPLAY, TYPE } from "@/constant/constant";
 
 import dayjs from 'dayjs';
 import { toast } from 'sonner';
-import styles from './TableTask.module.scss'
-import SearchField from '@/component/SearchField/SearchField';
 import urlPath from '@/constant/path';
 import { commonStatus } from '@/constant/constant';
 import SearchForm from '@/component/SearchForm/SearchForm';
 import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';
+import styles from './TableTask.module.scss'
+import { statusDDL } from '@/constant/masterData';
+import { handelGetListUser } from '@/service/userService';
 
 export default function TableTask({
     data,
@@ -24,6 +25,14 @@ export default function TableTask({
     const router = useRouter();
     const [keyIdTaskProgress, setKeyIdTaskProgress] = useState([])
     const [titleTask, setTitleTask] = useState([]);
+    const [listUser, setListUser] = useState([]) 
+    const ddlListUser = listUser?.map(item => {
+        return {
+            value: item.id,
+            label: item.name
+        }
+    })
+    
 
     const confirm = async (e) => {
         await deleteTask(taskID).then(res => {
@@ -43,9 +52,20 @@ export default function TableTask({
     };
 
     const filterData = useMemo(() => {
-        const dataRender = data.filter(item => item.status === commonStatus.PENDING)
+        const dataRender = data.filter(item => item.status !== commonStatus.PROGRESS)
         return dataRender
     }, [data])
+
+    useEffect(() => {
+        const fetchData = async() => {
+            await handelGetListUser().then(res => {
+                if (res.data.data) {
+                    setListUser(res.data.data.content)
+                }
+            })
+        }
+        fetchData()
+    }, [])
 
     const columns = [
         {
@@ -86,13 +106,17 @@ export default function TableTask({
             title: 'Completed Date',
             dataIndex: 'completedDate',
             key: 'completedDate',
-            render: text => dayjs(text).format(DATETIME_FORMAT_DISPLAY)
+            render: completedDate => dayjs(completedDate).format(DATETIME_FORMAT_DISPLAY)
         },
         {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            render: status => <Tag>{status}</Tag>
+            render: status =>
+                <Tag
+                    color={status === commonStatus.COMPLETED && 'green'}>
+                    {status}
+                </Tag>
         },
         {
             title: 'Action',
@@ -101,9 +125,10 @@ export default function TableTask({
             render: (_, record) => (
                 <div className={styles.btnAction}>
                     <Button
-                        style={{ background: '#f4a62a', color: 'white' }}
-                        onClick={() => router.push(`${urlPath.formTask}/${record.id}`)}>
-                        <EditOutlined /> Edit
+                        type="primary"
+                        onClick={() => router.push(`${urlPath.formTask}/${record.id}`)}
+                    >
+                        <EditOutlined />
                     </Button>
                     <Popconfirm
                         placement="topRight"
@@ -116,9 +141,8 @@ export default function TableTask({
                     >
                         <Button
                             danger
-                            type="primary"
                             onClick={() => setTaskID(record.id)} >
-                            <MinusCircleOutlined /> Delete
+                            <LineOutlined />
                         </Button>
                     </Popconfirm>
                 </div>
@@ -154,25 +178,25 @@ export default function TableTask({
                             key: 'taskTitle',
                             searchPlaceholder: 'Task Title',
                             fieldType: TYPE.TEXT,
-
                         },
                         {
                             key: 'reporter',
                             searchPlaceholder: 'Reporter',
                             fieldType: TYPE.SELECT,
+                            options: ddlListUser,
                         },
                         {
                             key: 'owner',
                             searchPlaceholder: 'Owner',
-                            fieldType: TYPE.TEXT
-
+                            fieldType: TYPE.SELECT,
+                            options: ddlListUser,
                         },
                         {
                             key: 'status',
                             searchPlaceholder: 'Status',
-                            fieldType: TYPE.TEXT
-
-                        }
+                            fieldType: TYPE.SELECT,
+                            options: statusDDL,
+                        },
                     ]}
                 />
             </div>
@@ -198,14 +222,6 @@ export default function TableTask({
                         pageSize: 6,
                     }}
                 />
-                {/* <div className={styles.pagination}>
-                    <Pagination
-                    defaultCurrent={queryPage}
-                    total={totalElement}
-                    onChange={onChange}
-                    pageSize={5}
-                />
-                </div> */}
                 <div className={styles.btnStartTask}>
                     <ModalShowListTask
                         dataProgress={data}

@@ -3,11 +3,9 @@ import queryString from 'querystring'
 
 import styles from './SearchForm.module.scss'
 import { SearchOutlined, SyncOutlined } from "@ant-design/icons"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { camelCaseToTitleCase, cleanObject, mappingDropdownData } from "@/utils"
+import { usePathname, useRouter } from "next/navigation"
+import { camelCaseToTitleCase, cleanObject } from "@/utils"
 import { TYPE } from "@/constant/constant"
-import { useEffect, useState } from "react"
-import { handelGetListUser } from "@/service/userService"
 
 const SearchForm = ({
     searchField = [],
@@ -15,7 +13,6 @@ const SearchForm = ({
     const router = useRouter();
     const pathname = usePathname();
     const [form] = Form.useForm();
-    const [listUser, setListUser] = useState([]) 
 
     const onFinish = (values, event) => {
         const data = cleanObject({
@@ -30,22 +27,12 @@ const SearchForm = ({
         form.resetFields()
     }
 
-    useEffect(() => {
-        const fetchData = async() => {
-            await handelGetListUser().then(res => {
-                if (res.data.data) {
-                    setListUser(res.data.data.content)
-                }
-            })
-        }
-        fetchData()
-    }, [])
-
     const getPlaceHolder = (item) => {
         return item.searchPlaceholder || `Search by ${camelCaseToTitleCase(item.key)}`;
     };
 
     const renderFieldType = (fieldItem) => {
+        let {options} = fieldItem
         if (fieldItem.fieldType === undefined || fieldItem === null) {
             return null;
         }
@@ -61,11 +48,12 @@ const SearchForm = ({
                 <Select
                     placeholder={getPlaceHolder(fieldItem)}
                     style={{ width:'100%'}}
-                    options={mappingDropdownData(listUser)}
+                    options={options}
                 />
             )
         }
     }
+    
     return (
         <div className={styles.container}>
             <Form
@@ -87,10 +75,9 @@ const SearchForm = ({
                                     {renderFieldType(item)}
                                 </Form.Item>
                             </Col>
-
-                                )
-                            })}
-                    <Col>
+                        )
+                    })}
+                    <Col flex="auto">
                         <Form.Item>
                             <div className={styles.btnAction}>
                                 <Button type="primary" htmlType="submit">

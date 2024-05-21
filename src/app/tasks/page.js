@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import styles from './page.module.scss'
 import { UnorderedListOutlined } from '@ant-design/icons';
-import { checkDeadline, getTask, searchTask } from '../../service/taskService';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { checkDeadline, getTask } from '../../service/taskService';
+import { useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/ProfileProvider';
 import { handelGetListUser } from '@/service/userService';
 import { cleanObject, convertSearchParamsToObject } from '@/utils';
@@ -34,10 +34,10 @@ const ListTask = () => {
                     const dataBody = cleanObject({
                         userId: id,
                         groupId: groupId,
-                        // page: queryPage ? queryPage : 1,
-                        // size: +querySize ? +querySize : +size,
                         taskTitle: paramsObject.taskTitle ? paramsObject.taskTitle : '',
-                        reporter: paramsObject.reporter ? +paramsObject.reporter : null
+                        reporter: paramsObject.reporter ? +paramsObject.reporter : null,
+                        owner: paramsObject.owner ? +paramsObject.owner : null,
+                        status: paramsObject.status ? paramsObject.status : undefined,
                     });
                     const response = await getTask(dataBody);
                     setData(response.data.data.content);

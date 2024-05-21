@@ -29,7 +29,10 @@ export default function Profile() {
                 footer={null}
                 className={styles.modalContainer}
                 onCancel={handleCancel}>
-                    <StepProfile handleCancel={handleCancel}/>
+                    <StepProfile 
+                        handleCancel={handleCancel} 
+                        setIsModalOpen={setIsModalOpen}
+                    />
             </Modal>
         </div>
     )

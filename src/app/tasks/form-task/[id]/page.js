@@ -109,9 +109,6 @@ const FormTask = () => {
                 <h1><PlusSquareOutlined /> {isCreating ? 'Add task' : 'Edit task'}</h1>
                 <div style={{ width: '100%' }}>
                     <Form
-                        // initialValues={{
-                        //     reporter: user.name
-                        // }}
                         name="basic"
                         form={form}
                         labelCol={{
@@ -232,7 +229,6 @@ const FormTask = () => {
                                             validator(_, value) {
                                                 const endDateFormat = dayjs(value)
                                                 const startDateFormat = dayjs(getFieldValue('scheduledDate'))
-                                                console.log(value)
                                                 if (value) {
                                                     if (endDateFormat < startDateFormat) {
                                                         return Promise.reject(new Error('The scheduled date cannot be completed after the completed date'));

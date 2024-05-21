@@ -1,30 +1,19 @@
-import { Badge, Dropdown, Popover } from 'antd';
+import { Badge, Popover } from 'antd';
 import styles from './Notification.module.scss'
 import { BellOutlined} from '@ant-design/icons';
-import Profile from '../_profile/page';
 import ItemNotification from './ItemNotification';
-import { useUser } from '@/context/ProfileProvider';
-import { useEffect, useState } from 'react';
-import { notifications } from '@/service/notificationService';
+import { useNotification } from '@/context/NotificationProvider';
 
 const Notification = () => {
-    
-    const { user } = useUser();
-    const [itemNotifications, setItemNotfications] = useState([])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            await notifications(user.id).then(res => {
-                if (res.data.result) {
-                    setItemNotfications(res.data.data.content)
-                }
-            })
-        }
-        fetchData();
-    }, [])
-
+    const {itemNotifications} = useNotification()
+    const countNotification = itemNotifications?.filter(item => {
+        return !item.seen
+    }).length
+   
     const items = (
-        <ItemNotification itemNotifications={itemNotifications}/>
+        <ItemNotification 
+            itemNotifications={itemNotifications}
+        />
     )
 
     return (
@@ -36,8 +25,8 @@ const Notification = () => {
                     placement="bottomRight"
                 >   
                      <span>
-                        <Badge count={itemNotifications.length}>
-                            <BellOutlined  style={{fontSize:'20px', color:'gray'}}/>
+                        <Badge count={countNotification}>
+                            <BellOutlined style={{fontSize:'20px', color:'gray'}}/>
                         </Badge>
                     </span>
                 </Popover>

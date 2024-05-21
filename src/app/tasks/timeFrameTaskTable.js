@@ -13,7 +13,7 @@ const TimeFrameTaskTable = ({
 }) => {
     const [listTaskKey, setListTaskKey] = useState([])
     const [listTaskCompleted, setListTaskCompleted] = useState([])
-    const isTaskCompleted = listTaskCompleted.some(item => item.isCompleted === 1)
+    const isTaskCompleted = listTaskCompleted.some(item => item.status === commonStatus.COMPLETED)
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -87,7 +87,21 @@ const TimeFrameTaskTable = ({
             title: 'Completed Date',
             dataIndex: 'completedDate',
             key: 'completedDate',
-            render: (text) => <span>{dayjs(text).format(DATETIME_FORMAT_DISPLAY)}</span>,
+            render: completedDate => {
+                const currentDate = dayjs(new Date())
+                const textDate = dayjs(completedDate)
+                const isCheckExpiredTime = textDate < currentDate
+                return (
+                    <div style={{ display: 'flex', flexDirection: 'column'}}>
+                        <span>{dayjs(completedDate).format(DATETIME_FORMAT_DISPLAY)}</span>
+                        <span 
+                            style={{color:'#ff4d4f'}}
+                        >
+                            {isCheckExpiredTime && 'Completion deadline exceeded'}
+                        </span>
+                    </div>
+                )
+            },
             width: 300
         }, 
         {
@@ -97,30 +111,15 @@ const TimeFrameTaskTable = ({
             render: (status) => <Tag color="blue">{status}</Tag>,
             width: 300
         },
-        {
-            title: 'Completed',
-            dataIndex: 'isCompleted',
-            key: 'isCompleted',
-            render: (isCompleted) => <Tag color={isCompleted === 1 ? 'green' : 'red'}>{isCompleted === 1 ? 'Finished' : 'Unfinished'}</Tag>,
-            width: 300
-        },
-        // {
-        //     title: 'Action',
-        //     key: 'action',
-        //     width: 150,
-        //     render: (_, record) => (
-        //         <Button  type="primary">Edit</Button>
-        //     ),
-        // },
     ];
 
     const handelTaskCompleted = async() => {
         const bodyData = {
             id: listTaskKey,
-            isCompleted: 1 ? true : false,
+            status: commonStatus.COMPLETED,
         }
         setReloadData(prevFlag => !prevFlag)
-        await updateInCompleted(bodyData)
+        await updateStatus(bodyData)
     }
 
     return (
@@ -129,11 +128,19 @@ const TimeFrameTaskTable = ({
                 queryName={'isCompleted'}
             />
             <div className={styles.btnAction}>
-                {/* <ModalShowTaskCompleted /> */}
-                <Button danger onClick={handelCancelTask} disabled={isTaskCompleted || listTaskKey.length < 1 }>
+                <Button 
+                    danger 
+                    onClick={handelCancelTask} 
+                    disabled={isTaskCompleted || listTaskKey.length < 1 }
+                >
                     Cancel
                 </Button>
-                <Button type="primary" disabled={listTaskKey.length < 1} onClick={handelTaskCompleted} >Completed</Button>
+                <Button 
+                    type="primary" 
+                    disabled={listTaskKey.length < 1} 
+                    onClick={handelTaskCompleted} >
+                        Completed
+                </Button>
             </div>
             <Table
                 rowKey={'id'}
@@ -165,7 +172,6 @@ const TimeFrameTaskTable = ({
                 }}
             />
         </>
-
     )
 }
 export default TimeFrameTaskTable;

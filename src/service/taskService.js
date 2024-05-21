@@ -1,6 +1,6 @@
 import axios from "../setup/axios";
 
-const getTask = async ({userId, groupId, page, size, taskTitle, reporter}) => {
+const getTask = async ({userId, groupId, page, size, taskTitle, reporter, owner, status}) => {
     return await axios({
         method: 'post',
         // url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/tasks?page=${page}&size=${5}`,
@@ -8,12 +8,14 @@ const getTask = async ({userId, groupId, page, size, taskTitle, reporter}) => {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
         withCredentials: true,
         data: {
-            userId: userId,
-            groupId: groupId,
-            page: page,
+            userId,
+            groupId,
+            page,
             size: 5,
-            taskTitle: taskTitle,
-            reporter: reporter,
+            taskTitle,
+            reporter,
+            owner,
+            status,
         }
     })
 }

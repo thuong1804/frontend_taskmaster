@@ -4,7 +4,10 @@ import FormProfile from './FormProfile';
 import FormChangePassword from './FormChangePassword';
 import styles from './StepProfile.module.scss'
 
-export default function StepProfile({ handleCancel }) {
+export default function StepProfile({ 
+    handleCancel,
+    setIsModalOpen,
+}){
     const [current, setCurrent] = useState(0);
     const formId = 'form-profile'
     const steps = [
