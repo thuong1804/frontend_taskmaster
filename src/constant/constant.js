@@ -10,6 +10,16 @@ export const commonStatus = {
     PENDING: "PENDING",
 };
 
+export const commonGender = {
+    MALE: 1,
+    FEMALE: 2,
+};
+
+export const roleGender = {
+    ADMIN: 1,
+    USER: 2,
+};
+
 export const TYPE = {
     TEXT: "TEXT",
     SELECT: "SELECT",

@@ -12,6 +12,7 @@ import { mappingDropdownData } from "@/utils";
 import { useUser } from "@/context/ProfileProvider";
 import { DATETIME_FORMAT_DISPLAY, commonStatus } from "@/constant/constant";
 import { CheckOutlined, CloseOutlined, PlusSquareOutlined, } from "@ant-design/icons";
+import SelectForm from "@/component/SelectForm/SelectForm";
 
 const FormTask = () => {
     const router = useRouter();
@@ -152,11 +153,10 @@ const FormTask = () => {
                                         },
                                     ]}
                                 >
-                                    <Select
-                                        placeholder="Select a option Owner"
-                                        // onChange={onGenderChange}
+                                    <SelectForm
+                                        placeholder="Reporter"
                                         options={mappingDropdownData(userData)}
-                                        allowClear
+                                        showSearch
                                     />
                                 </Form.Item>
                             </Col>
@@ -173,11 +173,10 @@ const FormTask = () => {
                                         },
                                     ]}
                                 >
-                                    <Select
-                                        placeholder="Select a option Owner"
-                                        // onChange={onGenderChange}
+                                    <SelectForm
+                                        placeholder="Owner"
                                         options={mappingDropdownData(userData)}
-                                        allowClear
+                                        showSearch
                                     />
                                 </Form.Item>
                             </Col>

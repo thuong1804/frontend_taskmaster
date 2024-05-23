@@ -2,7 +2,6 @@
 import { handelGetProfileUser, handelUpdateProfile } from "@/service/userService";
 import { getCookies } from "cookies-next";
 import { useState, createContext, useContext, useEffect } from "react";
-import { toast } from "sonner";
 
 export const ProfileContext = createContext({});
 

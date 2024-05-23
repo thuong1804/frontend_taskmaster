@@ -44,13 +44,18 @@ const SearchForm = ({
                 />
             )
         } else if (fieldItem.fieldType === TYPE.SELECT) {
-            return (
-                <Select
-                    placeholder={getPlaceHolder(fieldItem)}
-                    style={{ width:'100%'}}
-                    options={options}
-                />
-            )
+            const filterOption = (input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+                return (
+                    <Select
+                        placeholder={getPlaceHolder(fieldItem)}
+                        style={{ width:'100%'}}
+                        options={options}
+                        filterOption={filterOption}
+                        showSearch
+                        disabled={fieldItem.disabled}
+                    />
+                )
         }
     }
     
@@ -64,18 +69,18 @@ const SearchForm = ({
             >
                 <Row gutter={[16, 16]}>
                     {searchField.map((item, index) => {
-                        return (
-                            <Col
-                                span={4}
-                                key={index}
-                            >
-                                <Form.Item
-                                    name={item.key}
+                            return (
+                                <Col
+                                    span={4}
+                                    key={index}
                                 >
-                                    {renderFieldType(item)}
-                                </Form.Item>
-                            </Col>
-                        )
+                                    <Form.Item
+                                        name={item.key}
+                                    >
+                                        {renderFieldType(item)}
+                                    </Form.Item>
+                                </Col>
+                            )
                     })}
                     <Col flex="auto">
                         <Form.Item>

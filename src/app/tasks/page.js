@@ -31,12 +31,13 @@ const ListTask = () => {
         const fetchData = async () => {
             try {
                 if (user) {
+                    const shouldIncludeOwner = groupId !== 1 || (groupId === 1 && paramsObject.owner);
                     const dataBody = cleanObject({
                         userId: id,
                         groupId: groupId,
                         taskTitle: paramsObject.taskTitle ? paramsObject.taskTitle : '',
                         reporter: paramsObject.reporter ? +paramsObject.reporter : null,
-                        owner: paramsObject.owner ? +paramsObject.owner : null,
+                        owner: shouldIncludeOwner ? +paramsObject.owner : undefined,
                         status: paramsObject.status ? paramsObject.status : undefined,
                     });
                     const response = await getTask(dataBody);
@@ -103,8 +104,6 @@ const ListTask = () => {
                     setReloadData={setReloadData}
                     userData={userData}
                     totalElement={totalElement}
-                    // queryPage={queryPage}
-                    // querySize={querySize}
                     reloadData={reloadData}
                     size={size}
                 />

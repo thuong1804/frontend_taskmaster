@@ -14,6 +14,7 @@ import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';
 import styles from './TableTask.module.scss'
 import { statusDDL } from '@/constant/masterData';
 import { handelGetListUser } from '@/service/userService';
+import { useUser } from '@/context/ProfileProvider';
 
 export default function TableTask({
     data,
@@ -25,14 +26,15 @@ export default function TableTask({
     const router = useRouter();
     const [keyIdTaskProgress, setKeyIdTaskProgress] = useState([])
     const [titleTask, setTitleTask] = useState([]);
-    const [listUser, setListUser] = useState([]) 
+    const [listUser, setListUser] = useState([])
+    const {user} = useUser();
+    const {groupId} = user
     const ddlListUser = listUser?.map(item => {
         return {
             value: item.id,
             label: item.name
         }
     })
-    
 
     const confirm = async (e) => {
         await deleteTask(taskID).then(res => {
@@ -78,8 +80,8 @@ export default function TableTask({
             title: 'Reporter',
             dataIndex: 'reporter',
             key: 'reporter',
-            render: (id) => {
-                const reporterData = userData?.find(item => item.id === id);
+            render: (reporterId) => {
+                const reporterData = userData?.find(item => item.id === reporterId);
                 if (reporterData) {
                     return reporterData.name;
                 } else {
@@ -89,7 +91,16 @@ export default function TableTask({
         },
         {
             title: 'Owner',
-            dataIndex: ['User', 'name'],
+            key: 'owner',
+            dataIndex: 'owner',
+            render: (ownerId) => {
+                const ownerData = userData?.find(item => item.id === ownerId);
+                if (ownerData) {
+                    return ownerData.name;
+                } else {
+                    return null;
+                }
+            },
         },
         {
             title: 'Task Description',
@@ -190,6 +201,8 @@ export default function TableTask({
                             searchPlaceholder: 'Owner',
                             fieldType: TYPE.SELECT,
                             options: ddlListUser,
+                            disabled: groupId !== 1
+                            
                         },
                         {
                             key: 'status',

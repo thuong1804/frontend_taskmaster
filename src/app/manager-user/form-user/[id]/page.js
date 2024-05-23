@@ -11,6 +11,8 @@ import { cleanObject, validateEmail } from "@/utils";
 import { passwordRegex, phoneRegExp, whiteSpaceRegex } from "@/constant/constant";
 import { toast } from "sonner";
 import dayjs from "dayjs";
+import SelectForm from "@/component/SelectForm/SelectForm";
+import { genderDDL, roleDDL } from "@/constant/masterData";
 
 const FormUser = () => {
     const router = useRouter();
@@ -23,6 +25,7 @@ const FormUser = () => {
         const bodyData = cleanObject({
             ...values,
             id: +paramsId.id,
+            groupId: values.groupId === "Admin" ? 1 : 2
         });
 
         if (isCreating) {
@@ -34,7 +37,6 @@ const FormUser = () => {
             })
         } else {
             await handelUpdateUser(bodyData).then((res) => {
-                console.log({res})
                 if (res.data.result) {
                     toast.success('Update user success')
                     router.push(urlPath.user)
@@ -88,7 +90,7 @@ const FormUser = () => {
                         width: '100%',
                     }}
                     initialValues={{
-                        gender: undefined
+                        gender: undefined,
                     }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
@@ -147,15 +149,11 @@ const FormUser = () => {
                                     },
                                 ]}
                             >
-                                <Select
-                                    placeholder="Select a option Group"
-                                    // onChange={onGenderChange}
-                                    allowClear
+                                <SelectForm
+                                    placeholder="Group"
                                     defaultValue={detailUser?.groupId}
-                                >
-                                    <Option value={1}>Admin</Option>
-                                    <Option value={2}>User</Option>
-                                </Select>
+                                    options={roleDDL}
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -245,16 +243,12 @@ const FormUser = () => {
                                 name="gender" 
                                 label="Gender"
                             >
-                                <Select
-                                    placeholder="Select a option gender"
-                                    allowClear
-                                >
-                                    <Option value={1}>male</Option>
-                                    <Option value={2}>female</Option>
-                                </Select>
+                                <SelectForm 
+                                    placeholder='gender'
+                                    options={genderDDL}
+                                />
                             </Form.Item>
                         </Col>
-                       
                     </Row>
                 </Form>
             </div>

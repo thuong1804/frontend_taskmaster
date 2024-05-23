@@ -5,6 +5,8 @@ import { UserOutlined } from '@ant-design/icons';
 import UploadImageField from '@/component/UploadImageField/UploadImageField';
 import { cleanObject } from '@/utils';
 import styles from './FormProfile.module.scss'
+import dayjs from 'dayjs';
+import { DATETIME_FORMAT_VALUE } from '@/constant/constant';
 
 export default function FormProfile({
     handleCancel,
@@ -40,6 +42,7 @@ export default function FormProfile({
     useEffect(() => {
         form.setFieldValue('avatar', user.avatar)
     }, [user])
+    console.log({user})
 
     return (
         <div className={styles.container}>
@@ -60,6 +63,8 @@ export default function FormProfile({
                     address: user?.address,
                     groupId: user?.groupId === 1 ? true : false,
                     gender: user?.gender === 1 ? 1 : 2,
+                    phone: user?.phone,
+                    birthDay:dayjs(user?.birthDay),
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}

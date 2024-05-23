@@ -26,7 +26,7 @@ const Notification = () => {
                 >   
                      <span>
                         <Badge count={countNotification}>
-                            <BellOutlined style={{fontSize:'20px', color:'gray'}}/>
+                            <BellOutlined style={{fontSize:'20px', color:'gray', cursor:'pointer'}}/>
                         </Badge>
                     </span>
                 </Popover>
