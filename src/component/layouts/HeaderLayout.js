@@ -5,7 +5,7 @@ import { deleteCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
 import urlPath from '@/constant/path'
 import { useUser } from '../../context/ProfileProvider'
-import { BellOutlined, DownOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons'
+import { LoginOutlined, UserOutlined } from '@ant-design/icons'
 import Profile from '@/app/_profile/page'
 import Notification from '@/app/_notification/Notification'
 
@@ -28,7 +28,7 @@ export default function HeaderLayout({ className }) {
             ),
         },
         {
-            key: '2',
+            key: '4',
             label: (
                 <span
                     style={{

@@ -2,7 +2,7 @@ import { deleteTask, updateStatus } from '@/service/taskService';
 import { PlusOutlined, EditOutlined, LineOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Table, Tag } from 'antd';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { DATETIME_FORMAT_DISPLAY, TYPE } from "@/constant/constant";
 
 import dayjs from 'dayjs';
@@ -13,23 +13,23 @@ import SearchForm from '@/component/SearchForm/SearchForm';
 import ModalShowListTask from './_ModalShowListTask/ModalShowListTask';
 import styles from './TableTask.module.scss'
 import { statusDDL } from '@/constant/masterData';
-import { handelGetListUser } from '@/service/userService';
 import { useUser } from '@/context/ProfileProvider';
+import { useListUsers } from '@/context/UsersProvider';
 
 export default function TableTask({
     data,
     setReloadData,
-    reloadData,
     userData,
 }) {
     const [taskID, setTaskID] = useState([]);
     const router = useRouter();
     const [keyIdTaskProgress, setKeyIdTaskProgress] = useState([])
     const [titleTask, setTitleTask] = useState([]);
-    const [listUser, setListUser] = useState([])
+    const {users} = useListUsers();
+
     const {user} = useUser();
     const {groupId} = user
-    const ddlListUser = listUser?.map(item => {
+    const ddlListUser = users?.map(item => {
         return {
             value: item.id,
             label: item.name
@@ -58,16 +58,6 @@ export default function TableTask({
         return dataRender
     }, [data])
 
-    useEffect(() => {
-        const fetchData = async() => {
-            await handelGetListUser().then(res => {
-                if (res.data.data) {
-                    setListUser(res.data.data.content)
-                }
-            })
-        }
-        fetchData()
-    }, [])
 
     const columns = [
         {

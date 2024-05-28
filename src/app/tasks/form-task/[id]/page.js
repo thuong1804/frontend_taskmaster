@@ -13,6 +13,7 @@ import { useUser } from "@/context/ProfileProvider";
 import { DATETIME_FORMAT_DISPLAY, commonStatus } from "@/constant/constant";
 import { CheckOutlined, CloseOutlined, PlusSquareOutlined, } from "@ant-design/icons";
 import SelectForm from "@/component/SelectForm/SelectForm";
+import { useListUsers } from "@/context/UsersProvider";
 
 const FormTask = () => {
     const router = useRouter();
@@ -21,7 +22,7 @@ const FormTask = () => {
     const isCreating = !taskId;
     const { user } = useUser();
     const [detailTask, setDetailTask] = useState();
-    const [userData, setUserData] = useState();
+    const {users} = useListUsers();
     const [form] = Form.useForm();
     const [scheduleDate, setScheduleDate] = useState();
 
@@ -66,15 +67,6 @@ const FormTask = () => {
             fetchData()
         }
     }, [taskId])
-
-    useEffect(() => {
-        const fetchDataUser = async () => {
-            await handelGetListUser().then(res => {
-                setUserData(res.data.data.content)
-            })
-        }
-        fetchDataUser()
-    }, [])
 
     useEffect(() => {
         if (!isCreating) {
@@ -155,7 +147,7 @@ const FormTask = () => {
                                 >
                                     <SelectForm
                                         placeholder="Reporter"
-                                        options={mappingDropdownData(userData)}
+                                        options={mappingDropdownData(users)}
                                         showSearch
                                     />
                                 </Form.Item>
@@ -175,7 +167,7 @@ const FormTask = () => {
                                 >
                                     <SelectForm
                                         placeholder="Owner"
-                                        options={mappingDropdownData(userData)}
+                                        options={mappingDropdownData(users)}
                                         showSearch
                                     />
                                 </Form.Item>

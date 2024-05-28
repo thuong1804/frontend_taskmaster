@@ -6,18 +6,18 @@ import { UnorderedListOutlined } from '@ant-design/icons';
 import { checkDeadline, getTask } from '../../service/taskService';
 import { useSearchParams } from 'next/navigation';
 import { useUser } from '@/context/ProfileProvider';
-import { handelGetListUser } from '@/service/userService';
 import { cleanObject, convertSearchParamsToObject } from '@/utils';
 import TableTask from './tableTask';
 import dayjs from 'dayjs';
 import { commonStatus } from '@/constant/constant';
+import { useListUsers } from '@/context/UsersProvider';
 
 const ListTask = () => {
     const [data, setData] = useState([]);
     const { user } = useUser();
+    const {users} = useListUsers();
     const id = user?.id
     const groupId = user?.groupId;
-    const [userData, setUserData] = useState();
     const [reloadData, setReloadData] = useState(false);
     const [totalElement, setTotalElement] = useState();
     const size = 5;
@@ -50,15 +50,6 @@ const ListTask = () => {
         };
         fetchData();
     }, [user, reloadData, paramsObject])
-
-    useEffect(() => {
-        const fetchDataUser = async () => {
-            await handelGetListUser().then(res => {
-                setUserData(res.data.data.content)
-            })
-        }
-        fetchDataUser()
-    }, [])
 
     const checkTasksNearDeadline = (tasks) => {
         const nowDate = dayjs();
@@ -94,7 +85,6 @@ const ListTask = () => {
         return () => clearInterval(interval);
     }, [taskDeadline]);
 
-
     return (
         <div className={styles.container}>
             <h1><UnorderedListOutlined /> List Task Manager</h1>
@@ -102,7 +92,7 @@ const ListTask = () => {
                 <TableTask
                     data={data}
                     setReloadData={setReloadData}
-                    userData={userData}
+                    userData={users}
                     totalElement={totalElement}
                     reloadData={reloadData}
                     size={size}

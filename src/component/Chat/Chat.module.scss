@@ -1,0 +1,44 @@
+.icon {
+    border: 1px solid gray;
+    border-radius: 50%;
+    font-size: 15px;
+    background: rgb(255, 255, 255);
+    padding: 7px;
+    color: gray;
+}
+
+.content {
+    width: 300px;
+    height: 300px;
+
+    .list {
+        margin-top: 10px;
+        max-height: 250px;
+        overflow: auto;
+
+        &::-webkit-scrollbar {
+            width: 5px;
+            background-color: white;
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background-color: #e6e6e6;
+            border-radius: 5px; 
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 5px;
+            transition: 0.2s ease;
+            border-radius: 10px;
+            cursor: pointer;
+
+            &:hover {
+                background: rgb(245 245 245);
+            }
+        }
+    }
+}

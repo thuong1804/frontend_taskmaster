@@ -6,7 +6,6 @@ import UploadImageField from '@/component/UploadImageField/UploadImageField';
 import { cleanObject } from '@/utils';
 import styles from './FormProfile.module.scss'
 import dayjs from 'dayjs';
-import { DATETIME_FORMAT_VALUE } from '@/constant/constant';
 
 export default function FormProfile({
     handleCancel,

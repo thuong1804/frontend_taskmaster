@@ -6,7 +6,7 @@ import {
     MenuUnfoldOutlined,
 } from '@ant-design/icons';
 
-import { Button, Layout, theme } from 'antd';
+import { Button, FloatButton, Layout, theme } from 'antd';
 import HeaderLayout from './HeaderLayout';
 
 const { Header, Sider, Content } = Layout;
@@ -18,6 +18,8 @@ import classNames from 'classnames';
 import NavBarLayout from './NavBar';
 import Loading from '../Loading';
 import { useUser } from '@/context/ProfileProvider';
+import { Footer } from 'antd/es/layout/layout';
+import ChatPopup from '../Chat/Chat';
 
 const MasterLayout = ({children}) => {
    
@@ -81,6 +83,13 @@ const MasterLayout = ({children}) => {
                 >
                     {children}
                 </Content>
+                <Footer
+                    style={{
+                        textAlign: 'right',
+                    }}
+                    >
+                    <ChatPopup />
+                </Footer>
             </Layout>
         </Layout>
     );

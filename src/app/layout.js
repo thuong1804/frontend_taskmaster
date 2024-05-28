@@ -4,6 +4,7 @@ import { ProfileProvider } from "../context/ProfileProvider";
 import ToastProvider from "../context/ToastProvider";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ProviderNotification } from "@/context/NotificationProvider";
+import { ProviderUsers } from "@/context/UsersProvider";
 
 const roboto = Roboto({
     weight: '400',
@@ -23,13 +24,15 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body className={roboto.className}>
                 <ProfileProvider>
-                    <ProviderNotification>
-                        <ToastProvider>
-                            <AntdRegistry>
-                                {children}
-                            </AntdRegistry>
-                        </ToastProvider>
-                    </ProviderNotification>
+                    <ProviderUsers>
+                        <ProviderNotification>
+                            <ToastProvider>
+                                <AntdRegistry>
+                                    {children}
+                                </AntdRegistry>
+                            </ToastProvider>
+                        </ProviderNotification>
+                    </ProviderUsers>
                 </ProfileProvider>
             </body>
         </html>

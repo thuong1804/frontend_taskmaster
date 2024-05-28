@@ -50,11 +50,13 @@ const FormUser = () => {
     };
 
     useEffect(() => {
-        const fetchDataById = async () => {
-            await handelGetByIdUser(paramsId.id)
-                .then(res => setDetailUser(res.data.data.content))
+        if(!isCreating) {
+            const fetchDataById = async () => {
+                await handelGetByIdUser(paramsId.id)
+                    .then(res => setDetailUser(res.data.data.content))
+            }
+            fetchDataById();
         }
-        fetchDataById();
     }, [paramsId])
 
     useEffect(() => {

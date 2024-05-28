@@ -1,45 +1,23 @@
 'use client'
 import { Avatar, Button, Popconfirm, Space, Table, Tag } from "antd";
-import { useEffect, useState } from "react";
-import { handelDeleteUser, handelGetListUser } from "../../service/userService";
+import { useState } from "react";
 import { EditOutlined, UserDeleteOutlined, UserOutlined, PlusOutlined } from "@ant-design/icons";
 import styles from './page.module.scss'
 import { useRouter } from "next/navigation";
 import urlPath from "../../constant/path";
-import { toast } from "sonner";
 import Skeletons from "@/component/Skeleton";
 import dayjs from "dayjs";
-import { DATETIME_FORMAT_DISPLAY, DATETIME_FORMAT_VALUE } from "@/constant/constant";
-import Image from "next/image";
+import { DATETIME_FORMAT_VALUE } from "@/constant/constant";
+import { useListUsers } from "@/context/UsersProvider";
 
 const ListPageUser = () => {
-    const [data, setData] = useState([])
     const router = useRouter();
     const [userID, setUserID] = useState([]);
-    const [reloadData, setReloadData] = useState(false);
+    const {users, deleteUsers} = useListUsers();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await handelGetListUser().then(res => {
-                if (res.data.result) {
-                    setData(res.data.data.content)
-                }
-            })
-        }
-        fetchData();
-    }, [reloadData])
 
     const confirm = async (e) => {
-        await handelDeleteUser(userID).then(res => {
-            if (res.data.result) {
-                toast.success('Delete user success')
-                setReloadData(prevFlag => !prevFlag)
-            }
-        }).catch((error) => {
-            if (error) {
-                return toast.error('Delete user failed')
-            }
-        })
+       await deleteUsers(userID)
     };
 
     const cancel = (e) => {
@@ -153,7 +131,7 @@ const ListPageUser = () => {
 
     return (
         <>
-            {!data ? (
+            {!users ? (
                 <Skeletons className={styles.skeleton} />
             ) : (
                 <div className={styles.container}>
@@ -167,7 +145,7 @@ const ListPageUser = () => {
                             Create a new user
                         </Button>
                     </div>
-                    <Table rowKey={'id'} columns={columns} dataSource={data} />
+                    <Table rowKey={'id'} columns={columns} dataSource={users} />
                 </div>
             )}
         </>
