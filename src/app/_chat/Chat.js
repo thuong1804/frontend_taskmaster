@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Avatar, Popover } from 'antd';
 import { LeftOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './Chat.module.scss'
-import SearchField from '../SearchField/SearchField';
+import SearchField from '../../component/SearchField/SearchField';
 import { useListUsers } from '@/context/UsersProvider';
 
 

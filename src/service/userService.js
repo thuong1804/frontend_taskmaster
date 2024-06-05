@@ -1,11 +1,13 @@
 import axios from "../setup/axios";
 
-const handelGetListUser = async(data) => {
+const handelGetListUser = async({email, gender, groupId}) => {
    return await axios({
         method: 'post',
         url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/users`,
         data: {
-            ...data
+            email,
+            gender,
+            groupId,
         },
         withCredentials: true,
         headers: {'X-Requested-With': 'XMLHttpRequest'},

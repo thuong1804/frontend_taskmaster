@@ -19,7 +19,7 @@ import NavBarLayout from './NavBar';
 import Loading from '../Loading';
 import { useUser } from '@/context/ProfileProvider';
 import { Footer } from 'antd/es/layout/layout';
-import ChatPopup from '../Chat/Chat';
+import ChatPopup from '../../app/_chat/Chat';
 
 const MasterLayout = ({children}) => {
    

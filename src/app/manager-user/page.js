@@ -7,8 +7,10 @@ import { useRouter } from "next/navigation";
 import urlPath from "../../constant/path";
 import Skeletons from "@/component/Skeleton";
 import dayjs from "dayjs";
-import { DATETIME_FORMAT_VALUE } from "@/constant/constant";
+import { DATETIME_FORMAT_VALUE, TYPE } from "@/constant/constant";
 import { useListUsers } from "@/context/UsersProvider";
+import SearchForm from "@/component/SearchForm/SearchForm";
+import { genderDDL, roleDDL } from "@/constant/masterData";
 
 const ListPageUser = () => {
     const router = useRouter();
@@ -136,6 +138,27 @@ const ListPageUser = () => {
             ) : (
                 <div className={styles.container}>
                     <h1> <UserOutlined /> List User Manager</h1>
+                        <SearchForm
+                            searchField={[
+                                {
+                                    key: 'email',
+                                    searchPlaceholder: 'Email',
+                                    fieldType: TYPE.TEXT,
+                                },
+                                {
+                                    key: 'gender',
+                                    searchPlaceholder: 'Gender',
+                                    fieldType: TYPE.SELECT,
+                                    options: genderDDL,
+                                },
+                                {
+                                    key: 'groupId',
+                                    searchPlaceholder: 'Group',
+                                    fieldType: TYPE.SELECT,
+                                    options: roleDDL,
+                                },
+                            ]}
+                        />
                     <div className={styles.FormAddNew}>
                         <Button 
                             type="primary" 

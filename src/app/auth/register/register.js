@@ -13,7 +13,6 @@ import { validateEmail, validationPassword } from "@/utils";
 const Register = () => {
     const router = useRouter();
     const [form] = Form.useForm();
-    console.log({ form })
     const [isCheckGroup, setIsCheckGroup] = useState();
 
     const onFinish = async (values) => {
@@ -25,16 +24,14 @@ const Register = () => {
                 router.push(urlPath.login)
                 toast.success('Register new account success')
             }
-        })
-            .catch(e => {
+        }).catch(e => {
                 if (e.response.status === 400) {
                     return form.setFields([
                         {
                             name: "email",
                             errors: ["The email has exist in the system."],
                         },]);
-                }
-            })
+        }})
 
     };
 

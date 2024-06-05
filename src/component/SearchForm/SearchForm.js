@@ -54,6 +54,7 @@ const SearchForm = ({
                         filterOption={filterOption}
                         showSearch
                         disabled={fieldItem.disabled}
+                        allowClear
                     />
                 )
         }

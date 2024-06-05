@@ -1,8 +1,10 @@
 'use client'
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, createContext, useContext, useEffect, useMemo } from "react";
 import { useUser } from "./ProfileProvider";
 import { handelDeleteUser, handelGetListUser } from "@/service/userService";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
+import { cleanObject, convertSearchParamsToObject } from "@/utils";
 
 export const UsersContext = createContext({});
 
@@ -10,10 +12,19 @@ export const ProviderUsers = ({ children }) => {
     const [users, setUsers] = useState();
     const {user} = useUser();
     const [reloadData, setReloadData] = useState(false);
+    const searchParams = useSearchParams()
+    const paramsObject = useMemo(() => {
+        return convertSearchParamsToObject(searchParams);
+    }, [searchParams])
 
     const fetchData = async () => {
         if (user?.id) {
-            await handelGetListUser().then(res => {
+            const bodyData = cleanObject({
+                email: paramsObject.email ? paramsObject.email : '',
+                gender: paramsObject.gender,
+                groupId: paramsObject.groupId,
+            })
+            await handelGetListUser(bodyData).then(res => {
                 if (res.data.result) {
                     setUsers(res.data.data.content);
                 }
@@ -36,7 +47,7 @@ export const ProviderUsers = ({ children }) => {
 
     useEffect(() => {
         fetchData();
-    }, [user?.id, reloadData]);
+    }, [user?.id, reloadData, paramsObject]);
 
     return (
         <UsersContext.Provider value={{users, deleteUsers}}>
