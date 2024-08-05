@@ -1,6 +1,5 @@
 'use client'
 import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
-import { Option } from "antd/es/mentions";
 import styles from './page.module.scss'
 import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/service/userService";
 import { useParams, useRouter } from "next/navigation";
@@ -61,13 +60,14 @@ const FormUser = () => {
 
     useEffect(() => {
         const { email, name, groupId, address, gender, phone, birthDay } = detailUser ?? {};
+        const isGender = gender ? (gender === 1 ? 'male' : 'female') : null
 
         if (!isCreating) {
             form.setFieldValue('email', email);
             form.setFieldValue('name', name);
             form.setFieldValue('groupId', groupId === 1 ? 'Admin' : 'User');
             form.setFieldValue('address', address);
-            form.setFieldValue('gender', gender === 1 ? 'male' : 'female');
+            form.setFieldValue('gender', isGender);
             form.setFieldValue('phone', phone);
             form.setFieldValue('birthDay', birthDay ? dayjs(birthDay): undefined);
         }

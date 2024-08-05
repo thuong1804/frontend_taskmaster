@@ -1,30 +1,19 @@
 'use client'
-import { Avatar, Button, Popconfirm, Space, Table, Tag } from "antd";
-import { useState } from "react";
-import { EditOutlined, UserDeleteOutlined, UserOutlined, PlusOutlined } from "@ant-design/icons";
-import styles from './page.module.scss'
-import { useRouter } from "next/navigation";
+
+import { Avatar, Tag } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import urlPath from "../../constant/path";
-import Skeletons from "@/component/Skeleton";
 import dayjs from "dayjs";
 import { DATETIME_FORMAT_VALUE, TYPE } from "@/constant/constant";
 import { useListUsers } from "@/context/UsersProvider";
-import SearchForm from "@/component/SearchForm/SearchForm";
 import { genderDDL, roleDDL } from "@/constant/masterData";
+import ListContainer from "@/component/ListContainer";
+import { useUser } from "@/context/ProfileProvider";
 
 const ListPageUser = () => {
-    const router = useRouter();
-    const [userID, setUserID] = useState([]);
     const {users, deleteUsers} = useListUsers();
-
-
-    const confirm = async (e) => {
-       await deleteUsers(userID)
-    };
-
-    const cancel = (e) => {
-        console.log(e);
-    };
+    const {user} = useUser()
+    const mappingUser = users?.filter(item => item.id !== user.id)
 
     const columns = [
         {
@@ -34,7 +23,7 @@ const ListPageUser = () => {
             render: (avatar) => {
                 return (
                     <Avatar
-                        src={`http://localhost:3005/${avatar}`}
+                        src={`${process.env.NEXT_PUBLIC_WEB_URL}/${avatar}`}
                         >
                             {avatar ? avatar : <UserOutlined />}
                     </Avatar>
@@ -67,12 +56,12 @@ const ListPageUser = () => {
             title: 'Gender',
             key: 'gender',
             dataIndex: 'gender',
-            render: (tags) => {
-                let color = tags === 1 ? 'geekblue' : 'green';
-                const renderName = tags === 1 ? 'Male' : 'Female'
+            render: (gender) => {
+                const color = gender === 1 ? 'geekblue' : 'green';
+                const renderName = gender === 1 ? 'Male' : 'Female'
                 return (
                     <Tag color={color} key={renderName}>
-                        {renderName}
+                        {gender ? renderName : null}
                     </Tag>
                 )
             },
@@ -88,7 +77,6 @@ const ListPageUser = () => {
             dataIndex: 'phone',
             key: 'phone',
             width: 200
-
         },
         {
             title: 'Address',
@@ -96,81 +84,41 @@ const ListPageUser = () => {
             key: 'address',
             width: 400
         },
-        {
-            title: 'Action',
-            key: 'action',
-            width: 200,
-            render: (_, record) => {
-                return (
-                    <Space size="middle">
-                        <Button 
-                            type="primary" 
-                            onClick={() => router.push(`${urlPath.formUser}/${record.id}`)}
-                        >
-                            <EditOutlined /> 
-                        </Button>
-                        <Popconfirm
-                            title="Delete the user"
-                            placement="topRight"
-                            description="Are you sure to delete this user?"
-                            onConfirm={confirm}
-                            onCancel={cancel}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button 
-                                danger 
-                                onClick={() => { setUserID(record.id) }}>
-                                    <UserDeleteOutlined />
-                            </Button>
-                        </Popconfirm>
-                    </Space>
-                )
-            },
-        },
     ];
-
 
     return (
         <>
-            {!users ? (
-                <Skeletons className={styles.skeleton} />
-            ) : (
-                <div className={styles.container}>
-                    <h1> <UserOutlined /> List User Manager</h1>
-                        <SearchForm
-                            searchField={[
-                                {
-                                    key: 'email',
-                                    searchPlaceholder: 'Email',
-                                    fieldType: TYPE.TEXT,
-                                },
-                                {
-                                    key: 'gender',
-                                    searchPlaceholder: 'Gender',
-                                    fieldType: TYPE.SELECT,
-                                    options: genderDDL,
-                                },
-                                {
-                                    key: 'groupId',
-                                    searchPlaceholder: 'Group',
-                                    fieldType: TYPE.SELECT,
-                                    options: roleDDL,
-                                },
-                            ]}
-                        />
-                    <div className={styles.FormAddNew}>
-                        <Button 
-                            type="primary" 
-                            icon={<PlusOutlined />}
-                            onClick={() => router.push(urlPath.formUser)}
-                        >
-                            Create a new user
-                        </Button>
-                    </div>
-                    <Table rowKey={'id'} columns={columns} dataSource={users} />
-                </div>
-            )}
+            <ListContainer 
+                title='List User Manager'
+                columns={columns}
+                objectName="user"
+                searchFields={[
+                    {
+                        key: 'email',
+                        searchPlaceholder: 'Email',
+                        fieldType: TYPE.TEXT,
+                    },
+                    {
+                        key: 'gender',
+                        searchPlaceholder: 'Gender',
+                        fieldType: TYPE.SELECT,
+                        options: genderDDL,
+                    },
+                    {
+                        key: 'groupId',
+                        searchPlaceholder: 'Group',
+                        fieldType: TYPE.SELECT,
+                        options: roleDDL,
+                    },
+                ]}
+                formUrl={urlPath.formUser}
+                actionButtons={{
+                    isEdit: true,
+                    isDelete: true,
+                }}
+                deleteAction={deleteUsers}
+                dataList={mappingUser}
+            />
         </>
     )
 }

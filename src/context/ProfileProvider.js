@@ -1,6 +1,6 @@
 'use client'
 import { handelGetProfileUser, handelUpdateProfile } from "@/service/userService";
-import { getCookies } from "cookies-next";
+import { deleteCookie, getCookies } from "cookies-next";
 import { useState, createContext, useContext, useEffect } from "react";
 
 export const ProfileContext = createContext({});
@@ -17,6 +17,10 @@ const [user, setUser] = useState();
                     setUser(res.data.data.content);
                 }
             } catch (error) {
+                if (error.response.status === 402) {
+                    deleteCookie('login')
+                    deleteCookie('refreshToken')
+                }
                 console.error("Error fetching user profile:", error);
             }
         };

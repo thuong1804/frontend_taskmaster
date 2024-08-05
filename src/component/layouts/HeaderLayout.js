@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 import urlPath from '@/constant/path'
 import { useUser } from '../../context/ProfileProvider'
 import { LoginOutlined, UserOutlined } from '@ant-design/icons'
-import Profile from '@/app/_profile/page'
-import Notification from '@/app/_notification/Notification'
+import Notification from '../Notification/Notification'
+import Profile from '../Profile/page'
 
 export default function HeaderLayout({ className }) {
     const router = useRouter()
@@ -56,7 +56,7 @@ export default function HeaderLayout({ className }) {
                     <div className={styles.content}>
                         <Avatar
                             className={styles.avatar}
-                            src={`http://localhost:3005/${user.avatar}`}
+                            src={`${process.env.NEXT_PUBLIC_WEB_URL}/${user.avatar}`}
                         >
                             {user.avatar ? user.avatar : <UserOutlined />}
                         </Avatar>

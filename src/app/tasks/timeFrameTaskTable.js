@@ -1,10 +1,12 @@
 import { Button, Table, Tag } from "antd";
 import dayjs from "dayjs";
-import styles from './TimeFrameTaskTable.module.scss'
 import { useMemo, useState } from "react";
+
 import SearchField from "@/component/SearchField/SearchField";
 import { DATETIME_FORMAT_DISPLAY, commonStatus } from "@/constant/constant";
 import { updateStatus } from "@/service/taskService";
+
+import styles from './TimeFrameTaskTable.module.scss'
 
 const TimeFrameTaskTable = ({
     dataProgress,

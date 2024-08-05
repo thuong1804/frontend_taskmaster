@@ -63,7 +63,7 @@ export default function FormProfile({
                     groupId: user?.groupId === 1 ? true : false,
                     gender: user?.gender === 1 ? 1 : 2,
                     phone: user?.phone,
-                    birthDay:dayjs(user?.birthDay),
+                    birthDay: user.birthDay ? dayjs(user?.birthDay) : null,
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
