@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import dayjs from 'dayjs';
 
 import { convertSearchParamsToObject } from '@/utils';
-import { checkDeadline, deleteTask, getTask } from '../../service/taskService';
+import { checkDeadline, deleteTask, getTask, updateStatus } from '../../service/taskService';
 import { commonStatus, DATETIME_FORMAT_DISPLAY, TYPE } from '@/constant/constant';
 import { useListUsers } from '@/context/UsersProvider';
 import ListContainer from '@/component/ListContainer';
@@ -13,13 +13,17 @@ import { useUser } from '@/context/ProfileProvider';
 import { Button, Tag } from 'antd';
 import urlPath from '@/constant/path';
 import { statusDDL } from '@/constant/masterData';
+import { toast } from 'sonner';
+import ModalShowListTask from './_modal-show-list-task';
 
 import styles from './page.module.scss'
-import ModalShowListTask from './_modal-show-list-task/ModalShowListTask';
-import TableTask from './tableTask';
+
 
 const ListTask = () => {
     const [data, setData] = useState([])
+    const [taskDeadline, setTaskDeadline] = useState([])
+    const [keyIdTaskProgress, setKeyIdTaskProgress] = useState([])
+    const [reloadPage, setReloadPage] = useState(false)
     const { user } = useUser();
     const { users } = useListUsers();
     const id = user?.id
@@ -28,7 +32,10 @@ const ListTask = () => {
     const paramsObject = useMemo(() => {
         return convertSearchParamsToObject(searchParams);
     }, [searchParams])
-    const [taskDeadline, setTaskDeadline] = useState([])
+    const filterData = useMemo(() => {
+        return data.filter(item => item.status !== commonStatus.PROGRESS)
+    }, [data])
+
     const shouldIncludeOwner = groupId !== 1 || (groupId === 1 && paramsObject.owner);
 
     const ddlListUser = users?.map(item => {
@@ -113,6 +120,41 @@ const ListTask = () => {
         });
     };
 
+   
+
+    const onGetListSuccess = (res) => {
+        setData(res)
+    }
+
+    const handelParamsFilter = useMemo(() => {
+        return {
+            userId: id,
+            groupId: groupId,
+            taskTitle: paramsObject.taskTitle ? paramsObject.taskTitle : '',
+            reporter: paramsObject.reporter ? +paramsObject.reporter : null,
+            owner: shouldIncludeOwner ? +paramsObject.owner : undefined,
+            status: paramsObject.status ? paramsObject.status : undefined,
+        }
+    }, [id, groupId, paramsObject, shouldIncludeOwner, reloadPage])
+
+    const mappingSelected = (key, selected) => {
+        setKeyIdTaskProgress(key)
+    }
+
+    const handelTaskProgress = async () => {
+        const bodyData = {
+            id: keyIdTaskProgress,
+            status: commonStatus.PROGRESS
+        }
+        await updateStatus(bodyData).then(res => {
+            if (res.status === 200) {
+                setReloadPage(pre => !pre)
+                toast.success(`Select task success`)
+                setKeyIdTaskProgress([])
+            }
+        })
+    }
+
     useEffect(() => {
         const interval = setInterval(async () => {
             try {
@@ -134,28 +176,17 @@ const ListTask = () => {
         return () => clearInterval(interval);
     }, [taskDeadline]);
 
-    const onGetListSuccess = (res) => {
-        setData(res)
-    }
-
-    const handelTaskProgress = async () => {
-        const bodyData = {
-            id: keyIdTaskProgress,
-            status: commonStatus.PROGRESS
-        }
-        await updateStatus(bodyData)
-        setKeyIdTaskProgress([])
-        setReloadData(prevFlag => !prevFlag)
-        toast.success(`Select ${titleTask} success`)
-    }
-
     return (
-        <>
+        <div className={styles.container}>
             <ListContainer
+                pageSize={5}
                 columns={columns}
+                filterData={filterData}
                 getListAction={getTask}
+                isSelectedField
                 title='List task manager'
                 objectName='task'
+                onGetSelected={mappingSelected}
                 onGetListSuccess={onGetListSuccess}
                 searchFields={[
                     {
@@ -190,20 +221,26 @@ const ListTask = () => {
                     isDelete: true,
                 }}
                 deleteAction={deleteTask}
-                filterParams={{
-                    userId: id,
-                    groupId: groupId,
-                    taskTitle: paramsObject.taskTitle ? paramsObject.taskTitle : '',
-                    reporter: paramsObject.reporter ? +paramsObject.reporter : null,
-                    owner: shouldIncludeOwner ? +paramsObject.owner : undefined,
-                    status: paramsObject.status ? paramsObject.status : undefined,
-                }}
+                filterParams={handelParamsFilter}
             />
-             <TableTask
-                    data={data}
+
+            <div className={styles.actionFooter}>
+                <ModalShowListTask
+                    dataProgress={data}
                     userData={users}
-            />
-        </>
+                    setReloadPage={setReloadPage}
+                    reloadPage={reloadPage}
+                />
+                <Button
+                    type="primary"
+                    ghost
+                    onClick={handelTaskProgress}
+                    disabled={keyIdTaskProgress.length < 1}
+                >
+                    Start task
+                </Button>
+            </div>
+        </div>
     )
 }
 export default ListTask

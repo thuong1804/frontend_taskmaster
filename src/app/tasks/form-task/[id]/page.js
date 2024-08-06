@@ -24,6 +24,7 @@ const FormTask = () => {
     const {users} = useListUsers();
     const [form] = Form.useForm();
     const [scheduleDate, setScheduleDate] = useState();
+    const formId = urlPath.formTask
 
     const onFinish = async (values) => {
         const dataBody = {
@@ -102,6 +103,7 @@ const FormTask = () => {
                 <div style={{ width: '100%' }}>
                     <Form
                         name="basic"
+                        id={formId}
                         form={form}
                         labelCol={{
                             span: 16,
@@ -113,7 +115,6 @@ const FormTask = () => {
                         style={{
                             width: '100%',
                         }}
-                        id="form-task"
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                         autoComplete="off"
@@ -260,14 +261,14 @@ const FormTask = () => {
                     </Form>
                 </div>
             </div>
-            <div className={styles.btnAction}>   
+            {/* <div className={styles.btnAction}>   
                 <Button htmlType="button" onClick={() => router.push(urlPath.task)}>
                     <CloseOutlined /> Cancel
                 </Button>
                 <Button type="primary" htmlType="submit" form="form-task">
                     <CheckOutlined /> Submit
                 </Button>
-            </div>
+            </div> */}
         </div>
     )
 }

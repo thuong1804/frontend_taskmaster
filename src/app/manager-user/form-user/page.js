@@ -1,8 +1,3 @@
 import FormUser from "./[id]/page";
 
-const FormUserPage = () => {
-    return (
-        <FormUser/>
-    )
-}
-export default FormUserPage;
+export default FormUser;

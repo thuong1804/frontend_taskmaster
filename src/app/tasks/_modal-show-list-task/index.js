@@ -1,12 +1,13 @@
 import React, {  useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import TimeFrameTaskTable from '../timeFrameTaskTable';
+import TimeFrameTaskTable from '../time-frame-task';
 
 const ModalShowListTask = ({
     dataProgress,
-    setReloadData,
-    userData
+    userData,
+    setReloadPage,
+    reloadPage,
 }) => {
     const [open, setOpen] = useState(false);
 
@@ -30,10 +31,10 @@ const ModalShowListTask = ({
             >
                 <TimeFrameTaskTable
                     dataProgress={dataProgress}
-                    setReloadData={setReloadData}
+                    reloadPage={reloadPage}
                     userData={userData}
+                    setReloadPage={setReloadPage}
                 />
-
             </Drawer>
         </div>
     );

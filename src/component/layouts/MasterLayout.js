@@ -20,11 +20,14 @@ import Loading from '../Loading';
 import { useUser } from '@/context/ProfileProvider';
 import { Footer } from 'antd/es/layout/layout';
 import ChatPopup from '../../app/_chat/Chat';
+import ButtonActionContainer from '../ButtonActionField';
+import { usePathname } from 'next/navigation';
 
 const MasterLayout = ({children}) => {
-   
     const [collapsed, setCollapsed] = useState(false);
     const {user} = useUser();
+    const pathname = usePathname();
+    const splitTest = pathname.split('/')
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -79,17 +82,27 @@ const MasterLayout = ({children}) => {
                         minHeight: 280,
                         background: colorBgContainer,
                         borderRadius: borderRadiusLG,
+                        overflow:'auto'
                     }}
                 >
                     {children}
                 </Content>
-                <Footer
+                {splitTest.length > 2 && (
+                    <Footer
                     style={{
-                        textAlign: 'right',
+                        margin: '10px 16px',
+                        padding: '20px 20px',
+                        minHeight: 80,
+                        background: colorBgContainer,
+                        borderRadius: borderRadiusLG,
+                        background:'#ffffff',
+                        display:'flex',
+                        justifyContent:'flex-end'
                     }}
-                    >
-                    <ChatPopup />
+                >
+                    <ButtonActionContainer/>
                 </Footer>
+                )}
             </Layout>
         </Layout>
     );

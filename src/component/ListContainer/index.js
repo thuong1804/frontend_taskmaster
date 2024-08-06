@@ -16,31 +16,30 @@ const ListContainer = ({
     getListAction,
     objectName = '',
     formUrl,
-    pageSize = 6,
+    pageSize = 5,
     actionButtons = {
         isEdit: false,
         isDelete: false,
     },
     deleteAction,
     dataList,
-    filterParams = {},
+    filterParams,
     onGetListSuccess,
+    onGetSelected,
+    isSelectedField,
+    filterData,
 }) => {
     const [data, setData] = useState([])
     const { user } = useUser()
     const router = useRouter();
-    const [reloadPage, setReloadPage] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
-
-    const handelFilterParams = useMemo(() => {
-        return { ...filterParams }
-    }, [filterParams])
+    const [keySelected, setKeySelected] = useState([])
+    const [selected, setSelected] = useState([])
 
     const confirm = async (e, id) => {
         await deleteAction(id).then(res => {
             if (res.data.result) {
                 toast.success(`Delete ${objectName} success`)
-                setReloadPage(prevFlag => !prevFlag)
             }
         }).catch((error) => {
             console.log({ error })
@@ -49,7 +48,7 @@ const ListContainer = ({
             }
         })
     };
-
+   
     const prepareColumns = (columns) => {
         if (actionButtons) {
             columns.push({
@@ -86,17 +85,31 @@ const ListContainer = ({
         return columns
     }
 
+    const rowSelection = {
+        preserveSelectedRowKeys: true,
+        onChange: (selectedRowKeys, selectedRows) => {
+            setKeySelected(selectedRowKeys)
+            setSelected(selectedRows)
+        },
+        getCheckboxProps: (record) => ({
+            disabled: record.name === 'Disabled User',
+            name: record.name,
+        }),
+    };
+
     const fetchData = useCallback(async () => {
         try {
             if (getListAction) {
-                const response = await getListAction({ ...handelFilterParams });
-                setData(response.data.data.content || response.data.data);
-                onGetListSuccess?.(response.data.data.content || response.data.data)
+                const response = await getListAction({ ...filterParams });
+                if (response.status === 200) {
+                    setData(response.data.data.content || response.data.data);
+                    onGetListSuccess?.(response.data.data.content || response.data.data)
+                }
             }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
-    }, [getListAction, handelFilterParams, reloadPage])
+    }, [getListAction, filterParams])
 
     useEffect(() => {
         if (!dataList) {
@@ -111,6 +124,15 @@ const ListContainer = ({
         }
     }, [dataList])
 
+    useEffect(() => {
+        onGetSelected?.(keySelected, selected)
+    }, [selected, keySelected])
+
+    useEffect(() => {
+        if (filterData) {
+            setData(filterData)
+        }
+    }, [filterData])
 
     return (
         <div className={styles.container}>
@@ -129,14 +151,14 @@ const ListContainer = ({
                     </Button>
                 </div>
                 <Table
-                    // rowSelection={{
-                    //     type: 'checkbox',
-                    //     ...rowSelection,
-                    //     hideSelectAll: true
-                    // }}
+                    rowSelection={isSelectedField && { 
+                        type: 'checkbox',
+                        ...rowSelection,
+                        hideSelectAll: true
+                    }}
                     className="table-striped-rows"
                     columns={prepareColumns(columns)}
-                    dataSource={data || []}
+                    dataSource={(filterData || data) || []}
                     rowKey="id"
                     pagination={{
                         pageSize: pageSize,

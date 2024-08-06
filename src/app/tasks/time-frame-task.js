@@ -6,18 +6,25 @@ import SearchField from "@/component/SearchField/SearchField";
 import { DATETIME_FORMAT_DISPLAY, commonStatus } from "@/constant/constant";
 import { updateStatus } from "@/service/taskService";
 
-import styles from './TimeFrameTaskTable.module.scss'
+import styles from './time-frame-task.module.scss'
 
 const TimeFrameTaskTable = ({
     dataProgress,
-    setReloadData,
     userData,
+    setReloadPage,
+    reloadPage
 }) => {
     const [listTaskKey, setListTaskKey] = useState([])
     const [listTaskCompleted, setListTaskCompleted] = useState([])
     const isTaskCompleted = listTaskCompleted.some(item => item.status === commonStatus.COMPLETED)
 
+    const filterData = useMemo(() => {
+        const dataRender = dataProgress.filter(item => item.status === commonStatus.PROGRESS)
+        return dataRender;
+    }, [dataProgress, reloadPage])
+    
     const rowSelection = {
+        preserveSelectedRowKeys: true,
         onChange: (selectedRowKeys, selectedRows) => {
             setListTaskKey(selectedRowKeys)
             setListTaskCompleted(selectedRows)
@@ -27,21 +34,6 @@ const TimeFrameTaskTable = ({
             name: record.name,
         }),
     };
-
-    const filterData = useMemo(() => {
-        const dataRender = dataProgress.filter(item => item.status === commonStatus.PROGRESS)
-        return dataRender;
-    }, [dataProgress])
-
-    const handelCancelTask = async () => {
-        const bodyData = {
-            id: listTaskKey,
-            status: commonStatus.PENDING
-        }
-        await updateStatus(bodyData)
-        setListTaskKey([])
-        setReloadData(prevFlag => !prevFlag)
-    }
 
     const columns = [
         {
@@ -115,13 +107,12 @@ const TimeFrameTaskTable = ({
         },
     ];
 
-    const handelTaskCompleted = async() => {
+    const handelStatusTaskProgress = async(status) => {
         const bodyData = {
             id: listTaskKey,
-            status: commonStatus.COMPLETED,
+            status: status === commonStatus.COMPLETED ? commonStatus.COMPLETED : commonStatus.PENDING,
         }
-        setReloadData(prevFlag => !prevFlag)
-        await updateStatus(bodyData)
+        await updateStatus(bodyData).then(res => res.status === 200 && setReloadPage(prevFlag => !prevFlag))
     }
 
     return (
@@ -132,7 +123,7 @@ const TimeFrameTaskTable = ({
             <div className={styles.btnAction}>
                 <Button 
                     danger 
-                    onClick={handelCancelTask} 
+                    onClick={() => handelStatusTaskProgress('CANCEL')} 
                     disabled={isTaskCompleted || listTaskKey.length < 1 }
                 >
                     Cancel
@@ -140,7 +131,8 @@ const TimeFrameTaskTable = ({
                 <Button 
                     type="primary" 
                     disabled={listTaskKey.length < 1} 
-                    onClick={handelTaskCompleted} >
+                    onClick={() => handelStatusTaskProgress('COMPLETED')} 
+                    >
                         Completed
                 </Button>
             </div>

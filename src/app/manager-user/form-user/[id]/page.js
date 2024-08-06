@@ -19,6 +19,7 @@ const FormUser = () => {
     const [detailUser, setDetailUser] = useState();
     const paramsId = useParams();
     const isCreating = !paramsId.id
+    const formId = urlPath.formUser
 
     const onFinish = async (values) => {
         const bodyData = cleanObject({
@@ -78,7 +79,7 @@ const FormUser = () => {
             <div className={styles.formContent}>
                 <h1><UserAddOutlined /> Edit user</h1>
                 <Form
-                    id="form-user"
+                    id={formId}
                     name="basic"
                     form={form}
                     labelCol={{
@@ -254,14 +255,14 @@ const FormUser = () => {
                     </Row>
                 </Form>
             </div>
-            <div className={styles.btnAction}>
+            {/* <div className={styles.btnAction}>
                 <Button htmlType="button" onClick={() => router.push(urlPath.user)}>
                     <CloseOutlined /> Cancel
                 </Button>
                 <Button type="primary" htmlType="submit" form="form-user">
                     <CheckOutlined /> Submit
                 </Button>
-            </div>
+            </div> */}
         </div>
 
     )
