@@ -24,7 +24,8 @@ const TimeFrameTaskTable = ({
     }, [dataProgress, reloadPage])
     
     const rowSelection = {
-        preserveSelectedRowKeys: true,
+        preserveSelectedRowKeys: false,
+        checkStrictly: false,
         onChange: (selectedRowKeys, selectedRows) => {
             setListTaskKey(selectedRowKeys)
             setListTaskCompleted(selectedRows)

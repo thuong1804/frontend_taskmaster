@@ -3,16 +3,18 @@ import queryString from 'querystring'
 
 import styles from './SearchForm.module.scss'
 import { SearchOutlined, SyncOutlined } from "@ant-design/icons"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { camelCaseToTitleCase, cleanObject } from "@/utils"
 import { TYPE } from "@/constant/constant"
 
 const SearchForm = ({
     searchField = [],
+    setCurrentPage,
 }) => {
     const router = useRouter();
     const pathname = usePathname();
     const [form] = Form.useForm();
+    const [searchParams, setSeachSetParams] = useSearchParams();
 
     const onFinish = (values, event) => {
         const data = cleanObject({
@@ -20,11 +22,15 @@ const SearchForm = ({
         })
         const queryParam = queryString.stringify(data)
         router.replace(`${pathname}?${queryParam}`);
+        setCurrentPage(1)
     }
 
     const onReset = () => {
-        router.replace(pathname)
-        form.resetFields()
+        if (searchParams) {
+            router.replace(pathname)
+            form.resetFields()
+            setCurrentPage(1)
+        }
     }
 
     const getPlaceHolder = (item) => {

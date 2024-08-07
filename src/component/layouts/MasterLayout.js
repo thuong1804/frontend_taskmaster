@@ -6,12 +6,11 @@ import {
     MenuUnfoldOutlined,
 } from '@ant-design/icons';
 
-import { Button, FloatButton, Layout, theme } from 'antd';
+import { Button, Layout, theme } from 'antd';
 import HeaderLayout from './HeaderLayout';
 
 const { Header, Sider, Content } = Layout;
 
-import styles from './MasterLayout.module.scss'
 import Image from 'next/image';
 import logoImg from '../../../public/output-logo.png'
 import classNames from 'classnames';
@@ -19,9 +18,10 @@ import NavBarLayout from './NavBar';
 import Loading from '../Loading';
 import { useUser } from '@/context/ProfileProvider';
 import { Footer } from 'antd/es/layout/layout';
-import ChatPopup from '../../app/_chat/Chat';
-import ButtonActionContainer from '../ButtonActionField';
 import { usePathname } from 'next/navigation';
+import FooterLayout from './FooterLayout';
+
+import styles from './MasterLayout.module.scss'
 
 const MasterLayout = ({children}) => {
     const [collapsed, setCollapsed] = useState(false);
@@ -100,7 +100,7 @@ const MasterLayout = ({children}) => {
                         justifyContent:'flex-end'
                     }}
                 >
-                    <ButtonActionContainer/>
+                    <FooterLayout />
                 </Footer>
                 )}
             </Layout>

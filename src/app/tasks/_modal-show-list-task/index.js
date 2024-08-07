@@ -28,6 +28,7 @@ const ModalShowListTask = ({
                 onClose={onClose} open={open}
                 placement='bottom'
                 size={'large'}
+                height="100vh"
             >
                 <TimeFrameTaskTable
                     dataProgress={dataProgress}

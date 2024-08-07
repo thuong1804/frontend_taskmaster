@@ -2,7 +2,7 @@
 import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import styles from './page.module.scss'
 import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/service/userService";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import urlPath from "@/constant/path";
 import { CheckOutlined, CloseOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
@@ -20,6 +20,7 @@ const FormUser = () => {
     const paramsId = useParams();
     const isCreating = !paramsId.id
     const formId = urlPath.formUser
+    const pathname = usePathname();
 
     const onFinish = async (values) => {
         const bodyData = cleanObject({

@@ -35,6 +35,7 @@ const ListContainer = ({
     const [searchParams, setSearchParams] = useSearchParams()
     const [keySelected, setKeySelected] = useState([])
     const [selected, setSelected] = useState([])
+    const [currentPage, setCurrentPage] = useState('1')
 
     const confirm = async (e, id) => {
         await deleteAction(id).then(res => {
@@ -86,7 +87,8 @@ const ListContainer = ({
     }
 
     const rowSelection = {
-        preserveSelectedRowKeys: true,
+        preserveSelectedRowKeys: false,
+        selectedRowKeys: keySelected,
         onChange: (selectedRowKeys, selectedRows) => {
             setKeySelected(selectedRowKeys)
             setSelected(selectedRows)
@@ -110,6 +112,10 @@ const ListContainer = ({
             console.error('Error fetching data:', error);
         }
     }, [getListAction, filterParams])
+
+    const onChangeTabel = (page) => {
+        setCurrentPage(page.currentPage)
+    } 
 
     useEffect(() => {
         if (!dataList) {
@@ -140,6 +146,7 @@ const ListContainer = ({
             <div className={styles.actionFilter}>
                 <SearchForm
                     searchField={searchFields}
+                    setCurrentPage={setCurrentPage}
                 />
             </div>
             <div className={styles.contentTable}>
@@ -151,6 +158,7 @@ const ListContainer = ({
                     </Button>
                 </div>
                 <Table
+                    onChange={onChangeTabel}
                     rowSelection={isSelectedField && { 
                         type: 'checkbox',
                         ...rowSelection,
@@ -162,6 +170,7 @@ const ListContainer = ({
                     rowKey="id"
                     pagination={{
                         pageSize: pageSize,
+                        current: currentPage,
                     }}
                 />
             </div>
