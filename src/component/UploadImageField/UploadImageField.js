@@ -11,7 +11,7 @@ const UploadImageField = () => {
     const [imageUrl, setImageUrl] = useState();
     const [file, setFile] = useState();
     const { user, updateProfile} = useUser();
-    const storage =  user.avatar ? `http://localhost:3005/${user.avatar}` : null
+    const storage =  user.avatar ? `${process.env.NEXT_PUBLIC_WEB_URL}/${user.avatar}` : null
     const [fileList, setFileList] = useState([])
 
     const getBase64 = (img, callback) => {
