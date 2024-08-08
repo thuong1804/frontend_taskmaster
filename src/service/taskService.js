@@ -1,6 +1,15 @@
 import axios from "../setup/axios";
 
-const getTask = async ({userId, groupId, page, size, taskTitle, reporter}) => {
+const getTask = async ({
+    userId, 
+    groupId, 
+    page, 
+    size, 
+    taskTitle, 
+    reporter, 
+    owner, 
+    status
+}) => {
     return await axios({
         method: 'post',
         // url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/tasks?page=${page}&size=${5}`,
@@ -8,12 +17,12 @@ const getTask = async ({userId, groupId, page, size, taskTitle, reporter}) => {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
         withCredentials: true,
         data: {
-            userId: userId,
-            groupId: groupId,
-            page: page,
-            size: 5,
-            taskTitle: taskTitle,
-            reporter: reporter,
+            userId,
+            groupId,
+            taskTitle,
+            reporter,
+            owner,
+            status,
         }
     })
 }
@@ -125,6 +134,19 @@ const updateStatus = async ({id, status}) => {
     })
 }
 
+const checkDeadline = async ({id, userId}) => {
+    return await axios({
+        method: 'post',
+        url: `${process.env.NEXT_PUBLIC_WEB_URL}/api/deadline`,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        data: {
+            id: id,
+            userId: userId,
+        },
+        withCredentials: true,
+    })
+}
+
 export {
     getTask,
     createTask,
@@ -132,5 +154,6 @@ export {
     updateTask,
     getByIdTask,
     searchTask,
-    updateStatus
+    updateStatus,
+    checkDeadline,
 }

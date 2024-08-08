@@ -1,0 +1,107 @@
+.container {
+    padding: 10px 0px;
+    width: 350px;
+
+    h3 {
+        margin: 0;
+    }
+   
+    .readAll {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+       
+        > span:first-child {
+            color: #1677ff;
+            opacity: 0.5;
+            cursor: pointer;
+            transition: 0.5s ease;
+            font-size: 13px;
+            font-weight: bold;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+
+    .box {
+        background: #fff;
+        box-shadow: 0 .3rem 1.6rem 0 rgba(47, 83, 109, .12);
+        padding: 10px 15px;
+        position: relative;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #f5f5f5;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+
+            > span:first-child {
+                font-size: 18px;
+                font-weight: bold;
+            }
+        
+            > span:nth-child(2) {
+                font-size: 12px;
+                color: gray;
+            }
+            > span:nth-child(3) {
+                font-size: 12px;
+                color: gray;
+            }
+        }
+
+        .point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            top: 5px;
+            right: 5px;
+            border: none;
+            border-radius: 50%;
+            background: #ff4d4f;
+        }
+       
+    }
+}
+
+.noData {
+    width: 350px;
+    height: 250px;
+
+    .contentNodata {
+        width: 100%;
+        height: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+
+        > span:first-child {
+            font-size: 60px;
+            color: gray;
+            font-weight: bold;
+        }
+
+        > span:nth-child(2) {
+            font-size: 15px;
+            color: gray;
+        }
+    }
+}
+
+.ant-popover-inner {
+    max-height: 100px !important;
+    overflow: auto !important;
+}

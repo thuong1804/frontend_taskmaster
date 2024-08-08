@@ -1,12 +1,13 @@
 import React, {  useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import TimeFrameTaskTable from '../timeFrameTaskTable';
+import TimeFrameTaskTable from '../time-frame-task/time-frame-task';
 
 const ModalShowListTask = ({
     dataProgress,
-    setReloadData,
-    userData
+    userData,
+    setReloadPage,
+    reloadPage,
 }) => {
     const [open, setOpen] = useState(false);
 
@@ -16,23 +17,26 @@ const ModalShowListTask = ({
     const onClose = () => {
         setOpen(false);
     };
+
     return (
         <div>
             <Button type="primary" onClick={showDrawer}>
-                Show task progress
+                List task progress
             </Button>
             <Drawer
                 title="List task progress"
                 onClose={onClose} open={open}
                 placement='bottom'
                 size={'large'}
+                height="100vh"
             >
                 <TimeFrameTaskTable
+                    onClose={onClose}
                     dataProgress={dataProgress}
-                    setReloadData={setReloadData}
+                    reloadPage={reloadPage}
                     userData={userData}
+                    setReloadPage={setReloadPage}
                 />
-
             </Drawer>
         </div>
     );

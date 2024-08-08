@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
-import { Modal, Button } from "antd";
-import { AuditOutlined, UserOutlined } from '@ant-design/icons'
-import { useUser } from '@/context/ProfileProvider';
-import FormProfile from './FormProfile';
+import { Modal } from "antd";
+import { AuditOutlined } from '@ant-design/icons'
 import StepProfile from './StepProfile';
 import styles from './page.module.scss'
 
 export default function Profile() {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { user } = useUser();
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -21,15 +18,17 @@ export default function Profile() {
         <div style={{width:'100%'}}>
             <span
                 style={{display:'block', width:'100%'}}
-                onClick={showModal}>
-                    <AuditOutlined /> Profile
+                onClick={showModal}> <AuditOutlined /> Profile
             </span>
             <Modal
                 open={isModalOpen}
                 footer={null}
                 className={styles.modalContainer}
                 onCancel={handleCancel}>
-                    <StepProfile handleCancel={handleCancel}/>
+                    <StepProfile 
+                        handleCancel={handleCancel} 
+                        setIsModalOpen={setIsModalOpen}
+                    />
             </Modal>
         </div>
     )

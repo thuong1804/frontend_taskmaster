@@ -4,18 +4,17 @@ import queryString from 'querystring'
 import styles from './SearchForm.module.scss'
 import { SearchOutlined, SyncOutlined } from "@ant-design/icons"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { camelCaseToTitleCase, cleanObject, mappingDropdownData } from "@/utils"
+import { camelCaseToTitleCase, cleanObject } from "@/utils"
 import { TYPE } from "@/constant/constant"
-import { useEffect, useState } from "react"
-import { handelGetListUser } from "@/service/user-service"
 
 const SearchForm = ({
     searchField = [],
+    setCurrentPage,
 }) => {
     const router = useRouter();
     const pathname = usePathname();
     const [form] = Form.useForm();
-    const [listUser, setListUser] = useState([]) 
+    const [searchParams, setSeachSetParams] = useSearchParams();
 
     const onFinish = (values, event) => {
         const data = cleanObject({
@@ -23,29 +22,23 @@ const SearchForm = ({
         })
         const queryParam = queryString.stringify(data)
         router.replace(`${pathname}?${queryParam}`);
+        setCurrentPage(1)
     }
 
     const onReset = () => {
-        router.replace(pathname)
-        form.resetFields()
-    }
-
-    useEffect(() => {
-        const fetchData = async() => {
-            await handelGetListUser().then(res => {
-                if (res.data.data) {
-                    setListUser(res.data.data.content)
-                }
-            })
+        if (searchParams) {
+            router.replace(pathname)
+            form.resetFields()
+            setCurrentPage(1)
         }
-        fetchData()
-    }, [])
+    }
 
     const getPlaceHolder = (item) => {
         return item.searchPlaceholder || `Search by ${camelCaseToTitleCase(item.key)}`;
     };
 
     const renderFieldType = (fieldItem) => {
+        let {options} = fieldItem
         if (fieldItem.fieldType === undefined || fieldItem === null) {
             return null;
         }
@@ -57,15 +50,22 @@ const SearchForm = ({
                 />
             )
         } else if (fieldItem.fieldType === TYPE.SELECT) {
-            return (
-                <Select
-                    placeholder={getPlaceHolder(fieldItem)}
-                    style={{ width:'100%'}}
-                    options={mappingDropdownData(listUser)}
-                />
-            )
+            const filterOption = (input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+                return (
+                    <Select
+                        placeholder={getPlaceHolder(fieldItem)}
+                        style={{ width:'100%'}}
+                        options={options}
+                        filterOption={filterOption}
+                        showSearch
+                        disabled={fieldItem.disabled}
+                        allowClear
+                    />
+                )
         }
     }
+    
     return (
         <div className={styles.container}>
             <Form
@@ -76,21 +76,20 @@ const SearchForm = ({
             >
                 <Row gutter={[16, 16]}>
                     {searchField.map((item, index) => {
-                        return (
-                            <Col
-                                span={4}
-                                key={index}
-                            >
-                                <Form.Item
-                                    name={item.key}
+                            return (
+                                <Col
+                                    span={4}
+                                    key={index}
                                 >
-                                    {renderFieldType(item)}
-                                </Form.Item>
-                            </Col>
-
-                                )
-                            })}
-                    <Col>
+                                    <Form.Item
+                                        name={item.key}
+                                    >
+                                        {renderFieldType(item)}
+                                    </Form.Item>
+                                </Col>
+                            )
+                    })}
+                    <Col flex="auto">
                         <Form.Item>
                             <div className={styles.btnAction}>
                                 <Button type="primary" htmlType="submit">

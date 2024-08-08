@@ -1,16 +1,17 @@
 'use client'
 import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
-import { Option } from "antd/es/mentions";
 import styles from './page.module.scss'
-import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/service/user-service";
-import { useParams, useRouter } from "next/navigation";
+import { handelCreateUser, handelGetByIdUser, handelUpdateUser } from "@/service/userService";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import urlPath from "@/constant/path";
 import { CheckOutlined, CloseOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
-import { cleanObject, validateEmail, validationPassword } from "@/utils";
-import { DATETIME_FORMAT_DISPLAY, DATETIME_FORMAT_VALUE, passwordRegex, phoneRegExp, whiteSpaceRegex } from "@/constant/constant";
+import { cleanObject, validateEmail } from "@/utils";
+import { passwordRegex, phoneRegExp, whiteSpaceRegex } from "@/constant/constant";
 import { toast } from "sonner";
 import dayjs from "dayjs";
+import SelectForm from "@/component/SelectForm/SelectForm";
+import { genderDDL, roleDDL } from "@/constant/masterData";
 
 const FormUser = () => {
     const router = useRouter();
@@ -18,11 +19,14 @@ const FormUser = () => {
     const [detailUser, setDetailUser] = useState();
     const paramsId = useParams();
     const isCreating = !paramsId.id
+    const formId = urlPath.formUser
+    const pathname = usePathname();
 
     const onFinish = async (values) => {
         const bodyData = cleanObject({
             ...values,
             id: +paramsId.id,
+            groupId: values.groupId === "Admin" ? 1 : 2
         });
 
         if (isCreating) {
@@ -34,7 +38,6 @@ const FormUser = () => {
             })
         } else {
             await handelUpdateUser(bodyData).then((res) => {
-                console.log({res})
                 if (res.data.result) {
                     toast.success('Update user success')
                     router.push(urlPath.user)
@@ -48,22 +51,25 @@ const FormUser = () => {
     };
 
     useEffect(() => {
-        const fetchDataById = async () => {
-            await handelGetByIdUser(paramsId.id)
-                .then(res => setDetailUser(res.data.data.content))
+        if(!isCreating) {
+            const fetchDataById = async () => {
+                await handelGetByIdUser(paramsId.id)
+                    .then(res => setDetailUser(res.data.data.content))
+            }
+            fetchDataById();
         }
-        fetchDataById();
     }, [paramsId])
 
     useEffect(() => {
         const { email, name, groupId, address, gender, phone, birthDay } = detailUser ?? {};
+        const isGender = gender ? (gender === 1 ? 'male' : 'female') : null
 
         if (!isCreating) {
             form.setFieldValue('email', email);
             form.setFieldValue('name', name);
             form.setFieldValue('groupId', groupId === 1 ? 'Admin' : 'User');
             form.setFieldValue('address', address);
-            form.setFieldValue('gender', gender === 1 ? 'male' : 'female');
+            form.setFieldValue('gender', isGender);
             form.setFieldValue('phone', phone);
             form.setFieldValue('birthDay', birthDay ? dayjs(birthDay): undefined);
         }
@@ -74,7 +80,7 @@ const FormUser = () => {
             <div className={styles.formContent}>
                 <h1><UserAddOutlined /> Edit user</h1>
                 <Form
-                    id="form-user"
+                    id={formId}
                     name="basic"
                     form={form}
                     labelCol={{
@@ -88,7 +94,7 @@ const FormUser = () => {
                         width: '100%',
                     }}
                     initialValues={{
-                        gender: undefined
+                        gender: undefined,
                     }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
@@ -147,15 +153,11 @@ const FormUser = () => {
                                     },
                                 ]}
                             >
-                                <Select
-                                    placeholder="Select a option Group"
-                                    // onChange={onGenderChange}
-                                    allowClear
+                                <SelectForm
+                                    placeholder="Group"
                                     defaultValue={detailUser?.groupId}
-                                >
-                                    <Option value={1}>Admin</Option>
-                                    <Option value={2}>User</Option>
-                                </Select>
+                                    options={roleDDL}
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -245,27 +247,23 @@ const FormUser = () => {
                                 name="gender" 
                                 label="Gender"
                             >
-                                <Select
-                                    placeholder="Select a option gender"
-                                    allowClear
-                                >
-                                    <Option value={1}>male</Option>
-                                    <Option value={2}>female</Option>
-                                </Select>
+                                <SelectForm 
+                                    placeholder='gender'
+                                    options={genderDDL}
+                                />
                             </Form.Item>
                         </Col>
-                       
                     </Row>
                 </Form>
             </div>
-            <div className={styles.btnAction}>
+            {/* <div className={styles.btnAction}>
                 <Button htmlType="button" onClick={() => router.push(urlPath.user)}>
                     <CloseOutlined /> Cancel
                 </Button>
                 <Button type="primary" htmlType="submit" form="form-user">
                     <CheckOutlined /> Submit
                 </Button>
-            </div>
+            </div> */}
         </div>
 
     )

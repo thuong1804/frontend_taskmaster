@@ -11,18 +11,23 @@ import HeaderLayout from './HeaderLayout';
 
 const { Header, Sider, Content } = Layout;
 
-import styles from './MasterLayout.module.scss'
 import Image from 'next/image';
 import logoImg from '../../../public/output-logo.png'
 import classNames from 'classnames';
 import NavBarLayout from './NavBar';
 import Loading from '../Loading';
 import { useUser } from '@/context/ProfileProvider';
+import { Footer } from 'antd/es/layout/layout';
+import { usePathname } from 'next/navigation';
+import FooterLayout from './FooterLayout';
+
+import styles from './MasterLayout.module.scss'
 
 const MasterLayout = ({children}) => {
-   
     const [collapsed, setCollapsed] = useState(false);
     const {user} = useUser();
+    const pathname = usePathname();
+    const splitTest = pathname.split('/')
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -77,10 +82,27 @@ const MasterLayout = ({children}) => {
                         minHeight: 280,
                         background: colorBgContainer,
                         borderRadius: borderRadiusLG,
+                        overflow:'auto'
                     }}
                 >
                     {children}
                 </Content>
+                {splitTest.length > 2 && (
+                    <Footer
+                    style={{
+                        margin: '10px 16px',
+                        padding: '20px 20px',
+                        minHeight: 80,
+                        background: colorBgContainer,
+                        borderRadius: borderRadiusLG,
+                        background:'#ffffff',
+                        display:'flex',
+                        justifyContent:'flex-end'
+                    }}
+                >
+                    <FooterLayout />
+                </Footer>
+                )}
             </Layout>
         </Layout>
     );

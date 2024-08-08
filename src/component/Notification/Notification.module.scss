@@ -1,0 +1,20 @@
+.container {
+    width: 400px;
+}
+
+.popover {
+    [class~="ant-popover-inner"] {
+        max-height: 500px;
+        overflow: auto;
+    }
+    [class~="ant-popover-inner"]::-webkit-scrollbar {
+        width: 5px;
+    }
+    [class~="ant-popover-inner"]::-webkit-scrollbar-thumb {
+        background-color: #c0c0c0;
+        border-radius: 5px; 
+    }
+     
+    
+}
+

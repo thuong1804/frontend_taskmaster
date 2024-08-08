@@ -1,13 +1,12 @@
 'use client'
 import { AppstoreOutlined, SolutionOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import styles from './Navbar.module.scss'
 import urlPath from "@/constant/path";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUser } from '@/context/ProfileProvider'
-
 
 const childrenKey = {
     user: urlPath.user,
@@ -17,12 +16,12 @@ const childrenKey = {
 const NavBarLayout = () => {
     const pathname = usePathname();
     const [selectedKeys, setSelectedKeys] = useState();
-    const [openKeys, setOpenKeys] = useState(pathname === urlPath.home ? '' : pathname === childrenKey.user ? ['sub1'] : ['sub2']);
+    const [openKeys, setOpenKeys] = useState(pathname === urlPath.home 
+        ? '' : pathname === childrenKey.user ? ['sub1'] : ['sub2']);
     const {user} = useUser()
     const handleSubMenuOpenChange = openKeys => {
         setOpenKeys(openKeys);
     };
-
 
     const items = [
         {
@@ -48,7 +47,7 @@ const NavBarLayout = () => {
                     label: <Link href={urlPath.task} passHref>List task</Link>
                 }
             ]
-        }
+        },
     ];
 
     useEffect(() => {
@@ -57,7 +56,7 @@ const NavBarLayout = () => {
         }
         if (pathname.includes(childrenKey.user) || pathname.split('/').length === 3) {
             setSelectedKeys(childrenKey.user);
-        } else {
+        } else if (pathname.includes(childrenKey.task)) {
             setSelectedKeys(childrenKey.task);
         }
 

@@ -10,12 +10,22 @@ export const commonStatus = {
     PENDING: "PENDING",
 };
 
+export const commonGender = {
+    MALE: 1,
+    FEMALE: 2,
+};
+
+export const roleGender = {
+    ADMIN: 1,
+    USER: 2,
+};
+
 export const TYPE = {
     TEXT: "TEXT",
     SELECT: "SELECT",
     DATETIME: "DATETIME",
 };
 
-export const DATETIME_FORMAT_DISPLAY = "DD/MM/YYYY HH:mm";
+export const DATETIME_FORMAT_DISPLAY = "HH:mm DD/MM/YYYY";
 export const DATETIME_FORMAT_VALUE = "DD/MM/YYYY";
 

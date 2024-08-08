@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, message, Upload, Image } from 'antd';
 import { useUser } from '@/context/ProfileProvider';
-import { handelDeleteAvatar, handelUploadAvatar } from '@/service/user-service';
+import { handelDeleteAvatar, handelUploadAvatar } from '@/service/userService';
 
 
 

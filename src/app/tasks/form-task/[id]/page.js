@@ -6,12 +6,13 @@ import dayjs from "dayjs";
 import { createTask, getByIdTask, updateTask } from "@/service/taskService";
 import urlPath from "@/constant/path";
 import { useEffect, useState } from "react";
-import { handelGetListUser } from "@/service/user-service";
 import { toast } from "sonner";
 import { mappingDropdownData } from "@/utils";
 import { useUser } from "@/context/ProfileProvider";
 import { DATETIME_FORMAT_DISPLAY, commonStatus } from "@/constant/constant";
 import { CheckOutlined, CloseOutlined, PlusSquareOutlined, } from "@ant-design/icons";
+import SelectForm from "@/component/SelectForm/SelectForm";
+import { useListUsers } from "@/context/UsersProvider";
 
 const FormTask = () => {
     const router = useRouter();
@@ -20,17 +21,16 @@ const FormTask = () => {
     const isCreating = !taskId;
     const { user } = useUser();
     const [detailTask, setDetailTask] = useState();
-    const [userData, setUserData] = useState();
+    const {users} = useListUsers();
     const [form] = Form.useForm();
     const [scheduleDate, setScheduleDate] = useState();
+    const formId = urlPath.formTask
 
     const onFinish = async (values) => {
         const dataBody = {
             ...values,
             userId: user.id,
             reporter: values.reporter,
-            scheduledDate: dayjs(values.scheduledDate),
-            completedDate: dayjs(values.completedDate),
             owner: values.owner,
             status: commonStatus.PENDING
         }
@@ -69,15 +69,6 @@ const FormTask = () => {
     }, [taskId])
 
     useEffect(() => {
-        const fetchDataUser = async () => {
-            await handelGetListUser().then(res => {
-                setUserData(res.data.data.content)
-            })
-        }
-        fetchDataUser()
-    }, [])
-
-    useEffect(() => {
         if (!isCreating) {
             const {
                 taskTitle,
@@ -111,10 +102,8 @@ const FormTask = () => {
                 <h1><PlusSquareOutlined /> {isCreating ? 'Add task' : 'Edit task'}</h1>
                 <div style={{ width: '100%' }}>
                     <Form
-                        // initialValues={{
-                        //     reporter: user.name
-                        // }}
                         name="basic"
+                        id={formId}
                         form={form}
                         labelCol={{
                             span: 16,
@@ -126,7 +115,6 @@ const FormTask = () => {
                         style={{
                             width: '100%',
                         }}
-                        id="form-task"
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
                         autoComplete="off"
@@ -157,11 +145,10 @@ const FormTask = () => {
                                         },
                                     ]}
                                 >
-                                    <Select
-                                        placeholder="Select a option Owner"
-                                        // onChange={onGenderChange}
-                                        options={mappingDropdownData(userData)}
-                                        allowClear
+                                    <SelectForm
+                                        placeholder="Reporter"
+                                        options={mappingDropdownData(users)}
+                                        showSearch
                                     />
                                 </Form.Item>
                             </Col>
@@ -178,11 +165,10 @@ const FormTask = () => {
                                         },
                                     ]}
                                 >
-                                    <Select
-                                        placeholder="Select a option Owner"
-                                        // onChange={onGenderChange}
-                                        options={mappingDropdownData(userData)}
-                                        allowClear
+                                    <SelectForm
+                                        placeholder="Owner"
+                                        options={mappingDropdownData(users)}
+                                        showSearch
                                     />
                                 </Form.Item>
                             </Col>
@@ -234,7 +220,6 @@ const FormTask = () => {
                                             validator(_, value) {
                                                 const endDateFormat = dayjs(value)
                                                 const startDateFormat = dayjs(getFieldValue('scheduledDate'))
-                                                console.log(value)
                                                 if (value) {
                                                     if (endDateFormat < startDateFormat) {
                                                         return Promise.reject(new Error('The scheduled date cannot be completed after the completed date'));
@@ -276,14 +261,14 @@ const FormTask = () => {
                     </Form>
                 </div>
             </div>
-            <div className={styles.btnAction}>   
+            {/* <div className={styles.btnAction}>   
                 <Button htmlType="button" onClick={() => router.push(urlPath.task)}>
                     <CloseOutlined /> Cancel
                 </Button>
                 <Button type="primary" htmlType="submit" form="form-task">
                     <CheckOutlined /> Submit
                 </Button>
-            </div>
+            </div> */}
         </div>
     )
 }

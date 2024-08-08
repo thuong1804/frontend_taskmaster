@@ -1,4 +1,10 @@
 .container {
+    display: flex;
+    gap: 30px;
+
+    .notitfication {
+        color: gray;
+    }
 
     .content {
         display: flex;
@@ -11,6 +17,16 @@
             border: 1px solid #c5bcbc;
             border-radius: 50%;
         }
+
+        > span:nth-child(2) {
+            display: block;
+            width: 70px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+      
     }
 
     .content:hover {

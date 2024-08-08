@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import {    Form, Input, Switch, Radio, Row, Col, DatePicker } from 'antd'
+import { Form, Input, Switch, Radio, Row, Col, DatePicker } from 'antd'
 import { useUser } from '@/context/ProfileProvider';
 import { UserOutlined } from '@ant-design/icons';
 import UploadImageField from '@/component/UploadImageField/UploadImageField';
 import { cleanObject } from '@/utils';
+import styles from './FormProfile.module.scss'
+import dayjs from 'dayjs';
 
+export default function FormProfile({
 export default function FormProfile({
     handleCancel,
     formId,
@@ -38,10 +41,11 @@ export default function FormProfile({
 
     useEffect(() => {
         form.setFieldValue('avatar', user.avatar)
-    }, [user, form])
+    }, [user])
+    console.log({user})
 
     return (
-        <>
+        <div className={styles.container}>
             <h2 style={{
                 lineHeight: 4,
                 fontWeight: 'bold',
@@ -59,6 +63,8 @@ export default function FormProfile({
                     address: user?.address,
                     groupId: user?.groupId === 1 ? true : false,
                     gender: user?.gender === 1 ? 1 : 2,
+                    phone: user?.phone,
+                    birthDay: user.birthDay ? dayjs(user?.birthDay) : null,
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -150,6 +156,6 @@ export default function FormProfile({
                     </Col>
                 </Row>
             </Form>
-        </>
+        </div>
     )
 }
