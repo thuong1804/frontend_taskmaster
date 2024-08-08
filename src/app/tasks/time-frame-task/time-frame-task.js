@@ -7,12 +7,14 @@ import { DATETIME_FORMAT_DISPLAY, commonStatus } from "@/constant/constant";
 import { updateStatus } from "@/service/taskService";
 
 import styles from './time-frame-task.module.scss'
+import { toast } from "sonner";
 
 const TimeFrameTaskTable = ({
     dataProgress,
     userData,
     setReloadPage,
-    reloadPage
+    reloadPage,
+    onClose,
 }) => {
     const [listTaskKey, setListTaskKey] = useState([])
     const [listTaskCompleted, setListTaskCompleted] = useState([])
@@ -111,9 +113,14 @@ const TimeFrameTaskTable = ({
     const handelStatusTaskProgress = async(status) => {
         const bodyData = {
             id: listTaskKey,
-            status: status === commonStatus.COMPLETED ? commonStatus.COMPLETED : commonStatus.PENDING,
+            status: status === commonStatus.COMPLETED ? commonStatus.COMPLETED : commonStatus.PROGRESS,
         }
-        await updateStatus(bodyData).then(res => res.status === 200 && setReloadPage(prevFlag => !prevFlag))
+        await updateStatus(bodyData).then(res => {
+            if (res.status === 200) {
+                setReloadPage(prevFlag => !prevFlag)
+                toast.success('Update status task success')
+                onClose();
+            }})
     }
 
     return (

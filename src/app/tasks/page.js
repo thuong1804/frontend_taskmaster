@@ -149,7 +149,7 @@ const ListTask = () => {
         await updateStatus(bodyData).then(res => {
             if (res.status === 200) {
                 setReloadPage(pre => !pre)
-                toast.success(`Select task success`)
+                toast.success('Update status task success')
                 setKeyIdTaskProgress([])
             }
         })

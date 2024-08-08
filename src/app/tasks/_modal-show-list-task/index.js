@@ -1,7 +1,7 @@
 import React, {  useState } from 'react';
 import { Button, Drawer } from 'antd';
 
-import TimeFrameTaskTable from '../time-frame-task';
+import TimeFrameTaskTable from '../time-frame-task/time-frame-task';
 
 const ModalShowListTask = ({
     dataProgress,
@@ -31,6 +31,7 @@ const ModalShowListTask = ({
                 height="100vh"
             >
                 <TimeFrameTaskTable
+                    onClose={onClose}
                     dataProgress={dataProgress}
                     reloadPage={reloadPage}
                     userData={userData}
