@@ -1,13 +1,13 @@
 import { NextResponse, NextRequest } from 'next/server'
+import urlPath from './constant/path';
 
 export function middleware(request) {
     let isLogin = request.cookies.get("login");
+    const paths = Object.values(urlPath).filter(item => (item !== urlPath.login && item !== urlPath.register && item !== urlPath.main))
+    const requestPath = paths.some(path => request.nextUrl.pathname.startsWith(path))
+
     if (!isLogin) {
-        if (request.nextUrl.pathname.startsWith("/home")) {
-            return NextResponse.redirect(new URL("auth/login", request.url));
-        } else if (request.nextUrl.pathname.startsWith("/task")) {
-            return NextResponse.redirect(new URL("auth/login", request.url));
-        } else if (request.nextUrl.pathname.startsWith("/manager-user")) {
+        if (requestPath) {
             return NextResponse.redirect(new URL("auth/login", request.url));
         }
 
