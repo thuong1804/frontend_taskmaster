@@ -8,7 +8,6 @@ import styles from './FormProfile.module.scss'
 import dayjs from 'dayjs';
 
 export default function FormProfile({
-export default function FormProfile({
     handleCancel,
     formId,
 }) {

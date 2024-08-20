@@ -11,5 +11,6 @@ const urlPath = {
     recoverCode: '/auth/recover-code',
     changePassword: '/auth/change-password',
     assess: '/assess',
+    main: '/main',
 }
 export default urlPath;

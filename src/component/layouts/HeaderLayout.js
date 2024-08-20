@@ -17,7 +17,7 @@ export default function HeaderLayout({ className }) {
         deleteCookie('login')
         deleteCookie('refreshToken')
         clearUserData();
-        router.push(urlPath.login)
+        router.push(urlPath.main)
     }
 
     const items = [
